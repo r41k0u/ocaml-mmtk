@@ -61,7 +61,7 @@ let depth_class d niter =
     let st = ind * niter / num_domains in
     let en = ((ind + 1) * niter / num_domains) - 1 in
     let c = ref 0 in
-    for _ = st to en do c := !c + check (make d) done;
+    for _ = st to en do (*PROBE*) c := !c + check (make d) done;
     parts.(ind) <- !c) num_domains;
   Array.fold_left (+) 0 parts
 

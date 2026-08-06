@@ -35,7 +35,7 @@ let rec loop_depths d =
     let d = d + i * 2 in
     let niter = 1 lsl (max_depth - d + min_depth) in
     let c = ref 0 in
-      for i = 1 to niter do c := !c + check(make d) done;
+      for i = 1 to niter do (*PROBE*) c := !c + check(make d) done;
       Printf.printf "%i\t trees of depth %i\t check: %i\n" niter d !c;
   done
 

@@ -555,7 +555,7 @@ let () =
   let iters = if Array.length Sys.argv > 1 then int_of_string Sys.argv.(1) else 50 in
   let last = ref 0 in
   for _ = 1 to iters do
-    kb_cksum := 0;
+    (*PROBE*) kb_cksum := 0;
     kb_complete greater [] geom_rules;   (* full completion; output -> checksum *)
     last := !kb_cksum
   done;

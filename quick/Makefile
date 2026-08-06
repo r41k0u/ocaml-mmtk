@@ -55,6 +55,32 @@ $(BUILD)/%.native: src/%.ml | $(BUILD)
 	cp $< $(BUILD)/$*.ml
 	cd $(BUILD) && OCAMLLIB=$(STDLIB) $(OCAMLOPT) -I $(STDLIB) -o $*.native $*.ml
 
+# ---- instrumented panel (GC space-time shape: D2 pacing + D3 MMU) ----------
+# `make probe BUILD=<dir>` builds the SAME benchmarks with lib/probe.ml linked
+# and its per-iteration hook activated.
+#
+# src/ keeps a bare `(*PROBE*)` marker at each benchmark's per-iteration site.
+# It is an ordinary comment, so the plain panel above still compiles unchanged
+# and stays stdlib-only — the published numbers carry no probe cost, not even a
+# disabled branch. This rule rewrites the marker into a real call, so the
+# instrumented binaries are a separate artifact built from the same source.
+#
+# Native only: under bytecode the tick path costs 10 words/tick (no float
+# unboxing) and would corrupt the allocation odometer that D2 divides by. The
+# probe refuses to arm there; see lib/probe.ml.
+UNIXDIR ?= $(ROOT)/otherlibs/unix
+PROBE_BENCHES ?= binarytrees kb par_binarytrees
+PROBED := $(addprefix $(BUILD)/,$(addsuffix .probe.native,$(PROBE_BENCHES)))
+
+.PHONY: probe
+probe: $(PROBED)
+
+$(BUILD)/%.probe.native: src/%.ml lib/probe.ml | $(BUILD)
+	cp lib/probe.ml $(BUILD)/probe.ml
+	sed 's|(\*PROBE\*)|Probe.tick ();|' $< > $(BUILD)/$*_probe.ml
+	cd $(BUILD) && OCAMLLIB=$(STDLIB) $(OCAMLOPT) -I $(STDLIB) -I $(UNIXDIR) \
+	    unix.cmxa probe.ml $*_probe.ml -o $*.probe.native
+
 # Regenerate golden outputs at the panel (perf) sizes (native, GenImmix). Keep
 # in sync with quickbench.py perf_args. (Set LINK=bytecode for a bytecode run.)
 golden: native

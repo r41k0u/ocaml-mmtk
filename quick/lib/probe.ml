@@ -91,7 +91,17 @@ let gap_thresh = float_of_int (getenv_int "PROBE_GAP_US" 50) /. 1e6
 (* Odometer sample distance, in words (OCaml words are 8 bytes on 64-bit). *)
 let sample_words = float_of_int (getenv_int "PROBE_SAMPLE_MB" 50) *. 1024. *. 1024. /. 8.
 
-let cap = getenv_int "PROBE_CAP" (1 lsl 20)
+(* Record capacity. Small on purpose: these buffers are LIVE for the whole run,
+   so their size lands in the live set — and both collectors size the heap from
+   the live set, so an oversized probe buys the program a bigger heap and fewer
+   collections. Measured with the original 1<<20 default (16 MiB of gap arrays),
+   vanilla binarytrees went from a perfectly reproducible 61 major collections
+   to 42 with the probe armed: a 31% shift in the very quantity D2 plots, from
+   the instrument rather than the workload. At 1<<14 the buffers are ~370 KiB,
+   under 1% of that benchmark's live set, and the count is unperturbed.
+   Raise PROBE_CAP for a long run; [dropped] in the dump reports any overflow,
+   so a too-small buffer is visible rather than silent. *)
+let cap = getenv_int "PROBE_CAP" (1 lsl 14)
 
 (* Per-domain state. Flat arrays only; nothing here is grown after creation.
    The two mutable floats live in [fs] rather than in record fields — see the
@@ -105,6 +115,7 @@ type t = {
   mutable ticks : int;
   (* D3: gaps *)
   mutable ngap : int;
+  mutable dropped : int;         (* gaps lost to a full buffer *)
   gap_at : float array;          (* wall time the gap started *)
   gap_dur : float array;         (* gap length, seconds *)
   (* D2: odometer samples *)
@@ -117,7 +128,8 @@ type t = {
 
 let make () = {
   fs = Array.make 2 0.0; ticks = 0;
-  ngap = 0; gap_at = Array.make cap 0.0; gap_dur = Array.make cap 0.0;
+  ngap = 0; dropped = 0;
+  gap_at = Array.make cap 0.0; gap_dur = Array.make cap 0.0;
   nsamp = 0;
   s_at = Array.make 4096 0.0; s_words = Array.make 4096 0.0;
   s_majgc = Array.make 4096 0; s_heap = Array.make 4096 0;
@@ -150,10 +162,13 @@ let tick () =
     let t = state () in
     let now = Unix.gettimeofday () in
     let dt = now -. t.fs.(i_last) in
-    if dt >= gap_thresh && t.ngap < cap then begin
-      t.gap_at.(t.ngap) <- t.fs.(i_last);
-      t.gap_dur.(t.ngap) <- dt;
-      t.ngap <- t.ngap + 1
+    if dt >= gap_thresh then begin
+      if t.ngap < cap then begin
+        t.gap_at.(t.ngap) <- t.fs.(i_last);
+        t.gap_dur.(t.ngap) <- dt;
+        t.ngap <- t.ngap + 1
+      end else
+        t.dropped <- t.dropped + 1
     end;
     t.fs.(i_last) <- now;
     t.ticks <- t.ticks + 1;
@@ -194,8 +209,8 @@ let dump () =
          tick path would show up as a nonzero per-tick term. *)
       Printf.fprintf oc
         "{\"kind\":\"domain\",\"domain\":%d,\"ticks\":%d,\"gaps\":%d,\
-         \"samples\":%d,\"probe_words\":%d}\n"
-        did t.ticks t.ngap t.nsamp (25 * t.nsamp);
+         \"samples\":%d,\"dropped\":%d,\"probe_words\":%d}\n"
+        did t.ticks t.ngap t.nsamp t.dropped (25 * t.nsamp);
       for i = 0 to t.ngap - 1 do
         Printf.fprintf oc "{\"kind\":\"gap\",\"domain\":%d,\"at\":%.9f,\"dur\":%.9f}\n"
           did t.gap_at.(i) t.gap_dur.(i)
