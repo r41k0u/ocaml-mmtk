@@ -134,15 +134,24 @@ def main():
                                     stderr=errf)
             pid = proc.pid
 
-        last = None
+        # Summaries take the running MAX across samples, not the last sample:
+        # a thread's accumulated CPU vanishes from /proc/<pid>/task the moment
+        # it exits, so a final sample taken after the GC workers have shut down
+        # reads their contribution as ZERO (observed: a rep losing 1.7 s of
+        # worker CPU). Per-thread CPU is monotone while the thread lives, so
+        # the max is the value just before it died.
+        best_g = best_w = 0.0
+        best_ng = 0
         while True:
             if proc is not None and proc.poll() is not None:
                 break
             th = read_threads(pid)
             if th is None:
                 break
-            last = th
             g, w, ng = summarise(th)
+            if g > best_g:
+                best_g, best_ng = g, ng
+            best_w = max(best_w, w)
             out.write(json.dumps({
                 "kind": "cpu",
                 "t": time.clock_gettime(time.CLOCK_MONOTONIC) - t0,
@@ -156,7 +165,15 @@ def main():
 
         rc = proc.wait() if proc is not None else None
         wall = time.clock_gettime(time.CLOCK_MONOTONIC) - t0
-        g, w, ng = summarise(last) if last else (0.0, 0.0, 0)
+        # One more read: if the process is a zombie its threads are gone, but a
+        # still-live straggler can only raise the max.
+        th = read_threads(pid)
+        if th:
+            g, w, ng = summarise(th)
+            if g > best_g:
+                best_g, best_ng = g, ng
+            best_w = max(best_w, w)
+        g, w, ng = best_g, best_w, best_ng
         tot = g + w
         summary = {
             "kind": "cpu_summary",
