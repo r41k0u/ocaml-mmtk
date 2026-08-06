@@ -190,6 +190,9 @@ def parse_args(argv):
                         'largest UNIFORM set inside one NUMA node; "all" = the '
                         'whole machine; or an explicit taskset list like "0-13"')
     p.add_argument("--cores", dest="cpu_set", help="alias for --cpu-set")
+    p.add_argument("--smt", action="store_true",
+                   help="let auto include SMT siblings (default: one thread per "
+                        "physical core, matching PERFORMANCE.md section 5)")
     p.add_argument("--gc", action="store_true",
                    help="collect GC accounting (MMTK_VERBOSE on the fork, "
                         "OCAMLRUNPARAM=v=0x400 on vanilla)")
@@ -317,6 +320,34 @@ def numa_nodes():
     return out
 
 
+def smt_representatives():
+    """One CPU per PHYSICAL core: the first of each thread_siblings_list.
+
+    SMT siblings share a core's execution resources, so a mutator and a GC
+    worker landing on two siblings contend in a way that looks like collector
+    cost. PERFORMANCE.md section 5 already pins `taskset -c 0-13` on the
+    2-socket turing, which on that topology is exactly one thread per physical
+    core of socket 0 (0-13 are the primaries; 28-41 are their siblings) — so
+    this matches the convention the project already uses, rather than inventing
+    one. Returns None when the topology is unreadable, and is a no-op on a
+    machine without SMT."""
+    reps, seen = [], set()
+    base = "/sys/devices/system/cpu"
+    try:
+        cpus = sorted((int(m.group(1)) for m in
+                       (re.fullmatch(r"cpu(\d+)", e) for e in os.listdir(base)) if m))
+    except OSError:
+        return None
+    for c in cpus:
+        sib = _read(os.path.join(base, f"cpu{c}", "topology", "thread_siblings_list"))
+        if sib is None:
+            return None
+        if sib not in seen:
+            seen.add(sib)
+            reps.append(c)
+    return reps
+
+
 def _expand(spec):
     out = []
     for part in spec.split(","):
@@ -360,6 +391,9 @@ def resolve_cpu_set(a):
       * uniform: on a hybrid part, restrict to the performance class. On a
         uniform part (Xeon, church) there are no classes and this is a no-op —
         no laptop-specific behaviour follows the code onto that machine.
+      * one thread per physical core: SMT siblings share execution resources,
+        so a mutator and a GC worker on two siblings contend in a way that reads
+        as collector cost. --smt opts back in. No-op without SMT.
       * one node: on a multi-socket box, stay inside one. This is the case the
         earlier "pcores" default got WRONG — it found no hybrid classes, fell
         through to every core on the machine, and would have pinned across
@@ -375,6 +409,10 @@ def resolve_cpu_set(a):
     if spec in ("auto", "pcores"):     # "pcores" kept as a back-compat alias
         cls, nodes = core_classes(), numa_nodes()
         cpus = _expand(cls["P"]) if "P" in cls else list(range(os.cpu_count()))
+        if not a.smt:
+            reps = smt_representatives()
+            if reps:
+                cpus = [c for c in cpus if c in set(reps)]
         if len(nodes) > 1:
             # Keep the node holding most of the candidate set; ties go to the
             # lowest node id so repeated runs pick the same cores.
