@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""threadcpu — D1 CPU budget without perf, and therefore without root.
+
+D1 is the headline dimension: aggregate CPU doing work against aggregate CPU
+doing GC, a ratio invariant to whether GC work is interleaved into the mutator
+domains (vanilla) or handed to dedicated workers (Bactrian). Its proper
+instrument is perf symbol attribution (see gcsplit.py), which asks "which code
+ran" and so works identically on both runtimes. But perf needs
+perf_event_paranoid lowered, which needs root, and root is not available on
+every host we measure on.
+
+This is the privilege-free route on the MMTk side. It works because on this
+binding GC work runs on threads the mutator never uses, so per-thread CPU
+separates the two directly:
+
+    G  sum of utime+stime over threads named "mmtk-gc-worker"
+    W  everything else (mutator domains, the main thread)
+
+Both come from /proc/<pid>/task/<tid>/{comm,stat}, readable by the owning user
+with no privileges at all.
+
+The vanilla side is NOT this: vanilla has no GC threads, its major GC runs in
+incremental slices ON the mutator domains, so thread attribution cannot see it.
+There it comes from the runtime_events spans instead (lib/gcpauses.ml), whose
+EV_MINOR + EV_MAJOR_SLICE durations ARE the on-mutator GC time. Different
+mechanism per side, same definition — which is what the comparison needs.
+
+WHAT THIS CANNOT DO, stated because it bounds the claim
+------------------------------------------------------
+Thread attribution cannot separate the C (coordination-spin) bucket from real
+collector work: a worker spinning for work and a worker tracing are both
+GC-thread CPU, and both land in G. perf can tell them apart by symbol; this
+cannot.
+
+Whether that matters is measurable rather than assumed. If MMTk's idle workers
+PARK, worker CPU should be roughly invariant to MMTK_THREADS at fixed work; if
+they SPIN, it will scale with worker count. Run --invariance to test it — and
+note the result probes KC's framing directly, since the D1 ratio is supposed to
+be invariant to how many threads the collector uses.
+
+Sampling (rather than reading once at exit) also gives GC CPU over time, so D1
+can be plotted against the D2/D3/D4 timelines instead of collapsing to a scalar.
+
+Usage:
+    threadcpu.py --out cpu.ndjson -- CMD ARGS...
+    threadcpu.py --out cpu.ndjson --pid PID
+"""
+
+import argparse
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+
+CLK = os.sysconf("SC_CLK_TCK")          # jiffies per second
+GC_THREAD_NAME = "mmtk-gc-worker"       # set in binding/src/collection.rs
+
+
+def read_threads(pid):
+    """{tid: (comm, utime_s, stime_s)} or None once the process is gone."""
+    base = f"/proc/{pid}/task"
+    try:
+        tids = os.listdir(base)
+    except (FileNotFoundError, ProcessLookupError, PermissionError):
+        return None
+    out = {}
+    for tid in tids:
+        try:
+            with open(f"{base}/{tid}/stat", "rb") as f:
+                data = f.read()
+            # comm is field 2 and may contain spaces or ')', so split on the
+            # LAST ')': everything after it is positional and safe to split.
+            rp = data.rindex(b")")
+            comm = data[data.index(b"(") + 1:rp].decode("utf-8", "replace")
+            rest = data[rp + 2:].split()
+            # after state, fields are 1-indexed from ppid; utime=14, stime=15 of
+            # the whole line, i.e. index 11 and 12 of `rest`.
+            out[int(tid)] = (comm, int(rest[11]) / CLK, int(rest[12]) / CLK)
+        except (FileNotFoundError, ProcessLookupError, ValueError, IndexError):
+            continue        # thread exited mid-read; its final CPU is lost
+    return out or None
+
+
+def summarise(threads):
+    g = w = 0.0
+    ng = 0
+    for _tid, (comm, ut, st) in threads.items():
+        if comm == GC_THREAD_NAME:
+            g += ut + st
+            ng += 1
+        else:
+            w += ut + st
+    return g, w, ng
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--pid", type=int)
+    ap.add_argument("--interval-ms", type=float, default=20.0)
+    ap.add_argument("cmd", nargs=argparse.REMAINDER)
+    a = ap.parse_args()
+    if (a.pid is None) == (not a.cmd):
+        ap.error("give exactly one of --pid or -- CMD")
+    cmd = a.cmd[1:] if a.cmd and a.cmd[0] == "--" else a.cmd
+
+    proc = None
+    t0 = time.clock_gettime(time.CLOCK_MONOTONIC)
+    with open(a.out, "w") as out:
+        if a.pid is not None:
+            pid = a.pid
+        else:
+            proc = subprocess.Popen(cmd, start_new_session=True)
+            pid = proc.pid
+
+        last = None
+        while True:
+            if proc is not None and proc.poll() is not None:
+                break
+            th = read_threads(pid)
+            if th is None:
+                break
+            last = th
+            g, w, ng = summarise(th)
+            out.write(json.dumps({
+                "kind": "cpu",
+                "t": time.clock_gettime(time.CLOCK_MONOTONIC) - t0,
+                "gc_cpu_s": round(g, 4),
+                "mutator_cpu_s": round(w, 4),
+                "gc_threads": ng,
+                "threads": len(th),
+            }) + "\n")
+            out.flush()
+            time.sleep(a.interval_ms / 1000.0)
+
+        rc = proc.wait() if proc is not None else None
+        wall = time.clock_gettime(time.CLOCK_MONOTONIC) - t0
+        g, w, ng = summarise(last) if last else (0.0, 0.0, 0)
+        tot = g + w
+        out.write(json.dumps({
+            "kind": "cpu_summary",
+            "gc_cpu_s": round(g, 4),
+            "mutator_cpu_s": round(w, 4),
+            "total_cpu_s": round(tot, 4),
+            # The headline ratio. G here bundles coordination-spin with real
+            # collector work; see the module docstring.
+            "gc_fraction": round(g / tot, 5) if tot else None,
+            "gc_threads": ng,
+            "wall_s": round(wall, 4),
+            "exit": rc,
+        }) + "\n")
+
+    if last:
+        print(f"  GC {g:.2f}s  mutator {w:.2f}s  total {tot:.2f}s  "
+              f"gc_fraction {g/tot:.4f}  ({ng} GC threads, wall {wall:.2f}s)"
+              if tot else "  no CPU recorded")
+    sys.exit(rc if rc else 0)
+
+
+if __name__ == "__main__":
+    main()
