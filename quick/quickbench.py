@@ -185,9 +185,10 @@ def parse_args(argv):
     # The CPU set every cell is pinned to, the same for all variants. "pcores"
     # keeps the set homogeneous on hybrid parts (see core_classes); "all" uses
     # the whole machine and mixes core classes, so label such runs separately.
-    p.add_argument("--cpu-set", dest="cpu_set", default="pcores",
-                   help='cores to pin every cell to: "pcores" (default), "all", '
-                        'or an explicit taskset list like "0-5"')
+    p.add_argument("--cpu-set", dest="cpu_set", default="auto",
+                   help='cores to pin every cell to. "auto" (default) = the '
+                        'largest UNIFORM set inside one NUMA node; "all" = the '
+                        'whole machine; or an explicit taskset list like "0-13"')
     p.add_argument("--cores", dest="cpu_set", help="alias for --cpu-set")
     p.add_argument("--gc", action="store_true",
                    help="collect GC accounting (MMTK_VERBOSE on the fork, "
@@ -276,15 +277,16 @@ def _read(path):
 
 
 def core_classes():
-    """{class: cpulist} on a heterogeneous part, else {}.
+    """{class: cpulist} on a heterogeneous part, else {} on a uniform one.
 
-    Intel hybrid CPUs expose the split as separate PMUs. On this project's dev
-    laptop (Core Ultra 7 265H) that is P-cores 0-5 at 5.3 GHz, E-cores 6-13 at
-    4.6 GHz, and two low-power E-cores 14-15 at 2.5 GHz — a 2.12x frequency
-    spread. Letting the scheduler drift mutator or GC threads across classes
-    moves timings by up to 2x for reasons that have nothing to do with GC
-    design, and a comparison where one collector lands on P-cores while the
-    other's workers land on E-cores is meaningless."""
+    Intel hybrid CPUs expose the split as separate PMUs. On the dev laptop
+    (Core Ultra 7 265H) that is P-cores 0-5 at 5.3 GHz, E-cores 6-13 at 4.6, and
+    two low-power E-cores 14-15 at 2.5 — a 2.12x frequency spread. Letting the
+    scheduler drift mutator or GC threads across classes moves timings by up to
+    2x for reasons unrelated to GC design.
+
+    Returns {} on a uniform part (a Xeon has no /sys/devices/cpu_core), where
+    there is nothing to avoid and the whole notion does not apply."""
     out = {}
     for name, path in (("P", "/sys/devices/cpu_core/cpus"),
                        ("E", "/sys/devices/cpu_atom/cpus")):
@@ -294,15 +296,51 @@ def core_classes():
     return out
 
 
-def _cpulist_len(spec):
-    n = 0
+def numa_nodes():
+    """{node_id: cpulist}. More than one entry means pinning must stay inside a
+    node: a GC is memory-bound, so spanning sockets makes tracing pay remote
+    latency and turns the measurement into a NUMA experiment. PERFORMANCE.md
+    section 5 pins to one socket on the 2-socket turing for this reason."""
+    out = {}
+    base = "/sys/devices/system/node"
+    try:
+        entries = sorted(os.listdir(base))
+    except OSError:
+        return out
+    for e in entries:
+        m = re.fullmatch(r"node(\d+)", e)
+        if not m:
+            continue
+        v = _read(os.path.join(base, e, "cpulist"))
+        if v:
+            out[int(m.group(1))] = v
+    return out
+
+
+def _expand(spec):
+    out = []
     for part in spec.split(","):
         if "-" in part:
             lo, hi = part.split("-")
-            n += int(hi) - int(lo) + 1
+            out.extend(range(int(lo), int(hi) + 1))
         else:
-            n += 1
-    return n
+            out.append(int(part))
+    return out
+
+
+def _compact(cpus):
+    cpus = sorted(set(cpus))
+    if not cpus:
+        return ""
+    runs, start, prev = [], cpus[0], cpus[0]
+    for c in cpus[1:]:
+        if c == prev + 1:
+            prev = c
+            continue
+        runs.append((start, prev)); start = prev = c
+    runs.append((start, prev))
+    return ",".join(str(a) if a == b else f"{a}-{b}" for a, b in runs)
+
 
 
 def resolve_cpu_set(a):
@@ -314,15 +352,36 @@ def resolve_cpu_set(a):
     core, which specifically destroys any plan whose premise is marking off the
     critical path (ConcurrentImmix, Bactrian). Every cell now gets the same
     explicit budget and each collector is free to use it as it will, which is
-    what "same machine" has to mean for the comparison to be honest."""
+    what "same machine" has to mean for the comparison to be honest.
+
+    "auto" picks the largest UNIFORM set of cores that lies inside a single NUMA
+    node — the two properties a comparison needs, in the order they bite:
+
+      * uniform: on a hybrid part, restrict to the performance class. On a
+        uniform part (Xeon, church) there are no classes and this is a no-op —
+        no laptop-specific behaviour follows the code onto that machine.
+      * one node: on a multi-socket box, stay inside one. This is the case the
+        earlier "pcores" default got WRONG — it found no hybrid classes, fell
+        through to every core on the machine, and would have pinned across
+        sockets on church, making tracing pay remote-memory latency.
+
+    The choice is reported by main() so it is on the record, never inferred.
+    """
     if a.no_pin or not have("taskset"):
         return None
-    spec = a.cpu_set or "pcores"
+    spec = a.cpu_set or "auto"
     if spec == "all":
         return f"0-{os.cpu_count() - 1}"
-    if spec == "pcores":
-        cls = core_classes()
-        return cls.get("P") or f"0-{os.cpu_count() - 1}"
+    if spec in ("auto", "pcores"):     # "pcores" kept as a back-compat alias
+        cls, nodes = core_classes(), numa_nodes()
+        cpus = _expand(cls["P"]) if "P" in cls else list(range(os.cpu_count()))
+        if len(nodes) > 1:
+            # Keep the node holding most of the candidate set; ties go to the
+            # lowest node id so repeated runs pick the same cores.
+            best = max(sorted(nodes),
+                       key=lambda n: len(set(cpus) & set(_expand(nodes[n]))))
+            cpus = sorted(set(cpus) & set(_expand(nodes[best])))
+        return _compact(cpus)
     return spec
 
 
@@ -991,17 +1050,27 @@ def main():
           f"  sizes={'ci' if a.ci else 'perf'}")
     print(f"plans={' '.join(a.plans)}  heap={a.heap}  reps={a.reps}  warmup={a.warmup}"
           f"  gc-workers={threads_label(a)}")
-    cls = core_classes()
+    cls, nodes = core_classes(), numa_nodes()
     pinned = a.cpu_set_resolved or "unpinned"
-    print(f"cpu-set={pinned}" + (f"   (host classes: "
-          + ", ".join(f"{k}={v}" for k, v in cls.items()) + ")" if cls else ""))
-    if cls and a.cpu_set_resolved:
+    topo = []
+    if cls:
+        topo.append("classes " + ", ".join(f"{k}={v}" for k, v in cls.items()))
+    else:
+        topo.append("uniform cores")
+    if len(nodes) > 1:
+        topo.append(f"{len(nodes)} NUMA nodes " + ", ".join(f"{k}={v}" for k, v in sorted(nodes.items())))
+    print(f"cpu-set={pinned}   (host: {'; '.join(topo)})")
+    if a.cpu_set_resolved:
+        sel = set(_expand(a.cpu_set_resolved))
         # Warn rather than refuse: a whole-machine sweep is a legitimate figure,
-        # it just must not be pooled with the homogeneous curves.
-        if a.cpu_set_resolved not in cls.values():
-            print("  WARNING: the pinned set is not a single core class — timings "
-                  "mix core frequencies. Report this run separately.")
-        ncore = _cpulist_len(a.cpu_set_resolved)
+        # it just must not be pooled with the uniform-core curves.
+        if cls and not any(sel == set(_expand(v)) for v in cls.values()):
+            print("  WARNING: the pinned set is not one core class — timings mix "
+                  "core frequencies. Report this run separately.")
+        if len(nodes) > 1 and not any(sel <= set(_expand(v)) for v in nodes.values()):
+            print("  WARNING: the pinned set spans NUMA nodes — tracing will pay "
+                  "remote-memory latency and this becomes a NUMA experiment.")
+        ncore = len(sel)
         want = max(a.domains) if a.mode in ("par", "all") else 1
         if want > ncore:
             print(f"  NOTE: sweep reaches {want} domains on {ncore} pinned cores; "

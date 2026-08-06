@@ -29,8 +29,17 @@ OUT=${OUT:-$PWD/sweep.ndjson}
 REPS=${REPS:-5}
 BENCHES=${BENCHES:-"binarytrees kb"}
 PLANS=${PLANS:-"GenImmix Bactrian"}
+# Heap points bracket binarytrees-20's knee as measured HERE. Re-derive the
+# floor on a new host: the left edge is where the program stops completing, and
+# it is machine-dependent.
 HEAPS=${HEAPS:-"64 96 128 192 256 384 512 768 1024"}
 OVERHEADS=${OVERHEADS:-"40 60 80 120 200 300 500"}
+# GC workers. 4 was chosen for a 6-P-core laptop, where anything larger
+# oversubscribed the pinned set. It is NOT a portable default: on a many-core
+# host pick it from the pinned core count, and prefer sweeping it as its own
+# axis (PERFORMANCE.md section 5 treats worker count as both confounder and
+# knob). The D1 CPU ratio should be roughly INVARIANT to it if KC's framing
+# holds, which makes the sweep a direct test of the thesis rather than tuning.
 THREADS=${THREADS:-4}
 QB="uv run quickbench.py"
 

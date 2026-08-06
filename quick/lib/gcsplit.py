@@ -56,6 +56,14 @@ Usage:
     perf record -q -g --call-graph=fp -o perf.data -- CMD ...
     gcsplit.py perf.data                     # or: gcsplit.py --report report.txt
     gcsplit.py perf.data --json out.json --show-unmatched
+
+One portability note about the RECORDING step, which this script does not do.
+On a uniform host (a Xeon, church) plain `cycles` above is correct. On an Intel
+HYBRID host perf tries to open the event on both the cpu_core and cpu_atom PMUs
+and the whole record fails if either open fails, so there the event must be
+named explicitly: `-e cpu_core/cycles/`. Naming cpu_core on a uniform host is an
+error. This script only reads an existing perf.data and is unaffected either
+way.
 """
 
 import argparse
