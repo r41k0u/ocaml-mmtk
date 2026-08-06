@@ -5,3 +5,6 @@ results/
 # rule (which otherwise hides them).
 !golden/
 !golden/*.out
+quick/lib/*.cm*
+quick/lib/*.o
+quick/build*/
