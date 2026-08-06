@@ -134,45 +134,30 @@ def main():
                                     stderr=errf)
             pid = proc.pid
 
-        # Summaries take the running MAX across samples, not the last sample:
-        # a thread's accumulated CPU vanishes from /proc/<pid>/task the moment
-        # it exits, so a final sample taken after the GC workers have shut down
-        # reads their contribution as ZERO (observed: a rep losing 1.7 s of
-        # worker CPU). Per-thread CPU is monotone while the thread lives, so
-        # the max is the value just before it died.
-        best_g = best_w = 0.0
-        best_ng = 0
+        # Per-TID accounting, not a max of the instantaneous sum. A thread's
+        # accumulated CPU vanishes from /proc/<pid>/task the moment it exits,
+        # and OCaml programs join and respawn DOMAINS mid-run (par_binarytrees
+        # spawns a fresh set per depth class) — so the instantaneous sum both
+        # drops on every join and never includes already-dead threads. Observed:
+        # a d=2 run whose true mutator CPU is ~4.5 s summed to 0.5 s. Each TID's
+        # own CPU is monotone while it lives, so we keep the max ever seen PER
+        # TID and sum over every thread that ever existed; a death freezes its
+        # contribution. Residual loss: under one sampling interval per thread.
+        seen = {}                       # tid -> (comm, max cpu seen)
+        def fold(th):
+            for tid, (comm, ut, st) in th.items():
+                cur = ut + st
+                old = seen.get(tid)
+                if old is None or cur > old[1]:
+                    seen[tid] = (comm, cur)
         while True:
             if proc is not None and proc.poll() is not None:
                 break
             th = read_threads(pid)
             if th is None:
                 break
+            fold(th)
             g, w, ng = summarise(th)
-            if g > best_g:
-                best_g, best_ng = g, ng
-            best_w = max(best_w, w)
-            out.write(json.dumps({
-                "kind": "cpu",
-                "t": time.clock_gettime(time.CLOCK_MONOTONIC) - t0,
-                "gc_cpu_s": round(g, 4),
-                "mutator_cpu_s": round(w, 4),
-                "gc_threads": ng,
-                "threads": len(th),
-            }) + "\n")
-            out.flush()
-            time.sleep(a.interval_ms / 1000.0)
-
-        rc = proc.wait() if proc is not None else None
-        wall = time.clock_gettime(time.CLOCK_MONOTONIC) - t0
-        # One more read: if the process is a zombie its threads are gone, but a
-        # still-live straggler can only raise the max.
-        th = read_threads(pid)
-        if th:
-            g, w, ng = summarise(th)
-            if g > best_g:
-                best_g, best_ng = g, ng
-            best_w = max(best_w, w)
         g, w, ng = best_g, best_w, best_ng
         tot = g + w
         summary = {
