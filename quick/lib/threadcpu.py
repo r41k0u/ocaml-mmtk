@@ -49,13 +49,24 @@ Usage:
 import argparse
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 
 CLK = os.sysconf("SC_CLK_TCK")          # jiffies per second
 GC_THREAD_NAME = "mmtk-gc-worker"       # set in binding/src/collection.rs
+
+# The runtime's report of GC work done ON the mutator thread (write barriers,
+# TLAB refills, LOS allocations), emitted at exit under MMTK_MUTATOR_GC_TIME=1
+# (runtime/mmtk.c). Without it, that work is misfiled as mutator CPU and the
+# comparison against vanilla — whose span-based number captures ALL of its GC —
+# flatters MMTk. Parked (blocked-for-GC) time is already excluded runtime-side.
+MUT_GC_RE = re.compile(
+    r"\[mmtk\] mutator GC time: ([\d.]+) ms \(barrier ([\d.]+) ms, "
+    r"alloc ([\d.]+) ms; parked ([\d.]+) ms excluded\)")
 
 
 def read_threads(pid):
@@ -110,10 +121,17 @@ def main():
     proc = None
     t0 = time.clock_gettime(time.CLOCK_MONOTONIC)
     with open(a.out, "w") as out:
+        errf = None
         if a.pid is not None:
             pid = a.pid
         else:
-            proc = subprocess.Popen(cmd, start_new_session=True)
+            # Arm the runtime's mutator-side accounting and keep stderr so the
+            # at-exit line can be folded into the summary. A file, not a pipe:
+            # a filling pipe would deadlock the child while we sleep.
+            env = dict(os.environ, MMTK_MUTATOR_GC_TIME="1")
+            errf = tempfile.TemporaryFile()
+            proc = subprocess.Popen(cmd, start_new_session=True, env=env,
+                                    stderr=errf)
             pid = proc.pid
 
         last = None
@@ -140,18 +158,41 @@ def main():
         wall = time.clock_gettime(time.CLOCK_MONOTONIC) - t0
         g, w, ng = summarise(last) if last else (0.0, 0.0, 0)
         tot = g + w
-        out.write(json.dumps({
+        summary = {
             "kind": "cpu_summary",
             "gc_cpu_s": round(g, 4),
             "mutator_cpu_s": round(w, 4),
             "total_cpu_s": round(tot, 4),
-            # The headline ratio. G here bundles coordination-spin with real
-            # collector work; see the module docstring.
+            # Raw thread-attributed ratio. G here is workers only and bundles
+            # coordination-spin; see the module docstring.
             "gc_fraction": round(g / tot, 5) if tot else None,
             "gc_threads": ng,
             "wall_s": round(wall, 4),
             "exit": rc,
-        }) + "\n")
+        }
+        if errf is not None:
+            errf.seek(0)
+            text = errf.read().decode("utf-8", "replace")
+            errf.close()
+            sys.stderr.write(text)          # preserve the child's stderr
+            m = MUT_GC_RE.search(text)
+            if m:
+                mg = float(m.group(1)) / 1e3
+                gc_c = g + mg
+                w_c = max(0.0, w - mg)
+                summary.update({
+                    "mut_gc_s": round(mg, 4),
+                    "mut_gc_barrier_s": round(float(m.group(2)) / 1e3, 4),
+                    "mut_gc_alloc_s": round(float(m.group(3)) / 1e3, 4),
+                    "parked_s": round(float(m.group(4)) / 1e3, 4),
+                    # Corrected split: mutator-side GC work moved into G. This
+                    # is the number to compare against vanilla's span-based one.
+                    "gc_corrected_s": round(gc_c, 4),
+                    "mutator_corrected_s": round(w_c, 4),
+                    "gc_fraction_corrected":
+                        round(gc_c / tot, 5) if tot else None,
+                })
+        out.write(json.dumps(summary) + "\n")
 
     if last:
         print(f"  GC {g:.2f}s  mutator {w:.2f}s  total {tot:.2f}s  "
