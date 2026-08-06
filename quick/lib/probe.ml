@@ -110,8 +110,38 @@ let cap = getenv_int "PROBE_CAP" (1 lsl 14)
 let i_last = 0        (* wall time of the previous tick *)
 let i_next = 1        (* minor_words value that triggers the next sample *)
 
+(* Calls between clock reads, gating the timestamp so a fine call site does not
+   pay for a clock read per call.
+
+   MEASURED LIMIT — read this before trusting a gap as a GC stall. A gap means
+   "the mutator did not progress" only if the work BETWEEN two ticks is far
+   smaller than a pause, and that is a property of the call site, not of this
+   code. Two placements were measured on binarytrees at depth 20:
+
+     outer loop (one tick per check(make d))
+         cheap, but a single depth-20 iteration builds ~1M nodes: tens of ms of
+         ordinary work recorded as a 30 ms "stall". Vanilla came out 72%
+         "stalled" with MMU(10ms) = 0.000 — the instrument reporting the
+         workload's granularity, not the collector's.
+     per-node (tick inside the check recursion)
+         resolves properly, but costs 44% wall (1.92 -> 2.77 s). A stride sweep
+         (1024 / 16384 / 262144 -> 2.77 / 2.81 / 2.77 s) shows the clock is NOT
+         the cost: it is the per-call Domain.DLS.get, and even the disabled call
+         costs 11%. On a workload whose unit of work is ~7 ns, no call per unit
+         is affordable.
+
+   So the probe is used for D2 (pacing), where coarse placement is not merely
+   acceptable but correct — the pacing curve only changes at collections, so
+   sampling between them adds nothing. For D3 pause distribution prefer the
+   zero-overhead authoritative sources: MMTK_PAUSE_LOG on the fork, and
+   runtime_events on vanilla. Gap data remains useful as a cross-check and for
+   workloads with fine-grained work units, and the dump records the stride so a
+   consumer can tell what resolution it is looking at. *)
+let stride = getenv_int "PROBE_STRIDE" 1024
+
 type t = {
   fs : float array;              (* [| last; next_sample |] — flat, unboxed *)
+  mutable countdown : int;       (* calls remaining before the next clock read *)
   mutable ticks : int;
   (* D3: gaps *)
   mutable ngap : int;
@@ -127,7 +157,7 @@ type t = {
 }
 
 let make () = {
-  fs = Array.make 2 0.0; ticks = 0;
+  fs = Array.make 2 0.0; countdown = stride; ticks = 0;
   ngap = 0; dropped = 0;
   gap_at = Array.make cap 0.0; gap_dur = Array.make cap 0.0;
   nsamp = 0;
@@ -160,6 +190,9 @@ let state () =
 let tick () =
   if enabled then begin
     let t = state () in
+    t.countdown <- t.countdown - 1;
+    if t.countdown <= 0 then begin
+    t.countdown <- stride;
     let now = Unix.gettimeofday () in
     let dt = now -. t.fs.(i_last) in
     if dt >= gap_thresh then begin
@@ -183,6 +216,7 @@ let tick () =
       t.nsamp <- t.nsamp + 1;
       t.fs.(i_next) <- mw +. sample_words
     end
+    end
   end
 
 (* Wrap a domain body so spawned workers are registered and flushed even if the
@@ -198,10 +232,10 @@ let dump () =
     Printf.fprintf oc
       "{\"kind\":\"summary\",\"backend\":\"%s\",\"domains\":%d,\
        \"final_minor_words\":%.0f,\"final_major_collections\":%d,\
-       \"gap_threshold_us\":%.0f,\"sample_mb\":%.0f}\n"
+       \"gap_threshold_us\":%.0f,\"sample_mb\":%.0f,\"stride\":%d}\n"
       (if bytecode then "bytecode" else "native")
       (List.length !all) (Gc.minor_words ()) fin.Gc.major_collections
-      (gap_thresh *. 1e6) (sample_words *. 8. /. 1024. /. 1024.);
+      (gap_thresh *. 1e6) (sample_words *. 8. /. 1024. /. 1024.) stride;
     List.iter (fun (did, t) ->
       (* probe_words: the probe's own allocation. The tick path is measured at
          0 words; only the rare quick_stat sample allocates (~25 words). Kept
