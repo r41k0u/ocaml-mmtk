@@ -345,6 +345,53 @@ def m1_fig():
     save(fig, "m1_scaling.png")
 
 
+def tweak_fig():
+    """Shape-matching frontier: D2 pacing match vs its D1/wall price."""
+    cells = []
+    for f in sorted(glob.glob(os.path.join(S, "tweak.*.stderr"))):
+        m = re.match(r".*tweak\.(\w+)\.n(\w+)\.c(\d+)\.stderr", f)
+        if not m:
+            continue
+        b, n, c = m.groups()
+        g = re.search(r"GCs: (\d+) \(full: (\d+)\), GC time: (\d+) ms", open(f).read())
+        summ = [r for r in nd(f.replace(".stderr", ".cpu.ndjson"))
+                if r.get("kind") == "cpu_summary"]
+        if g and summ:
+            cells.append(dict(bench=b, nursery=n, cad=int(c), gcs=int(g.group(1)),
+                              stw_ms=int(g.group(3)), wall=summ[0]["wall_s"],
+                              G=summ[0].get("gc_corrected_s", summ[0]["gc_cpu_s"])))
+    if not cells:
+        return
+    rep("\n### Tweak matrix (shape/tweaks): matching vanilla's pacing, and its price")
+    rep("| bench | nursery | cadence | GCs | STW ms | wall s | corrected G |")
+    rep("|---|---|---|---|---|---|---|")
+    for c in sorted(cells, key=lambda c: (c["bench"], c["gcs"], c["cad"])):
+        nn = "default" if c["nursery"] == "default" else f"{int(c['nursery'])//2**20}MiB"
+        rep(f"| {c['bench']} | {nn} | {c['cad']} | {c['gcs']} | {c['stw_ms']} "
+            f"| {c['wall']:.2f} | {c['G']:.2f} |")
+    fig, ax = plt.subplots(figsize=(7.5, 5))
+    VAN = {"binarytrees": (1839, 4.24)}   # (collections, wall) measured on church
+    for b, mk in (("binarytrees", "o"), ("kb", "^")):
+        cs = [c for c in cells if c["bench"] == b]
+        ax.scatter([c["gcs"] for c in cs], [c["wall"] for c in cs],
+                   marker=mk, c=[C["Bactrian"]] * len(cs), label=f"Bactrian tweak ({b})")
+        for c in cs:
+            nn = "def" if c["nursery"] == "default" else f"{int(c['nursery'])//2**20}M"
+            ax.annotate(f"{nn}/c{c['cad']}", (c["gcs"], c["wall"]), fontsize=6,
+                        xytext=(3, 3), textcoords="offset points")
+        if b in VAN:
+            ax.scatter([VAN[b][0]], [VAN[b][1]], marker="*", s=220,
+                       c=C["vanilla"], zorder=5, label=f"vanilla ({b})")
+    ax.set_xscale("log")
+    ax.set_xlabel("collections per run (D2 pacing)")
+    ax.set_ylabel("wall time (s)")
+    ax.set_title("Shape-matching frontier — matching vanilla's collection rate vs its cost\n"
+                 "(Bactrian, nursery x cadence; star = vanilla)")
+    ax.grid(alpha=.3)
+    ax.legend(fontsize=8)
+    save(fig, "tweak_frontier.png")
+
+
 def main():
     rep(f"# Shape campaign summary — {RESULTS}")
     d5_fig()
@@ -352,6 +399,7 @@ def main():
     for b in ("binarytrees", "kb"):
         bench_figs(b)
     m1_fig()
+    tweak_fig()
     with open(os.path.join(RESULTS, "shape_summary.md"), "w") as f:
         f.write("\n".join(report) + "\n")
     print(f"\nwrote {RESULTS}/shape_summary.md")
