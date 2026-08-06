@@ -487,6 +487,14 @@ def run_once(cmd, env, timeout, capture_err=False):
     # more than a second between them means the machine slept during this run.
     if boot - mono > 1.0:
         gc_info = dict(gc_info, suspended=True, suspend_s=round(boot - mono, 3))
+    # Total CPU is D1's denominator and comes free from the wait4 we already do.
+    # It is also what separates "GC got faster" from "GC moved onto more cores":
+    # extra GC workers cut wall time while raising CPU, and only CPU reveals it.
+    if rusage is not None:
+        gc_info = dict(gc_info,
+                       cpu_user_s=round(rusage.ru_utime, 4),
+                       cpu_sys_s=round(rusage.ru_stime, 4),
+                       cpu_total_s=round(rusage.ru_utime + rusage.ru_stime, 4))
     ms = mono * 1000.0
     rss_kib = _maxrss_kib(rusage)
     return (ms, rss_kib, "ok" if rc == 0 else "err", gc_info)
@@ -519,6 +527,7 @@ def cell_median(a, variant, bench, args, dom, mode=None):
             return None, None, "hang", {}
     times = []
     rss_vals = []
+    cpu_vals = []
     gc_info = {}
     for _ in range(a.reps):
         ms, rss, st, gi = run_once(cmd, env, a.timeout, capture_err=a.gc)
@@ -528,11 +537,17 @@ def cell_median(a, variant, bench, args, dom, mode=None):
             times.append(ms)
         if rss is not None:
             rss_vals.append(rss)
+        if gi.get("cpu_total_s") is not None:
+            cpu_vals.append(gi["cpu_total_s"])
         if gi:
             gc_info = gi
     if not times:
         return None, None, "err", gc_info
     max_rss = max(rss_vals) if rss_vals else None
+    if cpu_vals:
+        # Median, like wall: CPU is a measurement, unlike the per-run counts
+        # (GC count, objects copied) which are carried from the last rep.
+        gc_info = dict(gc_info, cpu_total_s=round(statistics.median(cpu_vals), 4))
     return statistics.median(times), max_rss, "ok", gc_info
 
 
