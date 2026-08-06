@@ -519,6 +519,73 @@ def run_once(cmd, env, timeout, capture_err=False):
     return (ms, rss_kib, "ok" if rc == 0 else "err", gc_info)
 
 
+def run_cells_interleaved(a, variants, bench, args, dom, mode):
+    """Measure every variant of one bench with the reps ROUND-ROBINED across
+    variants, returning {label: (median_ms, max_rss_kib, status, gc_info)}.
+
+    Why not simply loop variant-then-rep: this machine's clock moves. With
+    powersave + intel_pstate, background load holds the P-cores near 1.5 GHz and
+    even a sustained single-core load only reaches 2999 of 5300 MHz, so the same
+    binary measured 1.64 s early in a session and 2.70 s later. Running all reps
+    of one variant before the next maps that drift straight onto the variant
+    difference — the one thing the comparison is trying to isolate. Interleaving
+    spreads it evenly instead, so drift inflates every variant alike and
+    cancels in the ratio."""
+    live, out = [], {}
+    for v in variants:
+        exe = os.path.join(v["dir"], f"{bench}." + ("byte" if a.bytecode else "native"))
+        if not os.path.exists(exe):
+            out[v["label"]] = (None, None, "missing", {})
+            continue
+        if a.resume and a.done:
+            probe = dict(kind="cell", mode=mode, bench=bench, variant=v["label"],
+                         plan=v["plan"] or "vanilla",
+                         domains=(dom if dom is not None else 1), size=args,
+                         heap_mode=a.heap,
+                         heap=(a.heap if a.heap not in ("dynamic", "parity") else None),
+                         cpu_set=a.cpu_set_resolved or "unpinned", reps=a.reps,
+                         ocamlrunparam=a.ocamlrunparam or None, **PROV)
+            if cell_key(probe) in a.done:
+                out[v["label"]] = (None, None, "skip", {})
+                continue
+        argv = [str(args)] + ([str(dom)] if dom is not None else [])
+        launcher = [v["ocamlrun"]] if a.bytecode else []
+        live.append(dict(v=v,
+                         cmd=pin_prefix(a) + setarch_prefix(a) + launcher + [exe] + argv,
+                         env=cell_env(a, v["plan"], dom, bench),
+                         times=[], rss=[], cpu=[], gi={}, dead=None))
+
+    for _ in range(a.warmup):
+        for c in live:
+            if c["dead"]: continue
+            _, _, st, _ = run_once(c["cmd"], c["env"], a.timeout)
+            if st == "hang": c["dead"] = "hang"
+    for _ in range(a.reps):
+        for c in live:
+            if c["dead"]: continue
+            ms, rss, st, gi = run_once(c["cmd"], c["env"], a.timeout, capture_err=a.gc)
+            if st == "hang":
+                c["dead"] = "hang"; c["gi"] = gi; continue
+            if ms is not None: c["times"].append(ms)
+            if rss is not None: c["rss"].append(rss)
+            if gi.get("cpu_total_s") is not None: c["cpu"].append(gi["cpu_total_s"])
+            if gi: c["gi"] = gi
+
+    for c in live:
+        lbl = c["v"]["label"]
+        if c["dead"]:
+            out[lbl] = (None, None, c["dead"], c["gi"])
+        elif not c["times"]:
+            out[lbl] = (None, None, "err", c["gi"])
+        else:
+            gi = c["gi"]
+            if c["cpu"]:
+                gi = dict(gi, cpu_total_s=round(statistics.median(c["cpu"]), 4))
+            out[lbl] = (statistics.median(c["times"]),
+                        max(c["rss"]) if c["rss"] else None, "ok", gi)
+    return out
+
+
 def cell_median(a, variant, bench, args, dom, mode=None):
     """One cell: return (median_wall_ms, max_rss_kib, status, gc_info).
     RSS is the PEAK across the measured reps; None if unavailable.
@@ -694,8 +761,9 @@ def run_seq(a, variants, sizes, records):
         base = None
         seq_med[b] = {}
         seq_rss[b] = {}
+        cells = run_cells_interleaved(a, variants, b, sizes[b], None, "seq")
         for v in variants:
-            med, rss_kib, st, gi = cell_median(a, v, b, sizes[b], None, mode="seq")
+            med, rss_kib, st, gi = cells[v["label"]]
             if st == "skip":
                 row += f"{'(done)':<{colw}}"
                 continue
