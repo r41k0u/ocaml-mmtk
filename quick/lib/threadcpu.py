@@ -211,10 +211,11 @@ def main():
                 })
         out.write(json.dumps(summary) + "\n")
 
-    if last:
+    if tot:
         print(f"  GC {g:.2f}s  mutator {w:.2f}s  total {tot:.2f}s  "
-              f"gc_fraction {g/tot:.4f}  ({ng} GC threads, wall {wall:.2f}s)"
-              if tot else "  no CPU recorded")
+              f"gc_fraction {g/tot:.4f}  ({ng} GC threads, wall {wall:.2f}s)")
+    else:
+        print("  no CPU recorded")
     sys.exit(rc if rc else 0)
 
 
