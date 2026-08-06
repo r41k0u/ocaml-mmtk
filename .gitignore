@@ -8,3 +8,5 @@ results/
 quick/lib/*.cm*
 quick/lib/*.o
 quick/build*/
+quick/sweep.ndjson*
+quick/results.ndjson.prev

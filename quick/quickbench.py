@@ -192,6 +192,10 @@ def parse_args(argv):
     p.add_argument("--gc", action="store_true",
                    help="collect GC accounting (MMTK_VERBOSE on the fork, "
                         "OCAMLRUNPARAM=v=0x400 on vanilla)")
+    p.add_argument("--ocamlrunparam", default="",
+                   help="OCAMLRUNPARAM for the VANILLA variant, e.g. o=200. "
+                        "Vanilla has no heap cap, so this is how its footprint "
+                        "is swept against the fork's MMTK_HEAP_SIZE_MB")
     p.add_argument("--resume", action="store_true",
                    help="skip cells already recorded ok in --json; the same "
                         "command can be rerun after any interruption")
@@ -377,12 +381,15 @@ def cell_env(a, plan, dom, bench=None):
         if a.gc:
             # The fork's only GC accounting: the at-exit [mmtk] line.
             e["MMTK_VERBOSE"] = "1"
-    elif a.gc:
-        # Vanilla side. v=0x400 prints the real counters here; it is deliberately
-        # NOT used for MMTk variants, where major_collections comes from the dead
-        # caml_major_cycles_completed and always reads 0.
-        prev = e.get("OCAMLRUNPARAM", "")
-        e["OCAMLRUNPARAM"] = (prev + "," if prev else "") + "v=0x400"
+    if not plan:
+        # Vanilla side. It has no heap CAP, so its footprint is driven by
+        # space_overhead (OCAMLRUNPARAM o=) rather than by a size — which is why
+        # the D5 x-axis has to be MEASURED peak RSS on both sides rather than a
+        # commanded heap. --ocamlrunparam is what sweeps it.
+        parts = [p for p in (a.ocamlrunparam, "v=0x400" if a.gc else "") if p]
+        if parts:
+            prev = e.get("OCAMLRUNPARAM", "")
+            e["OCAMLRUNPARAM"] = ",".join(([prev] if prev else []) + parts)
     if dom is not None:
         e["DOMAINS"] = str(dom)
     return e
@@ -523,7 +530,8 @@ def cell_median(a, variant, bench, args, dom, mode=None):
                          domains=(dom if dom is not None else 1), size=args,
                          heap_mode=a.heap,
                          heap=(a.heap if a.heap not in ("dynamic", "parity") else None),
-                         cpu_set=a.cpu_set_resolved or "unpinned", reps=a.reps, **PROV)
+                         cpu_set=a.cpu_set_resolved or "unpinned", reps=a.reps,
+                         ocamlrunparam=a.ocamlrunparam or None, **PROV)
         if cell_key(probe_rec) in a.done:
             return None, None, "skip", {}
     exe = os.path.join(variant["dir"], f"{bench}." + ("byte" if a.bytecode else "native"))
@@ -599,7 +607,8 @@ def cell_key(rec):
     belongs here; wall time and RSS obviously do not."""
     return "|".join(str(rec.get(k)) for k in (
         "host", "commit", "mode", "bench", "variant", "plan",
-        "domains", "heap_mode", "heap", "size", "reps", "cpu_set"))
+        "domains", "heap_mode", "heap", "size", "reps", "cpu_set",
+        "ocamlrunparam"))
 
 
 def load_records(path):
@@ -653,6 +662,7 @@ def emit(records, a, **rec):
     rec["heap_mode"] = a.heap
     rec["heap"] = a.heap if a.heap not in ("dynamic", "parity") else None
     rec["cpu_set"] = a.cpu_set_resolved or "unpinned"
+    rec["ocamlrunparam"] = a.ocamlrunparam or None
     rec["reps"] = a.reps
     rec["ts"] = time.time()
     records.append(rec)
