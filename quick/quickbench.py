@@ -103,6 +103,7 @@ import signal
 import statistics
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 
@@ -183,12 +184,20 @@ def parse_args(argv):
                    help='cores to pin every cell to: "pcores" (default), "all", '
                         'or an explicit taskset list like "0-5"')
     p.add_argument("--cores", dest="cpu_set", help="alias for --cpu-set")
-    p.add_argument("--gc", action="store_true")
+    p.add_argument("--gc", action="store_true",
+                   help="collect GC accounting (MMTK_VERBOSE on the fork, "
+                        "OCAMLRUNPARAM=v=0x400 on vanilla)")
+    p.add_argument("--resume", action="store_true",
+                   help="skip cells already recorded ok in --json; the same "
+                        "command can be rerun after any interruption")
     p.add_argument("--chart", action="store_true")
     p.add_argument("--json", dest="json_path",
                    default=os.path.join(HERE, "results.ndjson"))
     p.add_argument("--graphs", default=os.path.join(HERE, "graphs"))
     p.add_argument("--no-plot", dest="no_plot", action="store_true")
+    p.add_argument("--replot", metavar="FILE",
+                   help="regenerate graphs from an existing NDJSON and exit; "
+                        "runs no benchmarks")
     a = p.parse_args(argv)
     a.mode = mode
     if a.quick:
@@ -209,6 +218,8 @@ def parse_args(argv):
         p.error("LXR requires a pinned heap: pass --heap <MB> or --heap parity "
                 "(LXR has no dynamic-heap default). E.g. --heap 512")
     a.cpu_set_resolved = resolve_cpu_set(a)
+    a.json_handle = None   # opened in main; emit() is a no-op until then
+    a.done = set()
     return a
 
 
@@ -351,6 +362,15 @@ def cell_env(a, plan, dom, bench=None):
         t = effective_threads(a, dom)
         if t is not None:
             e["MMTK_THREADS"] = str(t)
+        if a.gc:
+            # The fork's only GC accounting: the at-exit [mmtk] line.
+            e["MMTK_VERBOSE"] = "1"
+    elif a.gc:
+        # Vanilla side. v=0x400 prints the real counters here; it is deliberately
+        # NOT used for MMTk variants, where major_collections comes from the dead
+        # caml_major_cycles_completed and always reads 0.
+        prev = e.get("OCAMLRUNPARAM", "")
+        e["OCAMLRUNPARAM"] = (prev + "," if prev else "") + "v=0x400"
     if dom is not None:
         e["DOMAINS"] = str(dom)
     return e
@@ -370,17 +390,52 @@ def _maxrss_kib(rusage):
     return (rss // 1024) if sys.platform == "darwin" else rss
 
 
-def run_once(cmd, env, timeout):
-    """Run cmd; return (elapsed_ms, rss_kib, status). status: 'ok'|'hang'|'err'.
-    Kills the whole process group on timeout (hung GC workers included).
-    RSS (peak, KiB) comes from os.wait4's rusage on the success path; it is
-    None if the child couldn't run or was killed on timeout."""
+# MMTk's at-exit line (runtime/mmtk.c). The only GC accounting the fork emits.
+MMTK_VERBOSE_RE = re.compile(
+    r"\[mmtk\] GCs: (\d+) \(full: (\d+)\), GC time: (\d+) ms, objects copied: (\d+)")
+
+# Vanilla's OCAMLRUNPARAM=v=0x400 exit block (runtime/sys.c). Used ONLY for the
+# vanilla variant: on the fork, v=0x400 prints caml_major_cycles_completed,
+# which is dead and always 0 under MMTk (major_gc.c:55 never increments it), so
+# the same run would report a nonzero count via Gc.stat and 0 here.
+VANILLA_STAT_RE = re.compile(r"^(minor_words|promoted_words|major_words|"
+                             r"minor_collections|major_collections|heap_words|"
+                             r"top_heap_words):\s+(\d+)", re.M)
+
+
+def parse_gc_output(text):
+    """Pull GC accounting out of a run's stderr. {} when there is none."""
+    out = {}
+    m = MMTK_VERBOSE_RE.search(text)
+    if m:
+        out["gc_count"] = int(m.group(1))
+        out["gc_full"] = int(m.group(2))
+        out["gc_stw_ms"] = int(m.group(3))
+        out["objects_copied"] = int(m.group(4))
+    for k, v in VANILLA_STAT_RE.findall(text):
+        out["v_" + k] = int(v)
+    return out
+
+
+def run_once(cmd, env, timeout, capture_err=False):
+    """Run cmd; return (elapsed_ms, rss_kib, status, gc_info).
+    status: 'ok'|'hang'|'err'. Kills the whole process group on timeout (hung
+    GC workers included). RSS (peak, KiB) comes from os.wait4's rusage on the
+    success path; None if the child couldn't run or was killed on timeout.
+
+    stderr goes to a temp FILE, not a pipe, when captured: a pipe that fills
+    while we are blocked in wait4 would deadlock the child."""
+    errf = tempfile.TemporaryFile() if capture_err else None
     t0 = time.monotonic()
+    b0 = time.clock_gettime(time.CLOCK_BOOTTIME)
     try:
         p = subprocess.Popen(cmd, env=env, stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL, start_new_session=True)
+                             stderr=(errf if errf is not None else subprocess.DEVNULL),
+                             start_new_session=True)
     except FileNotFoundError:
-        return None, None, "err"
+        if errf is not None:
+            errf.close()
+        return None, None, "err", {}
 
     # Timeout/kill path: os.wait4() has no timeout, so arm a watchdog Timer that
     # SIGKILLs the whole process group (hung GC workers included) on expiry. The
@@ -414,43 +469,71 @@ def run_once(cmd, env, timeout):
     # Keep Popen's internal bookkeeping consistent (child already reaped).
     p.returncode = rc if isinstance(rc, int) else -1
 
+    gc_info = {}
+    if errf is not None:
+        try:
+            errf.seek(0)
+            gc_info = parse_gc_output(errf.read().decode("utf-8", "replace"))
+        except OSError:
+            pass
+        errf.close()
+
     if timed_out["fired"]:
-        return None, None, "hang"
+        return None, None, "hang", gc_info
 
-    ms = (time.monotonic() - t0) * 1000.0
+    mono = time.monotonic() - t0
+    boot = time.clock_gettime(time.CLOCK_BOOTTIME) - b0
+    # CLOCK_MONOTONIC stops across a suspend, CLOCK_BOOTTIME does not. A gap of
+    # more than a second between them means the machine slept during this run.
+    if boot - mono > 1.0:
+        gc_info = dict(gc_info, suspended=True, suspend_s=round(boot - mono, 3))
+    ms = mono * 1000.0
     rss_kib = _maxrss_kib(rusage)
-    return (ms, rss_kib, "ok" if rc == 0 else "err")
+    return (ms, rss_kib, "ok" if rc == 0 else "err", gc_info)
 
 
-def cell_median(a, variant, bench, args, dom):
-    """One cell: return (median_wall_ms, max_rss_kib, status).
+def cell_median(a, variant, bench, args, dom, mode=None):
+    """One cell: return (median_wall_ms, max_rss_kib, status, gc_info).
     RSS is the PEAK across the measured reps; None if unavailable.
-    status: 'ok'|'hang'|'err'|'missing'."""
+    gc_info is from the LAST measured rep (counts are per-run, not aggregable).
+    status: 'ok'|'hang'|'err'|'missing'|'skip'."""
+    if a.resume and a.done:
+        probe_rec = dict(kind="cell", mode=mode, bench=bench,
+                         variant=variant["label"], plan=variant["plan"] or "vanilla",
+                         domains=(dom if dom is not None else 1), size=args,
+                         heap_mode=a.heap,
+                         heap=(a.heap if a.heap not in ("dynamic", "parity") else None),
+                         cpu_set=a.cpu_set_resolved or "unpinned", reps=a.reps, **PROV)
+        if cell_key(probe_rec) in a.done:
+            return None, None, "skip", {}
     exe = os.path.join(variant["dir"], f"{bench}." + ("byte" if a.bytecode else "native"))
     if not os.path.exists(exe):
-        return None, None, "missing"
+        return None, None, "missing", {}
     launcher = [variant["ocamlrun"]] if a.bytecode else []
     argv = [str(args)] + ([str(dom)] if dom is not None else [])
     cmd = pin_prefix(a) + setarch_prefix(a) + launcher + [exe] + argv
     env = cell_env(a, variant["plan"], dom, bench)
     for _ in range(a.warmup):
-        _, _, st = run_once(cmd, env, a.timeout)
+        _, _, st, _ = run_once(cmd, env, a.timeout)
         if st == "hang":
-            return None, None, "hang"
+            return None, None, "hang", {}
     times = []
     rss_vals = []
+    gc_info = {}
     for _ in range(a.reps):
-        ms, rss, st = run_once(cmd, env, a.timeout)
+        ms, rss, st, gi = run_once(cmd, env, a.timeout, capture_err=a.gc)
         if st == "hang":
-            return None, None, "hang"
+            return None, None, "hang", gi
         if ms is not None:
             times.append(ms)
         if rss is not None:
             rss_vals.append(rss)
+        if gi:
+            gc_info = gi
     if not times:
-        return None, None, "err"
+        return None, None, "err", gc_info
     max_rss = max(rss_vals) if rss_vals else None
-    return statistics.median(times), max_rss, "ok"
+    return statistics.median(times), max_rss, "ok", gc_info
 
 
 # ---- formatting ------------------------------------------------------------
@@ -464,14 +547,100 @@ def fmt_ms(v):
     return f"{v:.2f}"
 
 
-def emit(records, **rec):
+# ---- provenance + durability ----------------------------------------------
+# A campaign is hours long and has to survive a disconnect, a suspend, or a
+# crash without losing finished cells, and must never fold corrupted timings
+# into results. Three parts: every record carries enough provenance to be
+# identified later, records are appended and fsync'd as they complete, and a
+# rerun skips what is already present.
+
+def host_provenance():
+    commit = None
+    try:
+        commit = subprocess.run(["git", "-C", HERE, "rev-parse", "--short", "HEAD"],
+                                capture_output=True, text=True).stdout.strip() or None
+    except OSError:
+        pass
+    return {"host": os.uname().nodename, "commit": commit}
+
+
+PROV = host_provenance()
+
+
+def cell_key(rec):
+    """Identity of a cell, for --resume. Anything that changes what was measured
+    belongs here; wall time and RSS obviously do not."""
+    return "|".join(str(rec.get(k)) for k in (
+        "host", "commit", "mode", "bench", "variant", "plan",
+        "domains", "heap_mode", "heap", "size", "reps", "cpu_set"))
+
+
+def load_records(path):
+    """All cell records from an NDJSON, tolerating a truncated final line."""
+    out = []
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if r.get("kind", "cell") == "cell":
+                out.append(r)
+    return out
+
+
+def load_done(path):
+    """Cell keys already recorded in an existing NDJSON. Tolerates a truncated
+    final line, which is what a killed run leaves behind."""
+    done = set()
+    if not os.path.exists(path):
+        return done
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue      # truncated tail from a killed run
+            if r.get("kind", "cell") == "cell" and r.get("status") == "ok":
+                done.add(cell_key(r))
+    return done
+
+
+def emit(records, a, **rec):
+    """Record one cell and make it durable immediately.
+
+    Timing is bracketed by both CLOCK_MONOTONIC and CLOCK_BOOTTIME: on Linux
+    MONOTONIC stops across a suspend while BOOTTIME keeps counting, so a
+    materially larger BOOTTIME delta means the machine slept mid-cell. Such a
+    cell is marked suspended and must be excluded from analysis — a suspend
+    silently corrupts wall time, the MMU timeline and the RSS curve, and would
+    otherwise read as a GC pathology."""
+    rec.setdefault("kind", "cell")
+    rec.update(PROV)
+    rec["heap_mode"] = a.heap
+    rec["heap"] = a.heap if a.heap not in ("dynamic", "parity") else None
+    rec["cpu_set"] = a.cpu_set_resolved or "unpinned"
+    rec["reps"] = a.reps
+    rec["ts"] = time.time()
     records.append(rec)
+    if a.json_handle is not None:
+        a.json_handle.write(json.dumps(rec) + "\n")
+        a.json_handle.flush()
+        os.fsync(a.json_handle.fileno())
 
 
-def write_json(path, records):
-    with open(path, "w") as f:
-        for r in records:
-            f.write(json.dumps(r) + "\n")
+def open_json(path, resume):
+    """Append-mode handle. Truncates only when not resuming, so a plain rerun
+    still starts clean but --resume never clobbers finished work."""
+    if not resume and os.path.exists(path):
+        os.replace(path, path + ".prev")
+    return open(path, "a")
 
 
 # ---- run modes -------------------------------------------------------------
@@ -489,15 +658,19 @@ def run_seq(a, variants, sizes, records):
         seq_med[b] = {}
         seq_rss[b] = {}
         for v in variants:
-            med, rss_kib, st = cell_median(a, v, b, sizes[b], None)
+            med, rss_kib, st, gi = cell_median(a, v, b, sizes[b], None, mode="seq")
+            if st == "skip":
+                row += f"{'(done)':<{colw}}"
+                continue
             rss_mib = round(rss_kib / 1024) if (st == "ok" and rss_kib is not None) else None
             seq_med[b][v["label"]] = med if st == "ok" else None
             seq_rss[b][v["label"]] = rss_mib
-            emit(records, mode="seq", bench=b, variant=v["label"],
+            emit(records, a, mode="seq", bench=b, variant=v["label"],
                  plan=v["plan"] or "vanilla", domains=1, threads=threads_label(a),
                  median_ms=med if st == "ok" else None,
-                 rss_mib=rss_mib,
-                 status=("ok" if st == "ok" else "hang" if st == "hang" else st))
+                 rss_mib=rss_mib, size=sizes[b],
+                 status=("ok" if st == "ok" else "hang" if st == "hang" else st),
+                 **gi)
             if st == "missing":
                 row += f"{'n/a':<{colw}}"; continue
             if st == "hang":
@@ -524,13 +697,17 @@ def run_par(a, variants, sizes, records):
             row = f"{v['label']:<{lw}}"
             t1 = None
             for d in a.domains:
-                med, rss_kib, st = cell_median(a, v, b, sizes[b], d)
+                med, rss_kib, st, gi = cell_median(a, v, b, sizes[b], d, mode="par")
+                if st == "skip":
+                    row += f"{'(done)':<18}"
+                    continue
                 rss_mib = round(rss_kib / 1024) if (st == "ok" and rss_kib is not None) else None
-                emit(records, mode="par", bench=b, variant=v["label"],
+                emit(records, a, mode="par", bench=b, variant=v["label"],
                      plan=v["plan"] or "vanilla", domains=d, threads=threads_label(a),
                      median_ms=med if st == "ok" else None,
-                     rss_mib=rss_mib,
-                     status=("ok" if st == "ok" else "hang" if st == "hang" else st))
+                     rss_mib=rss_mib, size=sizes[b],
+                     status=("ok" if st == "ok" else "hang" if st == "hang" else st),
+                     **gi)
                 if st == "missing":
                     row += f"{'n/a':<18}"; continue
                 if st == "hang":
@@ -693,6 +870,14 @@ def main():
     except Exception:
         pass
     a = parse_args(sys.argv[1:])
+
+    if a.replot:
+        recs = load_records(a.replot)
+        print(f"replot: {len(recs)} records from {a.replot}")
+        plot_all(recs, a.graphs)
+        print(f"wrote graphs to {a.graphs}")
+        return
+
     sizes = CI if a.ci else PERF
     variants = build_variants(a)
 
@@ -723,22 +908,37 @@ def main():
     print("variants: " + " ".join(v["label"] for v in variants))
     print("=" * 60)
 
+    a.done = load_done(a.json_path) if a.resume else set()
+    if a.resume:
+        print(f"resume: {len(a.done)} cells already recorded in {a.json_path}")
+    a.json_handle = open_json(a.json_path, a.resume)
+
     records = []
     seq_med = {}
     seq_rss = {}
-    if a.mode in ("seq", "all"):
-        seq_med, seq_rss = run_seq(a, variants, sizes, records)
-    if a.mode in ("par", "all"):
-        run_par(a, variants, sizes, records)
+    try:
+        if a.mode in ("seq", "all"):
+            seq_med, seq_rss = run_seq(a, variants, sizes, records)
+        if a.mode in ("par", "all"):
+            run_par(a, variants, sizes, records)
+    finally:
+        # Records are already durable (emit fsyncs each one); this just closes.
+        a.json_handle.close()
+        a.json_handle = None
     if a.chart and a.mode != "par":
         print_chart(a, variants, seq_med)
 
-    write_json(a.json_path, records)
     print(f"\nwrote results JSON: {a.json_path}", file=sys.stderr)
+    susp = [r for r in records if r.get("suspended")]
+    if susp:
+        print(f"WARNING: {len(susp)} cell(s) ran across a machine suspend and are "
+              "marked suspended — exclude them from analysis.", file=sys.stderr)
 
     if not a.no_plot:
         try:
-            plot_all(records, a.graphs)
+            # Under --resume this run's in-memory records cover only the cells it
+            # actually ran, so plot from the file to include the earlier ones.
+            plot_all(load_records(a.json_path) if a.resume else records, a.graphs)
         except Exception as e:  # plotting is best-effort; never fail the run
             print(f"(plotting skipped: {e})", file=sys.stderr)
 
