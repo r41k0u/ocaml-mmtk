@@ -158,7 +158,26 @@ def main():
                 break
             fold(th)
             g, w, ng = summarise(th)
-        g, w, ng = best_g, best_w, best_ng
+            out.write(json.dumps({
+                "kind": "cpu",
+                "t": time.clock_gettime(time.CLOCK_MONOTONIC) - t0,
+                "gc_cpu_s": round(g, 4),
+                "mutator_cpu_s": round(w, 4),
+                "gc_threads": ng,
+                "threads": len(th),
+            }) + "\n")
+            out.flush()
+            time.sleep(a.interval_ms / 1000.0)
+
+        rc = proc.wait() if proc is not None else None
+        wall = time.clock_gettime(time.CLOCK_MONOTONIC) - t0
+        # One more opportunistic read; a still-live straggler only raises maxima.
+        th = read_threads(pid)
+        if th:
+            fold(th)
+        g = sum(c for comm, c in seen.values() if comm == GC_THREAD_NAME)
+        w = sum(c for comm, c in seen.values() if comm != GC_THREAD_NAME)
+        ng = sum(1 for comm, _ in seen.values() if comm == GC_THREAD_NAME)
         tot = g + w
         summary = {
             "kind": "cpu_summary",
