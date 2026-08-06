@@ -176,7 +176,13 @@ def parse_args(argv):
     p.add_argument("--bytecode", action="store_true")
     p.add_argument("--no-pin", dest="no_pin", action="store_true")
     p.add_argument("--no-setarch", dest="no_setarch", action="store_true")
-    p.add_argument("--cores", default="")
+    # The CPU set every cell is pinned to, the same for all variants. "pcores"
+    # keeps the set homogeneous on hybrid parts (see core_classes); "all" uses
+    # the whole machine and mixes core classes, so label such runs separately.
+    p.add_argument("--cpu-set", dest="cpu_set", default="pcores",
+                   help='cores to pin every cell to: "pcores" (default), "all", '
+                        'or an explicit taskset list like "0-5"')
+    p.add_argument("--cores", dest="cpu_set", help="alias for --cpu-set")
     p.add_argument("--gc", action="store_true")
     p.add_argument("--chart", action="store_true")
     p.add_argument("--json", dest="json_path",
@@ -202,6 +208,7 @@ def parse_args(argv):
     if "LXR" in a.plans and a.heap == "dynamic":
         p.error("LXR requires a pinned heap: pass --heap <MB> or --heap parity "
                 "(LXR has no dynamic-heap default). E.g. --heap 512")
+    a.cpu_set_resolved = resolve_cpu_set(a)
     return a
 
 
@@ -240,13 +247,67 @@ def setarch_prefix(a):
     return []
 
 
-def pin_prefix(a, k):
+def _read(path):
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except OSError:
+        return None
+
+
+def core_classes():
+    """{class: cpulist} on a heterogeneous part, else {}.
+
+    Intel hybrid CPUs expose the split as separate PMUs. On this project's dev
+    laptop (Core Ultra 7 265H) that is P-cores 0-5 at 5.3 GHz, E-cores 6-13 at
+    4.6 GHz, and two low-power E-cores 14-15 at 2.5 GHz — a 2.12x frequency
+    spread. Letting the scheduler drift mutator or GC threads across classes
+    moves timings by up to 2x for reasons that have nothing to do with GC
+    design, and a comparison where one collector lands on P-cores while the
+    other's workers land on E-cores is meaningless."""
+    out = {}
+    for name, path in (("P", "/sys/devices/cpu_core/cpus"),
+                       ("E", "/sys/devices/cpu_atom/cpus")):
+        v = _read(path)
+        if v:
+            out[name] = v
+    return out
+
+
+def _cpulist_len(spec):
+    n = 0
+    for part in spec.split(","):
+        if "-" in part:
+            lo, hi = part.split("-")
+            n += int(hi) - int(lo) + 1
+        else:
+            n += 1
+    return n
+
+
+def resolve_cpu_set(a):
+    """The CPU set every cell is pinned to — identical across variants.
+
+    Deliberately NOT derived from the cell's domain count. The previous policy
+    pinned a sequential cell to `0-0`, one single core, while also setting
+    MMTK_THREADS=1: that co-schedules the mutator and the GC worker on the same
+    core, which specifically destroys any plan whose premise is marking off the
+    critical path (ConcurrentImmix, Bactrian). Every cell now gets the same
+    explicit budget and each collector is free to use it as it will, which is
+    what "same machine" has to mean for the comparison to be honest."""
     if a.no_pin or not have("taskset"):
-        return []
-    if a.cores:
-        lst = a.cores.split(",")[:k]
-        return ["taskset", "-c", ",".join(lst)]
-    return ["taskset", "-c", f"0-{k-1}"]
+        return None
+    spec = a.cpu_set or "pcores"
+    if spec == "all":
+        return f"0-{os.cpu_count() - 1}"
+    if spec == "pcores":
+        cls = core_classes()
+        return cls.get("P") or f"0-{os.cpu_count() - 1}"
+    return spec
+
+
+def pin_prefix(a):
+    return ["taskset", "-c", a.cpu_set_resolved] if a.cpu_set_resolved else []
 
 
 def effective_threads(a, dom):
@@ -370,8 +431,7 @@ def cell_median(a, variant, bench, args, dom):
         return None, None, "missing"
     launcher = [variant["ocamlrun"]] if a.bytecode else []
     argv = [str(args)] + ([str(dom)] if dom is not None else [])
-    k = dom if dom else 1
-    cmd = pin_prefix(a, k) + setarch_prefix(a) + launcher + [exe] + argv
+    cmd = pin_prefix(a) + setarch_prefix(a) + launcher + [exe] + argv
     env = cell_env(a, variant["plan"], dom, bench)
     for _ in range(a.warmup):
         _, _, st = run_once(cmd, env, a.timeout)
@@ -641,6 +701,21 @@ def main():
           f"  sizes={'ci' if a.ci else 'perf'}")
     print(f"plans={' '.join(a.plans)}  heap={a.heap}  reps={a.reps}  warmup={a.warmup}"
           f"  gc-workers={threads_label(a)}")
+    cls = core_classes()
+    pinned = a.cpu_set_resolved or "unpinned"
+    print(f"cpu-set={pinned}" + (f"   (host classes: "
+          + ", ".join(f"{k}={v}" for k, v in cls.items()) + ")" if cls else ""))
+    if cls and a.cpu_set_resolved:
+        # Warn rather than refuse: a whole-machine sweep is a legitimate figure,
+        # it just must not be pooled with the homogeneous curves.
+        if a.cpu_set_resolved not in cls.values():
+            print("  WARNING: the pinned set is not a single core class — timings "
+                  "mix core frequencies. Report this run separately.")
+        ncore = _cpulist_len(a.cpu_set_resolved)
+        want = max(a.domains) if a.mode in ("par", "all") else 1
+        if want > ncore:
+            print(f"  NOTE: sweep reaches {want} domains on {ncore} pinned cores; "
+                  "high-domain cells are oversubscribed (equally for all variants).")
     if a.vanilla:
         print(f"vanilla={a.vanilla}")
     if a.bin_a or a.bin_b:
