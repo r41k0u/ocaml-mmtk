@@ -25,7 +25,11 @@ BUILD    ?= build
 
 SEQ_BENCHES := binarytrees nbody fannkuchredux spectralnorm mandelbrot \
                matrix_multiplication LU_decomposition kb
-PAR_BENCHES := par_spectralnorm par_matmul par_binarytrees
+# chameneos_redux was missing here while quickbench.py, mkgolden.sh and
+# PARITY_HEAPS all list it, so `make native` never built it and the panel
+# silently reported it as n/a — hiding the effect-handler/fiber workload, which
+# is where the sharpest multi-domain Bactrian pathology shows up.
+PAR_BENCHES := par_spectralnorm par_matmul par_binarytrees chameneos_redux
 BENCHES     := $(SEQ_BENCHES) $(PAR_BENCHES)
 BYTECODE := $(addprefix $(BUILD)/,$(addsuffix .byte,$(BENCHES)))
 NATIVE   := $(addprefix $(BUILD)/,$(addsuffix .native,$(BENCHES)))

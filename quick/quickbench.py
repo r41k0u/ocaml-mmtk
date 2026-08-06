@@ -144,12 +144,17 @@ PARITY_HEAPS = {
     # across the domain sweep; one heap/bench is fair, and RSS is still measured
     # + charted so parity stays verifiable.
     "par_binarytrees": 448, "par_matmul": 112, "par_spectralnorm": 96,
+    # chameneos_redux had no entry, so `--heap parity` silently gave it a
+    # DYNAMIC heap (cell_env only pins when PARITY_HEAPS.get(bench) is not
+    # None) — breaking parity with no warning, and reaching LXR, which has no
+    # dynamic-heap default at all. Pinned at its d=8 GenImmix footprint.
+    "chameneos_redux": 96,
 }
 
 COLORS = {
     "vanilla": "#444444", "mmtk:GenImmix": "#4C72B0",
     "mmtk:Immix": "#DD8452", "mmtk:ConcurrentImmix": "#55A868",
-    "mmtk:LXR": "#C44E52",
+    "mmtk:LXR": "#C44E52", "mmtk:Bactrian": "#8172B3",
 }
 
 
@@ -354,6 +359,13 @@ def cell_env(a, plan, dom, bench=None):
             hp = PARITY_HEAPS.get(bench)
             if hp is not None:
                 e["MMTK_HEAP_SIZE_MB"] = str(hp)
+            else:
+                # Falling through here leaves the heap DYNAMIC, quietly breaking
+                # the parity the flag was asked for — and for LXR, which has no
+                # dynamic default, it is not even a valid configuration. Say so.
+                print(f"  WARNING: --heap parity but no PARITY_HEAPS entry for "
+                      f"{bench!r}; this cell runs on a DYNAMIC heap and is NOT at "
+                      f"parity.", file=sys.stderr)
         elif a.heap != "dynamic":
             e["MMTK_HEAP_SIZE_MB"] = str(a.heap)
         # GC-worker count. Default policy "domains" sets workers = this cell's
