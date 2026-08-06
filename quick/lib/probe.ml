@@ -42,6 +42,18 @@
  *     floats moved out of the record the whole tick path measures 0.000
  *     words/tick, so the probe does not perturb its own denominator at all.
  *
+ * NATIVE ONLY — the tick path is allocation-free only under ocamlopt. All of
+ * the above depends on float unboxing, which the bytecode interpreter does not
+ * do: every float operation there boxes. Measured, 2M ticks:
+ *
+ *     backend    disabled   enabled
+ *     bytecode    0.000     10.000  words/tick
+ *     native      0.000      0.000
+ *
+ * 10 words/tick would swamp D2's denominator, so the probe refuses to arm
+ * under bytecode rather than quietly producing a corrupted pacing curve. This
+ * costs nothing in practice: quickbench times the native builds.
+ *
  * Tunables (env): PROBE_OUT (path; unset = probe disabled), PROBE_GAP_US
  * (record gaps at least this long, default 50), PROBE_SAMPLE_MB (odometer
  * sample distance, default 50), PROBE_CAP (per-domain record capacity).
@@ -53,7 +65,25 @@ let getenv_int name default =
   | _ -> default
 
 let out_path = try Some (Sys.getenv "PROBE_OUT") with Not_found -> None
-let enabled = out_path <> None
+
+(* Refuse to arm under bytecode: the tick path costs 10 words/tick there (no
+   float unboxing) and would corrupt the very odometer D2 divides by. Set
+   PROBE_ALLOW_BYTECODE=1 to override for a deliberate D3-only run, where the
+   allocation skew does not matter. *)
+let bytecode = (Sys.backend_type = Sys.Bytecode)
+let allow_bytecode =
+  (try Sys.getenv "PROBE_ALLOW_BYTECODE" with Not_found -> "") <> ""
+
+let enabled =
+  match out_path with
+  | None -> false
+  | Some _ when bytecode && not allow_bytecode ->
+    prerr_endline
+      "probe: DISABLED under bytecode (tick path costs 10 words/tick without \
+       float unboxing, which would corrupt the D2 odometer). Use a native \
+       build, or set PROBE_ALLOW_BYTECODE=1 for a D3-only run.";
+    false
+  | Some _ -> true
 
 (* Gap threshold in seconds. Below this a tick is "the mutator kept running". *)
 let gap_thresh = float_of_int (getenv_int "PROBE_GAP_US" 50) /. 1e6
@@ -151,8 +181,10 @@ let dump () =
     let oc = open_out path in
     let fin = Gc.quick_stat () in
     Printf.fprintf oc
-      "{\"kind\":\"summary\",\"domains\":%d,\"final_minor_words\":%.0f,\
-       \"final_major_collections\":%d,\"gap_threshold_us\":%.0f,\"sample_mb\":%.0f}\n"
+      "{\"kind\":\"summary\",\"backend\":\"%s\",\"domains\":%d,\
+       \"final_minor_words\":%.0f,\"final_major_collections\":%d,\
+       \"gap_threshold_us\":%.0f,\"sample_mb\":%.0f}\n"
+      (if bytecode then "bytecode" else "native")
       (List.length !all) (Gc.minor_words ()) fin.Gc.major_collections
       (gap_thresh *. 1e6) (sample_words *. 8. /. 1024. /. 1024.);
     List.iter (fun (did, t) ->
