@@ -111,9 +111,15 @@ def mmu(stalls, t_end, w):
 
 # ---------------- per-bench figures ----------------
 def bench_figs(bench):
-    variants = [("vanilla", f"{bench}.vanilla.o500"),
-                ("GenImmix", f"{bench}.GenImmix.T4"),
-                ("Bactrian", f"{bench}.Bactrian.T4")]
+    def pick(label, *cands):
+        for c in cands:
+            if os.path.exists(os.path.join(S, c + ".pause.ndjson")) or \
+               os.path.exists(os.path.join(S, c + ".rss.ndjson")):
+                return (label, c)
+        return (label, cands[0])
+    variants = [pick("vanilla", f"{bench}.vanilla.o500"),
+                pick("GenImmix", f"{bench}.GenImmix.T4", f"{bench}.GenImmix.T1"),
+                pick("Bactrian", f"{bench}.Bactrian.T1", f"{bench}.Bactrian.T4")]
 
     # D3 pause CDFs
     fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -439,6 +445,105 @@ def tweak_fig():
     save(fig, "tweak_frontier.png")
 
 
+PERF = os.path.join(RESULTS, "perf")
+
+def counters_fig():
+    """Bactrian/vanilla ratios of instructions, cycles, LLC-loads per bench."""
+    import math
+    rows = []
+    for f in sorted(glob.glob(os.path.join(PERF, "*.vanilla.stat"))):
+        bench = os.path.basename(f).split(".")[0]
+        def parse(path):
+            out = {}
+            for line in open(path):
+                pp = line.split()
+                if len(pp) >= 2 and pp[0].replace(",", "").isdigit():
+                    out[pp[1]] = int(pp[0].replace(",", ""))
+            return out
+        v = parse(f); b = parse(f.replace(".vanilla.", ".Bactrian."))
+        if v.get("instructions") and b.get("instructions"):
+            rows.append((bench,
+                         b["instructions"] / v["instructions"],
+                         b["cycles"] / v["cycles"],
+                         (b.get("LLC-loads", 0) / v["LLC-loads"]) if v.get("LLC-loads") else float("nan")))
+    if not rows:
+        return
+    rep("\n### Hardware counters, whole process (Bactrian / vanilla ratios)")
+    rep("| bench | instructions | cycles | LLC-loads |")
+    rep("|---|---|---|---|")
+    for b, i, c, l in rows:
+        rep(f"| {b} | {i:.2f}x | {c:.2f}x | {'-' if math.isnan(l) else f'{l:.2f}x'} |")
+    fig, ax = plt.subplots(figsize=(2 + 1.35 * len(rows), 4.6))
+    w = 0.26
+    for k, (lab, col) in enumerate((("instructions", "#4C72B0"),
+                                    ("cycles", "#C44E52"), ("LLC-loads", "#55A868"))):
+        vals = [r[1 + k] for r in rows]
+        ax.bar([i + (k - 1) * w for i in range(len(rows))], vals, w,
+               color=col, label=lab)
+    ax.axhline(1.0, color="#444444", lw=1, ls="--")
+    ax.set_yscale("log")
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels([r[0] for r in rows], fontsize=8, rotation=15)
+    ax.set_ylabel("Bactrian / vanilla (log)")
+    ax.set_title("Hardware counters — Bactrian relative to vanilla (1.0 = equal)")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=.3, axis="y")
+    save(fig, "counters_panel.png")
+
+
+def hybrid_d1_fig():
+    """perf-grade D1: worker-thread samples are G by identity, mutator by symbol."""
+    gpat = re.compile(r"caml_modify|caml_initialize|mmtk_ocaml|caml_mmtk_(?!park)|refill_tlab"
+                      r"|^mark$|do_some_marking|mark_slice_darken|caml_sweep|oldify|caml_darken"
+                      r"|caml_empty_minor|major_collection_slice|caml_do_roots|caml_scan_stack"
+                      r"|pool_sweep|caml_shared_try_alloc|ephe_", re.I)
+    cpat = re.compile(r"caml_mmtk_park|futex|lock_contended|pthread_(mutex|cond)", re.I)
+    rows = []
+    for f in sorted(glob.glob(os.path.join(PERF, "*.vanilla.report"))):
+        bench = os.path.basename(f).split(".")[0]
+        def split(path):
+            G = W = C = 0.0
+            for line in open(path):
+                m = re.match(r"\s*([\d.]+)%\s+(\S+)\s+\[[.k]\]\s+(.*)", line)
+                if not m:
+                    continue
+                pct, comm, sym = float(m.group(1)), m.group(2), m.group(3)
+                if comm == "mmtk-gc-worker":
+                    G += pct
+                elif cpat.search(sym):
+                    C += pct
+                elif gpat.search(sym):
+                    G += pct
+                else:
+                    W += pct
+            t = G + W + C
+            return (G / t, W / t, C / t) if t else (0, 0, 0)
+        v = split(f); b = split(f.replace(".vanilla.", ".Bactrian."))
+        rows.append((bench, v, b))
+    if not rows:
+        return
+    rep("\n### Hybrid perf D1 (worker threads = G by identity; mutator by symbol)")
+    rep("| bench | vanilla G share | Bactrian G share |")
+    rep("|---|---|---|")
+    fig, ax = plt.subplots(figsize=(2 + 1.6 * len(rows), 4.6))
+    w = 0.35
+    for i, (bench, v, b) in enumerate(rows):
+        ax.bar(i - w / 2, v[0], w, color=C["vanilla"], label="vanilla G" if i == 0 else None)
+        ax.bar(i - w / 2, v[1], w, bottom=v[0], color=C["vanilla"], alpha=.3,
+               label="vanilla W" if i == 0 else None)
+        ax.bar(i + w / 2, b[0], w, color=C["Bactrian"], label="Bactrian G" if i == 0 else None)
+        ax.bar(i + w / 2, b[1], w, bottom=b[0], color=C["Bactrian"], alpha=.3,
+               label="Bactrian W" if i == 0 else None)
+        rep(f"| {bench} | {v[0]:.3f} | {b[0]:.3f} |")
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels([r[0] for r in rows], fontsize=9)
+    ax.set_ylabel("share of sampled CPU")
+    ax.set_title("D1 by perf hybrid attribution — G (solid, baseline) + W (translucent)")
+    ax.legend(fontsize=8, ncol=2)
+    ax.grid(alpha=.3, axis="y")
+    save(fig, "d1_hybrid_perf.png")
+
+
 def main():
     rep(f"# Shape campaign summary — {RESULTS}")
     d5_fig()
@@ -447,6 +552,8 @@ def main():
         bench_figs(b)
     m1_fig()
     tweak_fig()
+    counters_fig()
+    hybrid_d1_fig()
     with open(os.path.join(RESULTS, "shape_summary.md"), "w") as f:
         f.write("\n".join(report) + "\n")
     print(f"\nwrote {RESULTS}/shape_summary.md")
