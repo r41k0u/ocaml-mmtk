@@ -214,50 +214,66 @@ def bench_figs(bench):
 
 # ---------------- D1 stacked bars ----------------
 def d1_fig():
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), sharey=False)
-    rep("\n### D1 corrected CPU budget (G = collector incl. mutator-side GC; W = program)")
+    """One panel, every bench with data, G on the BOTTOM.
+
+    G sits on the common baseline precisely so the claim this figure carries —
+    Bactrian's collector CPU matches vanilla's — is readable off the shared
+    axis; with W underneath, equal Gs start at different heights and the eye
+    cannot compare them. T=1 throughout: the operating point where the match
+    holds (worker CPU grows with T; see the retraction in RUNLOG)."""
+    benches = sorted({f.split("/")[-1].split(".")[0] for f in
+                      glob.glob(os.path.join(S, "*.vanilla.o500.time.txt"))})
+    rep("\n### D1 corrected CPU budget, all benches (T=1; G = collector incl. mutator-side GC)")
     rep("| bench | variant | G s | W s | fraction |")
     rep("|---|---|---|---|---|")
-    for ax, bench in zip(axes, ("binarytrees", "kb")):
-        labels, Gs, Ws = [], [], []
-        # vanilla o=500: G = span sum (pause stream), CPU = median of time.txt
+    groups = []
+    for bench in benches:
+        row = []
         tt = os.path.join(S, f"{bench}.vanilla.o500.time.txt")
         st, _, recs = stalls_of(os.path.join(S, f"{bench}.vanilla.o500.pause.ndjson"))
-        if os.path.exists(tt) and recs:
-            cpus = []
-            for line in open(tt):
-                p = line.split()
-                if len(p) >= 3:
-                    cpus.append(float(p[1]) + float(p[2]))
+        if os.path.exists(tt):
+            cpus = [float(x.split()[1]) + float(x.split()[2])
+                    for x in open(tt) if len(x.split()) >= 3]
             cpu = statistics.median(cpus)
             g = sum(r["dur"] for r in recs)
-            labels.append("vanilla\no=500"); Gs.append(g); Ws.append(max(0, cpu - g))
-            rep(f"| {bench} | vanilla o=500 | {g:.2f} | {cpu - g:.2f} | {g/cpu:.3f} |")
+            row.append(("vanilla", g, max(0.0, cpu - g)))
+            rep(f"| {bench} | vanilla | {g:.2f} | {cpu - g:.2f} | {g/cpu:.3f} |")
         for plan in ("GenImmix", "Bactrian"):
-            for T in (1, 4):
-                gs, ws_ = [], []
-                for f in glob.glob(os.path.join(S, f"{bench}.{plan}.T{T}.cpu*.ndjson")):
-                    summ = [r for r in nd(f) if r.get("kind") == "cpu_summary"]
-                    if summ and summ[0].get("gc_corrected_s") is not None \
-                       and summ[0]["gc_cpu_s"] > 0:
-                        gs.append(summ[0]["gc_corrected_s"])
-                        ws_.append(summ[0]["mutator_corrected_s"])
-                if gs:
-                    g, w = statistics.median(gs), statistics.median(ws_)
-                    labels.append(f"{plan}\nT={T}"); Gs.append(g); Ws.append(w)
-                    rep(f"| {bench} | {plan} T={T} | {g:.2f} | {w:.2f} | {g/(g+w):.3f} |")
-        x = range(len(labels))
-        ax.bar(x, Ws, color="#AAAAAA", label="W (program)")
-        ax.bar(x, Gs, bottom=Ws, color="#C44E52", label="G (collector)")
-        for i, (g, w) in enumerate(zip(Gs, Ws)):
-            ax.text(i, g + w + .05, f"{g/(g+w):.2f}", ha="center", fontsize=8)
-        ax.set_xticks(list(x))
-        ax.set_xticklabels(labels, fontsize=8)
-        ax.set_ylabel("CPU seconds")
-        ax.set_title(bench)
-        ax.grid(alpha=.3, axis="y")
-    axes[0].legend(fontsize=8)
-    fig.suptitle("D1 CPU budget, corrected (number atop bar = GC fraction)")
+            gs, ws_ = [], []
+            for f in glob.glob(os.path.join(S, f"{bench}.{plan}.T1.cpu*.ndjson")):
+                summ = [r for r in nd(f) if r.get("kind") == "cpu_summary"]
+                if summ and summ[0].get("gc_corrected_s") is not None:
+                    gs.append(summ[0]["gc_corrected_s"])
+                    ws_.append(summ[0]["mutator_corrected_s"])
+            if gs:
+                g, w = statistics.median(gs), statistics.median(ws_)
+                row.append((plan, g, w))
+                rep(f"| {bench} | {plan} | {g:.2f} | {w:.2f} | {g/(g+w):.3f} |")
+        if row:
+            groups.append((bench, row))
+    if not groups:
+        return
+    fig, ax = plt.subplots(figsize=(max(10, 1.7 * sum(len(r) for _, r in groups) * .55), 5.2))
+    x, ticks, ticklabs = 0, [], []
+    for bench, row in groups:
+        xs = []
+        for label, g, w in row:
+            ax.bar(x, g, color=C.get(label, "#999999"), edgecolor="white", width=.8,
+                   label=f"{label} G" if bench == groups[0][0] else None)
+            ax.bar(x, w, bottom=g, color=C.get(label, "#999999"), alpha=.32,
+                   width=.8, label=f"{label} W" if bench == groups[0][0] else None)
+            frac = g / (g + w) if g + w else 0
+            ax.text(x, g + w + .06, f"{frac:.2f}", ha="center", fontsize=7)
+            xs.append(x); x += 1
+        ticks.append(sum(xs) / len(xs)); ticklabs.append(bench)
+        x += 1.2
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(ticklabs, fontsize=8, rotation=12)
+    ax.set_ylabel("CPU seconds")
+    ax.set_title("D1 CPU budget across the panel — collector CPU (G, solid, common baseline) "
+                 "+ program CPU (W, translucent); label = GC fraction. T=1, iso-memory.")
+    ax.legend(fontsize=7, ncol=3)
+    ax.grid(alpha=.3, axis="y")
     save(fig, "d1_cpu_budget.png")
 
 

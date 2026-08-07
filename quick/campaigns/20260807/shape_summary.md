@@ -1,18 +1,32 @@
 # Shape campaign summary — /tmp/final/20260807
 
-### D1 corrected CPU budget (G = collector incl. mutator-side GC; W = program)
+### D1 corrected CPU budget, all benches (T=1; G = collector incl. mutator-side GC)
 | bench | variant | G s | W s | fraction |
 |---|---|---|---|---|
-| binarytrees | vanilla o=500 | 1.98 | 1.64 | 0.546 |
-| binarytrees | GenImmix T=1 | 1.74 | 2.46 | 0.413 |
-| binarytrees | GenImmix T=4 | 3.34 | 2.48 | 0.573 |
-| binarytrees | Bactrian T=1 | 1.99 | 2.76 | 0.419 |
-| binarytrees | Bactrian T=4 | 4.07 | 2.72 | 0.599 |
-| kb | vanilla o=500 | 0.19 | 1.23 | 0.136 |
-| kb | GenImmix T=1 | 0.52 | 1.58 | 0.250 |
-| kb | GenImmix T=4 | 0.51 | 1.60 | 0.244 |
-| kb | Bactrian T=1 | 0.53 | 1.58 | 0.253 |
-| kb | Bactrian T=4 | 0.58 | 1.63 | 0.265 |
+| LU_decomposition | vanilla | 0.01 | 1.67 | 0.004 |
+| LU_decomposition | GenImmix | 0.27 | 2.19 | 0.110 |
+| LU_decomposition | Bactrian | 0.28 | 2.19 | 0.111 |
+| binarytrees | vanilla | 1.98 | 1.64 | 0.546 |
+| binarytrees | GenImmix | 1.74 | 2.46 | 0.413 |
+| binarytrees | Bactrian | 1.99 | 2.76 | 0.419 |
+| fannkuchredux | vanilla | 0.00 | 3.33 | 0.000 |
+| fannkuchredux | GenImmix | 0.00 | 3.42 | 0.000 |
+| fannkuchredux | Bactrian | 0.00 | 3.42 | 0.000 |
+| kb | vanilla | 0.19 | 1.23 | 0.136 |
+| kb | GenImmix | 0.52 | 1.58 | 0.250 |
+| kb | Bactrian | 0.53 | 1.58 | 0.253 |
+| mandelbrot | vanilla | 0.00 | 1.78 | 0.000 |
+| mandelbrot | GenImmix | 0.00 | 1.71 | 0.000 |
+| mandelbrot | Bactrian | 0.00 | 1.71 | 0.000 |
+| matrix_multiplication | vanilla | 0.00 | 1.48 | 0.001 |
+| matrix_multiplication | GenImmix | 0.05 | 2.79 | 0.016 |
+| matrix_multiplication | Bactrian | 0.05 | 2.84 | 0.016 |
+| nbody | vanilla | 0.00 | 2.11 | 0.000 |
+| nbody | GenImmix | 0.00 | 2.11 | 0.000 |
+| nbody | Bactrian | 0.00 | 2.10 | 0.000 |
+| spectralnorm | vanilla | 0.00 | 1.54 | 0.002 |
+| spectralnorm | GenImmix | 0.12 | 1.70 | 0.064 |
+| spectralnorm | Bactrian | 0.12 | 1.70 | 0.067 |
 
 ### D3 binarytrees: MMU (authoritative stall streams)
 | variant | stalls | stalled s | MMU@1ms | MMU@10ms | MMU@100ms |

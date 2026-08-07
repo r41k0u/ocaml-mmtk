@@ -59,27 +59,4 @@ operating point: MMTK_HEAP_SIZE_MB=192 vs vanilla o=500 (iso-memory, from the la
 [05:19:31] PARFIX: rerun MMTk par threadcpu cells (per-TID sampler)
 [05:20:18] PARFIX done
 [05:23:26] VANPAUSE recapture done (interactive; detached-context corrupt-stream unresolved)
-
-## Post-campaign notes (analysis session)
-
-Hitches, in the order they were found and fixed:
-1. Campaign script's mrun/vrun helpers had the benchmark ARG before the binary,
-   so `env` tried to execute "20" — every stage-2/3 pause-stream run died
-   instantly. cpu/rss/time data unaffected. Streams re-captured.
-2. threadcpu (a) crashed after writing (NameError from a stale variable),
-   logging phantom cell failures while data stayed valid; (b) needed per-TID
-   accounting — par_binarytrees joins domains per depth class and a joined
-   thread's CPU vanishes from /proc, so a d=2 cell summed 1.86 s where truth is
-   ~4.2 s. MMTk par cpu cells re-run with the per-TID sampler (PARFIX).
-3. gcpauses raises "Runtime_events: corrupt stream" when run from the DETACHED
-   campaign context, but works flawlessly interactively (3554/3554 records) —
-   UNRESOLVED; vanilla pause streams re-captured interactively.
-4. The chained tweaks run initially failed at git fetch: no SSH agent in a
-   detached watcher. Re-fetched with agent, relaunched without the fetch.
-5. campaign_plots typo (zorder5) killed the summary write on first runs.
-
-Retraction recorded: the 2026-08-06 claim that "idle MMTk workers park, so G is
-roughly invariant to MMTK_THREADS" was an artifact of the pre-fix sampler
-(worker CPU lost at thread exit). The per-TID data shows worker CPU GROWS with
-T: binarytrees G = 1.74 (T=1) -> 3.34 (T=4). Workers burn CPU well beyond the
-STW windows; mechanism (spin vs useful overlap) needs perf.
+[13:05:48] D1 panel extension: 6 remaining seq benches collected (T=1)
