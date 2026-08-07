@@ -251,6 +251,13 @@ def d1_fig():
                 rep(f"| {bench} | {plan} | {g:.2f} | {w:.2f} | {g/(g+w):.3f} |")
         if row:
             groups.append((bench, row))
+    # Keep only benches where the GC actually runs on BOTH runtimes: a bar pair
+    # with G ~ 0 on either side says nothing about collector-cost matching, it
+    # only says the workload does not collect. (The compute-bound controls stay
+    # in the summary table above as the no-false-cost check.)
+    EPS = 0.05
+    groups = [(b, row) for b, row in groups
+              if row and min(g for _, g, _ in row) >= EPS]
     if not groups:
         return
     fig, ax = plt.subplots(figsize=(max(10, 1.7 * sum(len(r) for _, r in groups) * .55), 5.2))
@@ -275,6 +282,30 @@ def d1_fig():
     ax.legend(fontsize=7, ncol=3)
     ax.grid(alpha=.3, axis="y")
     save(fig, "d1_cpu_budget.png")
+
+    # G alone, grouped — the direct collector-cost comparison with no W in the
+    # frame. Same filtered bench set, value labels on every bar.
+    fig, ax = plt.subplots(figsize=(2.4 + 2.2 * len(groups), 4.6))
+    width = 0.26
+    order = ["vanilla", "GenImmix", "Bactrian"]
+    for vi, vlabel in enumerate(order):
+        xs, gs = [], []
+        for bi, (bench, row) in enumerate(groups):
+            for label, g, _w in row:
+                if label == vlabel:
+                    xs.append(bi + (vi - 1) * width)
+                    gs.append(g)
+        ax.bar(xs, gs, width=width, color=C[vlabel], label=vlabel)
+        for xx, gg in zip(xs, gs):
+            ax.text(xx, gg + .02, f"{gg:.2f}", ha="center", fontsize=8)
+    ax.set_xticks(range(len(groups)))
+    ax.set_xticklabels([b for b, _ in groups], fontsize=9)
+    ax.set_ylabel("collector CPU (s)")
+    ax.set_title("Collector CPU alone — vanilla vs GenImmix vs Bactrian\n"
+                 "(T=1, iso-memory; benches with real GC on both runtimes)")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=.3, axis="y")
+    save(fig, "d1_gc_only.png")
 
 
 # ---------------- D5 ----------------
