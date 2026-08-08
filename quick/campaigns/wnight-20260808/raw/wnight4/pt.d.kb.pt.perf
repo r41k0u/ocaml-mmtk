@@ -1,0 +1,6 @@
+# started on Sat Aug  8 05:46:31 2026
+
+kb.native-257125,4327894520,,cycles,1361527416,100.00,,
+mmtk-gc-worker-257127,724406322,,cycles,229378918,100.00,,
+kb.native-257125,6603421435,,instructions,1361527416,100.00,,
+mmtk-gc-worker-257127,1347061054,,instructions,229366430,100.00,,

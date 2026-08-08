@@ -1,0 +1,6 @@
+# started on Sat Aug  8 05:46:32 2026
+
+LU_decompositio-257132,6898329456,,cycles,2170481079,100.00,,
+mmtk-gc-worker-257134,219618921,,cycles,71066809,100.00,,
+LU_decompositio-257132,21118397876,,instructions,2170481079,100.00,,
+mmtk-gc-worker-257134,47800720,,instructions,71054301,100.00,,

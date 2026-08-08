@@ -1,0 +1,531 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+Warning:
+Kernel address maps (/proc/{kallsyms,modules}) were restricted.
+
+Check /proc/sys/kernel/kptr_restrict before running 'perf record'.
+
+As no suitable kallsyms nor vmlinux was found, kernel samples
+can't be resolved.
+
+Samples in kernel modules can't be resolved as well.
+
+#
+# Total Lost Samples: 0
+#
+# Samples: 46K of event 'cpu/cycles/P'
+# Event count (approx.): 141593136432
+#
+# Children      Self  Command          Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               IPC   [IPC Coverage]
+# ........  ........  ...............  ...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................  ....................
+#
+    29.90%     0.63%  binarytrees.nat  [.] syscall                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+            |          
+             --29.81%--syscall
+                       |          
+                       |--7.02%--0xffffffffa92001c4
+                       |          
+                       |--4.54%--0xffffffffa920014d
+                       |          
+                       |--4.42%--0xffffffffa920012b
+                       |          |          
+                       |           --2.98%--0xffffffffaa917b65
+                       |                     |          
+                       |                      --2.86%--0xffffffffa954858e
+                       |                                |          
+                       |                                 --2.49%--0xffffffffa979b220
+                       |                                           |          
+                       |                                            --2.40%--0xffffffffa979ab98
+                       |                                                      |          
+                       |                                                       --1.08%--0xffffffffa979e284
+                       |          
+                       |--4.06%--0xffffffffa920010d
+                       |          
+                       |--2.85%--0xffffffffa920009f
+                       |          
+                        --2.82%--0xffffffffa92001b7
+
+     7.54%     0.52%  binarytrees.nat  [k] 0xffffffffa92001c4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --7.02%--0xffffffffa92001c4
+
+     7.06%     7.02%  binarytrees.nat  [k] 0xffffffffa92001bd                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --7.02%--syscall
+                       0xffffffffa92001c4
+
+     6.84%     0.00%  mmtk-gc-worker   [.] visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)                                                                                                                                                                                                                                                          -      -            
+            |
+            ---visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+               |          
+                --1.37%--{closure#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+
+     6.44%     6.44%  mmtk-gc-worker   [.] <F as mmtk::vm::scanning::SlotVisitor<SL>>::visit_slot                                                                                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+            |          
+             --5.99%--visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+
+     5.73%     0.00%  mmtk-gc-worker   [k] 0x0000000100000400                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0x100000400
+               |          
+               |--1.31%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+               |          
+                --1.21%--copy_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     4.90%     0.00%  mmtk-gc-worker   [.] from_address (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+            |
+            ---from_address (inlined)
+               |          
+               |--2.34%--classify_inner (inlined)
+               |          
+                --1.38%--load (inlined)
+
+     4.80%     0.26%  binarytrees.nat  [.] 0xffffffffa920014d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --4.54%--0xffffffffa920014d
+
+     4.63%     4.63%  mmtk-gc-worker   [.] mmtk_ocaml_common::slot::FieldSlot::from_address                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+            |          
+             --3.95%--from_address (inlined)
+                       |          
+                       |--1.78%--classify_inner (inlined)
+                       |          
+                        --1.06%--load (inlined)
+
+     4.54%     4.54%  binarytrees.nat  [k] 0xffffffffa920014b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --4.54%--syscall
+                       0xffffffffa920014d
+
+     4.42%     0.00%  binarytrees.nat  [.] 0xffffffffa920012b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0xffffffffa920012b
+               |          
+                --2.98%--0xffffffffaa917b65
+                          |          
+                           --2.86%--0xffffffffa954858e
+                                     |          
+                                      --2.49%--0xffffffffa979b220
+                                                |          
+                                                 --2.40%--0xffffffffa979ab98
+                                                           |          
+                                                            --1.08%--0xffffffffa979e284
+
+     4.28%     0.22%  binarytrees.nat  [.] 0xffffffffa920010d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --4.06%--0xffffffffa920010d
+
+     4.25%     0.00%  mmtk-gc-worker   [.] 0x0000555555c5af30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0x555555c5af30
+               |          
+                --3.65%--do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --3.55%--trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                     |          
+                                      --3.33%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                                |          
+                                                 --2.57%--fetch_add (inlined)
+                                                           atomic_add<usize, usize> (inlined)
+
+     4.18%     4.18%  mmtk-gc-worker   [.] <mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<VM,P,_> as mmtk::scheduler::work::GCWork<VM>>::do_work                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+            |          
+             --3.63%--0x555555c5af30
+                       |          
+                        --3.54%--do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                  trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                  |          
+                                   --3.32%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                             |          
+                                              --2.57%--fetch_add (inlined)
+                                                        atomic_add<usize, usize> (inlined)
+
+     4.18%     0.00%  mmtk-gc-worker   [.] do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --4.08%--trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --3.83%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                     |          
+                                      --2.58%--fetch_add (inlined)
+                                                atomic_add<usize, usize> (inlined)
+
+     4.13%     4.13%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+            |          
+             --3.03%--side_metadata_access<true, u8, core::result::Result<u8, u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#1}<u8>> (inlined)
+                       |          
+                        --2.87%--{closure#0}<u8> (inlined)
+
+     4.08%     0.00%  mmtk-gc-worker   [.] trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                                                                                                                                                                                                                                                         -      -            
+            |
+            ---trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --3.83%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --2.58%--fetch_add (inlined)
+                                     atomic_add<usize, usize> (inlined)
+
+     4.06%     4.06%  binarytrees.nat  [k] 0xffffffffa920010b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---syscall
+               0xffffffffa920010d
+
+     4.02%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, core::result::Result<u8, u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#1}<u8>> (inlined)                                                                                                                                                                                                                                 -      -            
+            |
+            ---side_metadata_access<true, u8, core::result::Result<u8, u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --3.82%--{closure#0}<u8> (inlined)
+
+     3.88%     0.00%  mmtk-gc-worker   [.] atomic_compare_exchange<u8> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+            |
+            ---atomic_compare_exchange<u8> (inlined)
+
+     3.83%     0.00%  mmtk-gc-worker   [.] trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+            |
+            ---trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --2.58%--fetch_add (inlined)
+                          atomic_add<usize, usize> (inlined)
+
+     3.82%     0.00%  mmtk-gc-worker   [.] {closure#0}<u8> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -      -            
+            |
+            ---{closure#0}<u8> (inlined)
+
+     3.79%     0.00%  binarytrees.nat  [.] 0x6168732f75306b31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0x6168732f75306b31
+               |          
+               |--2.45%--Binarytrees.check_280
+               |          
+                --1.31%--Binarytrees.make_277
+
+     3.73%     3.73%  mmtk-gc-worker   [.] core::sync::atomic::atomic_compare_exchange                                                                                                                                                                                                                                                                                                                                                                                                                                                                      -      -            
+            |          
+             --2.83%--atomic_compare_exchange<u8> (inlined)
+
+     3.67%     0.00%  mmtk-gc-worker   [.] {closure#0}<u8> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -      -            
+            |
+            ---{closure#0}<u8> (inlined)
+
+     3.31%     0.46%  binarytrees.nat  [.] 0xffffffffa920009f                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.85%--0xffffffffa920009f
+
+     3.13%     0.31%  binarytrees.nat  [k] 0xffffffffa92001b7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.82%--0xffffffffa92001b7
+
+     3.11%     0.13%  binarytrees.nat  [.] 0xffffffffaa917b65                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.98%--0xffffffffaa917b65
+                       |          
+                        --2.86%--0xffffffffa954858e
+                                  |          
+                                   --2.49%--0xffffffffa979b220
+                                             |          
+                                              --2.40%--0xffffffffa979ab98
+                                                        |          
+                                                         --1.08%--0xffffffffa979e284
+
+     2.98%     0.00%  mmtk-gc-worker   [.] 0x0000555555c6b680                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0x555555c6b680
+
+     2.92%     0.07%  binarytrees.nat  [.] 0xffffffffa954858e                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.86%--0xffffffffa954858e
+                       |          
+                        --2.49%--0xffffffffa979b220
+                                  |          
+                                   --2.40%--0xffffffffa979ab98
+                                             |          
+                                              --1.08%--0xffffffffa979e284
+
+     2.85%     2.85%  binarytrees.nat  [k] 0xffffffffa920009c                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---syscall
+               0xffffffffa920009f
+
+     2.83%     2.82%  binarytrees.nat  [k] 0xffffffffa92001b4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.82%--syscall
+                       0xffffffffa92001b7
+
+     2.79%     2.79%  mmtk-gc-worker   [.] <mmtk::policy::sft_map::space_map::SFTSpaceMap as mmtk::policy::sft_map::SFTMap>::get_checked                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+            |          
+             --1.98%--get_checked (inlined)
+                       |          
+                        --1.27%--get_unchecked (inlined)
+
+     2.77%     0.00%  mmtk-gc-worker   [.] trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>, 0> (inlined)                                                                                                                                                                                                                                                                                         -      -            
+            |
+            ---trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>, 0> (inlined)
+               |          
+                --2.06%--trace_object_without_moving<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+                          |          
+                           --1.20%--attempt_mark<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.74%     0.00%  mmtk-gc-worker   [.] load (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -      -            
+            |
+            ---load (inlined)
+
+     2.70%     0.00%  mmtk-gc-worker   [.] get_checked (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+            |
+            ---get_checked (inlined)
+               |          
+                --1.45%--get_unchecked (inlined)
+
+     2.69%     2.69%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+            |          
+             --2.02%--side_metadata_access<true, u8, u8, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#1}<u8>> (inlined)
+                       |          
+                        --1.91%--{closure#0}<u8> (inlined)
+
+     2.69%     2.69%  mmtk-gc-worker   [.] <mmtk_ocaml_common::slot::FieldSlot as mmtk::vm::slot::Slot>::load                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.26%--load (inlined)
+
+     2.65%     0.00%  mmtk-gc-worker   [.] is_in_mmtk_spaces (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      -      -            
+            |
+            ---is_in_mmtk_spaces (inlined)
+
+     2.58%     0.00%  mmtk-gc-worker   [.] fetch_add (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+            |
+            ---fetch_add (inlined)
+               atomic_add<usize, usize> (inlined)
+
+     2.58%     0.00%  mmtk-gc-worker   [.] atomic_add<usize, usize> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---atomic_add<usize, usize> (inlined)
+
+     2.58%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, u8, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#1}<u8>> (inlined)                                                                                                                                                                                                                                                                                   -      -            
+            |
+            ---side_metadata_access<true, u8, u8, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --2.40%--{closure#0}<u8> (inlined)
+
+     2.56%     2.56%  mmtk-gc-worker   [.] <mmtk::policy::immix::immixspace::ImmixSpace<VM> as mmtk::policy::gc_work::PolicyTraceObject<VM>>::trace_object                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+            |          
+             --1.78%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>, 0> (inlined)
+                       |          
+                        --1.51%--trace_object_without_moving<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+                                  |          
+                                   --1.04%--attempt_mark<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.56%     0.07%  binarytrees.nat  [.] 0xffffffffa979b220                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.49%--0xffffffffa979b220
+                       |          
+                        --2.40%--0xffffffffa979ab98
+                                  |          
+                                   --1.08%--0xffffffffa979e284
+
+     2.46%     2.46%  mmtk-gc-worker   [.] mmtk::memory_manager::is_in_mmtk_spaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+            |          
+             --1.65%--is_in_mmtk_spaces (inlined)
+
+     2.45%     2.43%  binarytrees.nat  [.] Binarytrees.check_280                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+            |          
+             --2.43%--0x6168732f75306b31
+                       Binarytrees.check_280
+
+     2.42%     0.03%  binarytrees.nat  [.] 0xffffffffa979ab98                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --2.40%--0xffffffffa979ab98
+                       |          
+                        --1.08%--0xffffffffa979e284
+
+     2.42%     2.42%  mmtk-gc-worker   [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::PlanTraceObject<VM>>::post_scan_object                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+            |          
+             --1.20%--post_scan_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.34%     0.00%  mmtk-gc-worker   [.] classify_inner (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -      -            
+            |
+            ---classify_inner (inlined)
+
+     2.31%     0.00%  mmtk-gc-worker   [.] post_scan_object<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+            |
+            ---post_scan_object<mmtk_ocaml::OCamlVM> (inlined)
+               |          
+                --1.34%--post_scan_object<mmtk_ocaml::OCamlVM> (inlined)
+                          mark_lines<mmtk_ocaml::OCamlVM> (inlined)
+                          |          
+                           --1.24%--mark_lines_for_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.06%     0.00%  mmtk-gc-worker   [.] trace_object_without_moving<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)                                                                                                                                                                                                                                                                             -      -            
+            |
+            ---trace_object_without_moving<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+               |          
+                --1.20%--attempt_mark<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.83%     0.00%  mmtk-gc-worker   [.] visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+            |
+            ---visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)
+               |          
+                --1.66%--push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+                          |          
+                           --1.60%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                     push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                     |          
+                                      --1.54%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.76%     1.76%  mmtk-gc-worker   [.] mmtk_ocaml_common::scanning::scan_ocaml_object                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -      -            
+            |          
+             --1.53%--scan_ocaml_object<mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+
+     1.75%     0.00%  mmtk-gc-worker   [.] load (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -      -            
+            |
+            ---load (inlined)
+               |          
+                --1.10%--atomic_load<usize> (inlined)
+
+     1.73%     1.73%  mmtk-gc-worker   [.] mmtk::policy::copyspace::CopySpace<VM>::trace_object                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+            |          
+             --1.37%--0x100000400
+                       |          
+                        --1.28%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+
+     1.68%     0.00%  mmtk-gc-worker   [.] atomic_compare_exchange_weak<u8> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                       -      -            
+            |
+            ---atomic_compare_exchange_weak<u8> (inlined)
+
+     1.67%     1.67%  mmtk-gc-worker   [.] core::sync::atomic::atomic_compare_exchange_weak                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+            |          
+             --1.66%--atomic_compare_exchange_weak<u8> (inlined)
+
+     1.67%     0.00%  mmtk-gc-worker   [.] scan_ocaml_object<mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)                                                                                                                                                                                                                                                                                       -      -            
+            |
+            ---scan_ocaml_object<mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+
+     1.66%     0.00%  mmtk-gc-worker   [.] push<mmtk_ocaml_common::slot::FieldSlot> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+               |          
+                --1.60%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                          push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                          |          
+                           --1.54%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.65%     0.00%  mmtk-gc-worker   [.] trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+            |
+            ---trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+               |          
+                --1.03%--forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+
+     1.61%     0.00%  mmtk-gc-worker   [.] 0x004e0800000000b9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |
+            ---0x4e0800000000b9
+
+     1.60%     0.00%  mmtk-gc-worker   [.] push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                         -      -            
+            |
+            ---push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               |          
+                --1.54%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.60%     0.00%  mmtk-gc-worker   [.] push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                     -      -            
+            |
+            ---push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               |          
+                --1.54%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.54%     0.00%  mmtk-gc-worker   [.] write<mmtk_ocaml_common::slot::FieldSlot> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+            |
+            ---write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.48%     0.00%  binarytrees.nat  [.] is_mutator (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+            |
+            ---is_mutator (inlined)
+
+     1.47%     1.47%  binarytrees.nat  [.] <mmtk_ocaml::active_plan::VMActivePlan as mmtk::vm::active_plan::ActivePlan<mmtk_ocaml::OCamlVM>>::is_mutator                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+            |          
+             --1.43%--is_mutator (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] get_unchecked (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+            |
+            ---get_unchecked (inlined)
+
+     1.38%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)                                                                                                                                                                                                                                                                                 -      -            
+            |
+            ---side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --1.26%--{closure#0}<u8> (inlined)
+
+     1.37%     1.37%  mmtk-gc-worker   [.] mmtk_ocaml_common::object_model::copy_object                                                                                                                                                                                                                                                                                                                                                                                                                                                                     -      -            
+            |          
+             --1.21%--0x100000400
+                       |          
+                        --1.14%--copy_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.37%     0.00%  mmtk-gc-worker   [.] {closure#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+            |
+            ---{closure#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+
+     1.37%     0.00%  mmtk-gc-worker   [.] copy_object<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                       -      -            
+            |
+            ---copy_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.36%     1.36%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+     1.34%     0.00%  mmtk-gc-worker   [.] mark_lines<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -      -            
+            |
+            ---mark_lines<mmtk_ocaml::OCamlVM> (inlined)
+               |          
+                --1.24%--mark_lines_for_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.31%     1.30%  binarytrees.nat  [.] Binarytrees.make_277                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+            |          
+             --1.30%--0x6168732f75306b31
+                       Binarytrees.make_277
+
+     1.25%     0.00%  binarytrees.nat  [.] hash_one<std::hash::random::RandomState, &usize> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                       -      -            
+            |
+            ---hash_one<std::hash::random::RandomState, &usize> (inlined)
+
+     1.25%     1.25%  mmtk-gc-worker   [.] <mmtk::plan::tracing::ObjectsClosure<E> as mmtk::vm::scanning::SlotVisitor<<<E as mmtk::scheduler::gc_work::ProcessEdgesWork>::VM as mmtk::vm::VMBinding>::VMSlot>>::visit_slot                                                                                                                                                                                                                                                                                                                                  -      -            
+            |          
+             --1.24%--visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)
+                       |          
+                        --1.08%--push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+                                  |          
+                                   --1.02%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                             push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+
+     1.24%     0.00%  mmtk-gc-worker   [.] mark_lines_for_object<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+            |
+            ---mark_lines_for_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.20%     0.00%  mmtk-gc-worker   [.] attempt_mark<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                      -      -            
+            |
+            ---attempt_mark<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.17%     1.17%  binarytrees.nat  [.] core::hash::BuildHasher::hash_one                                                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+            |          
+             --1.16%--hash_one<std::hash::random::RandomState, &usize> (inlined)
+
+     1.10%     0.00%  mmtk-gc-worker   [.] atomic_load<usize> (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     -      -            
+            |
+            ---atomic_load<usize> (inlined)
+
+     1.08%     0.00%  binarytrees.nat  [.] 0xffffffffa979e284                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+            |          
+             --1.08%--0xffffffffa979e284
+
+     1.07%     0.00%  mmtk-gc-worker   [.] set_raw_byte_atomic (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+            |
+            ---set_raw_byte_atomic (inlined)
+
+     1.05%     0.00%  mmtk-gc-worker   [.] _atomic_load_vmovdqa (inlined)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -      -            
+            |
+            ---_atomic_load_vmovdqa (inlined)
+
+     1.04%     1.04%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::set_raw_byte_atomic                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+     1.03%     0.00%  mmtk-gc-worker   [.] forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)                                                                                                                                                                                                                                                                                                     -      -            
+            |
+            ---forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

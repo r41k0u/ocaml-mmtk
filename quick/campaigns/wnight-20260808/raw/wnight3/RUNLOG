@@ -1,0 +1,45 @@
+[05:35:50] commit: 154de2d31 runtime: MMTK_ALLOC_JITTER takes entropy bits (2..8; 1 = default 5)
+[05:35:50] === full seq panel, three-way ===
+[05:36:01] cell v.binarytrees done
+[05:36:12] cell b.binarytrees done
+[05:36:23] cell j.binarytrees done
+[05:36:30] cell v.nbody done
+[05:36:36] cell b.nbody done
+[05:36:43] cell j.nbody done
+[05:36:53] cell v.fannkuchredux done
+[05:37:03] cell b.fannkuchredux done
+[05:37:14] cell j.fannkuchredux done
+[05:37:18] cell v.spectralnorm done
+[05:37:24] cell b.spectralnorm done
+[05:37:30] cell j.spectralnorm done
+[05:37:35] cell v.mandelbrot done
+[05:37:40] cell b.mandelbrot done
+[05:37:46] cell j.mandelbrot done
+[05:37:50] cell v.matrix_multiplication done
+[05:37:59] cell b.matrix_multiplication done
+[05:38:05] cell j.matrix_multiplication done
+[05:38:10] cell v.LU_decomposition done
+[05:38:17] cell b.LU_decomposition done
+[05:38:25] cell j.LU_decomposition done
+[05:38:29] cell v.kb done
+[05:38:34] cell b.kb done
+[05:38:40] cell j.kb done
+[05:38:40] === targeted: 6-bit jitter and THP ===
+[05:38:46] cell j6.matrix_multiplication done
+[05:38:53] cell j6.mm800 done
+[05:39:00] cell thp.LU_decomposition done
+[05:39:07] cell thpn8.LU_decomposition done
+[05:39:18] cell thp.binarytrees done
+[05:39:23] cell thp.kb done
+[05:39:23] === output-parity gate under jitter, whole panel ===
+[05:39:30] gate binarytrees OK
+[05:39:35] gate nbody OK
+[05:39:42] gate fannkuchredux OK
+[05:39:46] gate spectralnorm OK
+[05:39:49] gate mandelbrot OK
+[05:39:54] gate matrix_multiplication OK
+[05:40:00] gate LU_decomposition OK
+[05:40:04] gate kb OK
+[05:40:04] === par_binarytrees d=4 jitter sanity (STW multi-domain) ===
+[05:40:05] par d=4 ran OK
+[05:40:05] === ROUND 3 COMPLETE ===

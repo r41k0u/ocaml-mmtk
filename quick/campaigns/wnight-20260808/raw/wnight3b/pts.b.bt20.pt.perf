@@ -1,0 +1,12 @@
+# started on Sat Aug  8 05:41:41 2026
+
+binarytrees.nat-254670,7855328733,,cycles,2490234639,100.00,,
+mmtk-gc-worker-254672,4984589772,,cycles,1589293631,100.00,,
+binarytrees.nat-254670,14175662749,,instructions,2490220955,100.00,,
+mmtk-gc-worker-254672,10644657912,,instructions,1589293631,100.00,,
+binarytrees.nat-254670,1417648114,,cycle_activity.stalls_mem_any,2490209312,100.00,,
+mmtk-gc-worker-254672,651705172,,cycle_activity.stalls_mem_any,1589293631,100.00,,
+binarytrees.nat-254670,2309141176,,cycle_activity.stalls_total,2490199222,100.00,,
+mmtk-gc-worker-254672,876608497,,cycle_activity.stalls_total,1589293631,100.00,,
+binarytrees.nat-254670,3526733567,,duration_time,1,100.00,,
+mmtk-gc-worker-254672,0,,duration_time,1,100.00,,

@@ -1,0 +1,4 @@
+[mmtk] initialised: plan=Bactrian heap=192MiB weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+[mmtk] mutator GC time: 97.017 ms (barrier 0.024 ms, alloc 96.993 ms; parked 1298.736 ms excluded)
+[mmtk] GCs: 57 (full: 6), GC time: 1015 ms, objects copied: 5772832

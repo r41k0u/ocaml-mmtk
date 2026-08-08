@@ -1,0 +1,53 @@
+[05:15:18] env: paranoid=-1 gov=performance
+[05:15:18] commit: 5a64cd691 runtime: fix knob decl placement (bytecode build); count jitter fillers
+[05:15:18] === STAGE A: vanilla baselines ===
+[05:15:23] cell v.mm768 done
+[05:15:28] cell v.mm800 done
+[05:15:33] cell v.lu900 done
+[05:15:44] cell v.bt20 done
+[05:15:48] cell v.kb50 done
+[05:15:48] === STAGE B: Bactrian stock ===
+[05:15:57] cell b.mm768 done
+[05:16:04] cell b.mm800 done
+[05:16:11] cell b.lu900 done
+[05:16:22] cell b.bt20 done
+[05:16:28] cell b.kb50 done
+[05:16:28] === STAGE C: E1 LOS routing + E2 jitter (matmul/LU) ===
+[05:16:37] cell los2k.mm768 done
+[05:16:46] cell los4k.mm768 done
+[05:16:55] cell los8k.mm768 done
+[05:17:01] cell jit.mm768 done
+[05:17:12] cell los2k.mm800 done
+[05:17:23] cell los4k.mm800 done
+[05:17:30] cell los8k.mm800 done
+[05:17:37] cell jit.mm800 done
+[05:17:45] cell los2k.lu900 done
+[05:17:52] cell los4k.lu900 done
+[05:18:00] cell los8k.lu900 done
+[05:18:07] cell jit.lu900 done
+[05:18:07] === STAGE D: E3 nursery warmth curve (binarytrees/kb) ===
+[05:19:29] cell nur2.bt20 done
+[05:19:38] cell nur2.kb50 done
+[05:20:08] nursery 2MiB done
+[05:20:57] cell nur4.bt20 done
+[05:21:04] cell nur4.kb50 done
+[05:21:23] nursery 4MiB done
+[05:21:54] cell nur8.bt20 done
+[05:22:00] cell nur8.kb50 done
+[05:22:13] nursery 8MiB done
+[05:22:34] cell nur16.bt20 done
+[05:22:41] cell nur16.kb50 done
+[05:22:50] nursery 16MiB done
+[05:23:05] cell nur32.bt20 done
+[05:23:11] cell nur32.kb50 done
+[05:23:18] nursery 32MiB done
+[05:23:23] === STAGE E: technique validation (pinning variants, binarytrees) ===
+[05:23:36] cell val.b.one done
+[05:23:49] cell val.b.smt done
+[05:24:00] cell val.b.all done
+[05:24:11] cell val.v.one done
+[05:24:22] cell val.v.smt done
+[05:24:33] cell val.v.all done
+[05:24:44] cell drift.b.bt20 done
+[05:24:55] cell drift.v.bt20 done
+[05:24:55] === ROUND 1 COMPLETE ===

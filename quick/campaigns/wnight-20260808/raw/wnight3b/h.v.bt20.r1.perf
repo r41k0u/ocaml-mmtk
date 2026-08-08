@@ -1,0 +1,7 @@
+# started on Sat Aug  8 05:41:20 2026
+
+7463867644,,mem_load_retired.l1_hit,3611202530,100.00,,
+49069928,,mem_load_retired.l2_hit,3611202530,100.00,,
+7049750,,mem_load_retired.l3_hit,3611202530,100.00,,
+56751583,,mem_load_retired.l1_miss,3611202530,100.00,,
+3623061069,,duration_time,1,100.00,,

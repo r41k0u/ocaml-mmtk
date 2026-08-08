@@ -1,0 +1,6 @@
+# started on Sat Aug  8 05:46:35 2026
+
+matrix_multipli-257139,6581230139,,cycles,2072254541,100.00,,
+mmtk-gc-worker-257141,36034,,cycles,15698,100.00,,
+matrix_multipli-257139,13768354164,,instructions,2072241836,100.00,,
+mmtk-gc-worker-257141,12178,,instructions,15698,100.00,,

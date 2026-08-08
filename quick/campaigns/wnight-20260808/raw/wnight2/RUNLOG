@@ -1,0 +1,37 @@
+[05:27:04] commit: 49ffd7e58 runtime: jitter v2 — line-granular pad entropy (0..31 lines)
+[05:27:04] === R2A: jitter v2 on matmul/LU ===
+[05:27:10] cell jit2.mm768 done
+[05:27:17] cell jit2.mm800 done
+[05:27:25] cell jit2.lu900 done
+[05:27:33] cell b2.mm768 done
+[05:27:40] cell b2.mm800 done
+[05:27:45] cell v2.mm768 done
+[05:27:45] === R2B: nursery curve on LU (frontier-write hypothesis) ===
+[05:27:52] cell nur2.lu900 done
+[05:27:59] cell nur4.lu900 done
+[05:28:06] cell nur8.lu900 done
+[05:28:13] cell nur16.lu900 done
+[05:28:20] cell nur32.lu900 done
+[05:28:25] === R2C: sub-LLC events (residual diagnosis) ===
+[05:28:29] cell f.v.mm768 done
+[05:28:35] cell f.jit2.mm768 done
+[05:28:41] cell f.v.lu900 done
+[05:28:48] cell f.b.lu900 done
+[05:28:55] cell f.n8.lu900 done
+[05:29:06] cell f.v.bt20 done
+[05:29:17] cell f.b.bt20 done
+[05:29:48] cell f.n8.bt20 done
+[05:30:09] cell f.n16.bt20 done
+[05:30:09] === R2D: per-thread mutator cycles ===
+[05:30:13] pt pt.b.bt20 done
+[05:30:24] pt pt.n8.bt20 done
+[05:30:31] pt pt.n16.bt20 done
+[05:30:32] pt pt.b.kb50 done
+[05:30:34] pt pt.n16.kb50 done
+[05:30:38] pt pt.v.bt20 done
+[05:30:40] pt pt.v.kb50 done
+[05:31:07] pt pt.n2.bt20 done
+[05:31:23] pt pt.n4.bt20 done
+[05:31:23] === R2E: who burns the mutator CPU at tiny nursery ===
+[05:32:07] R2E done
+[05:32:07] === ROUND 2 COMPLETE ===

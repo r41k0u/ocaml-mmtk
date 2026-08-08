@@ -1,0 +1,11 @@
+[05:40:59] commit: 154de2d31 runtime: MMTK_ALLOC_JITTER takes entropy bits (2..8; 1 = default 5)
+[05:41:06] cell s.v.bt20 done
+[05:41:14] cell s.b.bt20 done
+[05:41:17] cell s.v.kb50 done
+[05:41:20] cell s.b.kb50 done
+[05:41:27] cell h.v.bt20 done
+[05:41:35] cell h.b.bt20 done
+[05:41:38] cell h.v.kb50 done
+[05:41:41] cell h.b.kb50 done
+[05:41:48] pt cells done
+[05:41:48] === ROUND 3b COMPLETE ===

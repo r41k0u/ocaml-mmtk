@@ -1,0 +1,490 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+Warning:
+Kernel address maps (/proc/{kallsyms,modules}) were restricted.
+
+Check /proc/sys/kernel/kptr_restrict before running 'perf record'.
+
+As no suitable kallsyms nor vmlinux was found, kernel samples
+can't be resolved.
+
+Samples in kernel modules can't be resolved as well.
+
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cpu/cycles/P'
+# Event count (approx.): 13281364516
+#
+# Children      Self  Command          Symbol                                                                                                                                                                                                                                                                      IPC   [IPC Coverage]
+# ........  ........  ...............  ..........................................................................................................................................................................................................................................................................  ....................
+#
+    52.64%     0.00%  binarytrees.nat  [k] 0x6168732f75306b31                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0x6168732f75306b31
+               |          
+               |--36.58%--Binarytrees.check_280
+               |          
+                --15.85%--Binarytrees.make_277
+
+    36.58%    36.41%  binarytrees.nat  [.] Binarytrees.check_280                                                                                                                                                                                                                                                   -      -            
+            |          
+             --36.41%--0x6168732f75306b31
+                       |          
+                       |--34.15%--Binarytrees.check_280
+                       |          
+                        --2.26%--0x5555556ac9f8
+
+    15.85%    14.79%  binarytrees.nat  [.] Binarytrees.make_277                                                                                                                                                                                                                                                    -      -            
+            |          
+             --14.79%--0x6168732f75306b31
+                       |          
+                       |--13.71%--Binarytrees.make_277
+                       |          
+                        --1.09%--0x5555556ac97c
+
+    10.30%     0.00%  mmtk-gc-worker   [.] 0x0000000100000400                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0x100000400
+               |          
+               |--2.31%--copy_object<mmtk_ocaml::OCamlVM> (inlined)
+               |          
+               |--1.97%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+               |          |          
+               |           --1.57%--forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+               |                     |          
+               |                      --1.28%--write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)
+               |                                store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+               |                                store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+               |                                store_atomic<usize> (inlined)
+               |                                store_inner<usize> (inlined)
+               |                                fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               |                                fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               |                                try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               |          
+               |--1.75%--__memmove_evex_unaligned_erms
+               |          
+                --1.10%--side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)
+                          {closure#0}<u8> (inlined)
+
+     5.84%     0.09%  binarytrees.nat  [.] syscall                                                                                                                                                                                                                                                                 -      -            
+            |          
+             --5.81%--syscall
+                       |          
+                        --1.67%--0xffffffffa92001c4
+
+     3.19%     0.00%  mmtk-gc-worker   [.] {closure#0}<u8> (inlined)                                                                                                                                                                                                                                               -      -            
+            |
+            ---{closure#0}<u8> (inlined)
+
+     3.10%     0.00%  mmtk-gc-worker   [.] from_address (inlined)                                                                                                                                                                                                                                                  -      -            
+            |
+            ---from_address (inlined)
+               |          
+                --1.90%--classify_inner (inlined)
+
+     2.79%     0.00%  mmtk-gc-worker   [.] copy_object<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                              -      -            
+            |
+            ---copy_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.77%     2.77%  mmtk-gc-worker   [.] mmtk_ocaml_common::slot::FieldSlot::from_address                                                                                                                                                                                                                        -      -            
+            |          
+             --2.61%--from_address (inlined)
+                       |          
+                        --1.67%--classify_inner (inlined)
+
+     2.67%     2.67%  mmtk-gc-worker   [.] mmtk_ocaml_common::object_model::copy_object                                                                                                                                                                                                                            -      -            
+            |          
+             --2.19%--0x100000400
+                       |          
+                        --2.14%--copy_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     2.57%     2.57%  mmtk-gc-worker   [.] mmtk::policy::copyspace::CopySpace<VM>::trace_object                                                                                                                                                                                                                    -      -            
+            |          
+             --2.09%--0x100000400
+                       |          
+                        --1.93%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+                                  |          
+                                   --1.57%--forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+                                             |          
+                                              --1.28%--write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)
+                                                        store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+                                                        store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+                                                        store_atomic<usize> (inlined)
+                                                        store_inner<usize> (inlined)
+                                                        fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                                                        fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                                                        try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     2.52%     2.52%  mmtk-gc-worker   [.] <F as mmtk::vm::scanning::SlotVisitor<SL>>::visit_slot                                                                                                                                                                                                                  -      -            
+            |          
+             --2.31%--visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+
+     2.50%     0.00%  mmtk-gc-worker   [.] visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)                 -      -            
+            |
+            ---visit_slot<mmtk_ocaml_common::slot::FieldSlot, mmtk::plan::concurrent::concurrent_marking_work::{impl#0}::scan_and_enqueue::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0>> (inlined)
+
+     2.43%     0.00%  mmtk-gc-worker   [.] visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)                                                                                                                                                       -      -            
+            |
+            ---visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)
+               |          
+                --2.12%--push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+                          |          
+                           --2.05%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                     push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                     |          
+                                      --1.83%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     2.40%     0.00%  mmtk-gc-worker   [.] trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)                                                                                                                                                     -      -            
+            |
+            ---trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>> (inlined)
+               |          
+                --1.74%--forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+                          |          
+                           --1.45%--write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)
+                                     store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+                                     store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+                                     store_atomic<usize> (inlined)
+                                     store_inner<usize> (inlined)
+                                     fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                                     fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                                     try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     2.22%     0.50%  mmtk-gc-worker   [.] __memmove_evex_unaligned_erms                                                                                                                                                                                                                                           -      -            
+            |          
+             --1.72%--__memmove_evex_unaligned_erms
+                       |          
+                        --1.19%--0xffffffffa9200bb7
+                                  0xffffffffaa9202e3
+                                  |          
+                                   --1.12%--0xffffffffa961734e
+                                             0xffffffffa99fe7ce
+
+     2.12%     0.00%  mmtk-gc-worker   [.] push<mmtk_ocaml_common::slot::FieldSlot> (inlined)                                                                                                                                                                                                                      -      -            
+            |
+            ---push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+               |          
+                --2.05%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                          push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                          |          
+                           --1.83%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     2.05%     0.00%  mmtk-gc-worker   [.] push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)                                                                                                                                                                                                -      -            
+            |
+            ---push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               |          
+                --1.83%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     2.05%     0.00%  mmtk-gc-worker   [.] push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)                                                                                                                                                                                            -      -            
+            |
+            ---push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+               |          
+                --1.83%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     2.04%     2.04%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                     -      -            
+     2.03%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)                                        -      -            
+            |
+            ---side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --1.96%--{closure#0}<u8> (inlined)
+
+     1.98%     1.98%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                     -      -            
+            |          
+             --1.10%--0x100000400
+                       |          
+                        --1.08%--side_metadata_access<true, u8, (), mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::store_atomic::{closure_env#1}<u8>> (inlined)
+                                  {closure#0}<u8> (inlined)
+
+     1.96%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, core::result::Result<u8, u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#1}<u8>> (inlined)  -      -            
+            |
+            ---side_metadata_access<true, u8, core::result::Result<u8, u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::compare_exchange_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --1.89%--{closure#0}<u8> (inlined)
+
+     1.93%     0.00%  mmtk-gc-worker   [.] atomic_compare_exchange_weak<u8> (inlined)                                                                                                                                                                                                                              -      -            
+            |
+            ---atomic_compare_exchange_weak<u8> (inlined)
+
+     1.93%     1.93%  mmtk-gc-worker   [.] core::sync::atomic::atomic_compare_exchange_weak                                                                                                                                                                                                                        -      -            
+            |          
+             --1.91%--atomic_compare_exchange_weak<u8> (inlined)
+
+     1.93%     0.00%  mmtk-gc-worker   [.] atomic_compare_exchange<u8> (inlined)                                                                                                                                                                                                                                   -      -            
+            |
+            ---atomic_compare_exchange<u8> (inlined)
+
+     1.90%     0.00%  mmtk-gc-worker   [.] classify_inner (inlined)                                                                                                                                                                                                                                                -      -            
+            |
+            ---classify_inner (inlined)
+
+     1.89%     0.00%  mmtk-gc-worker   [.] {closure#0}<u8> (inlined)                                                                                                                                                                                                                                               -      -            
+            |
+            ---{closure#0}<u8> (inlined)
+
+     1.83%     0.00%  mmtk-gc-worker   [.] write<mmtk_ocaml_common::slot::FieldSlot> (inlined)                                                                                                                                                                                                                     -      -            
+            |
+            ---write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.83%     1.83%  mmtk-gc-worker   [.] <mmtk::plan::tracing::ObjectsClosure<E> as mmtk::vm::scanning::SlotVisitor<<<E as mmtk::scheduler::gc_work::ProcessEdgesWork>::VM as mmtk::vm::VMBinding>::VMSlot>>::visit_slot                                                                                         -      -            
+            |          
+             --1.81%--visit_slot<mmtk::plan::concurrent::bactrian::gc_work::BactrianNurseryProcessEdges<mmtk_ocaml::OCamlVM>> (inlined)
+                       |          
+                        --1.50%--push<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+                                  |          
+                                   --1.45%--push<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                             push_mut<mmtk_ocaml_common::slot::FieldSlot, alloc::alloc::Global> (inlined)
+                                             |          
+                                              --1.24%--write<mmtk_ocaml_common::slot::FieldSlot> (inlined)
+
+     1.81%     0.14%  binarytrees.nat  [.] 0xffffffffa92001c4                                                                                                                                                                                                                                                      -      -            
+            |          
+             --1.67%--0xffffffffa92001c4
+
+     1.76%     1.76%  mmtk-gc-worker   [.] core::sync::atomic::atomic_compare_exchange                                                                                                                                                                                                                             -      -            
+     1.76%     0.00%  mmtk-gc-worker   [.] 0xffffffffa9200bb7                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa9200bb7
+               0xffffffffaa9202e3
+               |          
+                --1.64%--0xffffffffa961734e
+                          |          
+                           --1.62%--0xffffffffa99fe7ce
+                                     |          
+                                      --1.45%--0xffffffffa99fe443
+                                                |          
+                                                 --1.44%--0xffffffffa99fdf7b
+                                                           |          
+                                                            --1.17%--0xffffffffa99fcc0a
+
+     1.76%     0.00%  mmtk-gc-worker   [.] 0xffffffffaa9202e3                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffaa9202e3
+               |          
+                --1.64%--0xffffffffa961734e
+                          |          
+                           --1.62%--0xffffffffa99fe7ce
+                                     |          
+                                      --1.45%--0xffffffffa99fe443
+                                                |          
+                                                 --1.44%--0xffffffffa99fdf7b
+                                                           |          
+                                                            --1.17%--0xffffffffa99fcc0a
+
+     1.74%     0.00%  mmtk-gc-worker   [.] forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)                                                            -      -            
+            |
+            ---forward_object<mmtk_ocaml::OCamlVM, mmtk::policy::copyspace::{impl#3}::trace_object::{closure_env#0}<mmtk_ocaml::OCamlVM, mmtk::plan::tracing::VectorQueue<mmtk::util::address::ObjectReference>>> (inlined)
+               |          
+                --1.45%--write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)
+                          store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+                          store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+                          store_atomic<usize> (inlined)
+                          store_inner<usize> (inlined)
+                          fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                          fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+                          try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.67%     1.67%  binarytrees.nat  [k] 0xffffffffa92001bd                                                                                                                                                                                                                                                      -      -            
+            |
+            ---syscall
+               0xffffffffa92001c4
+
+     1.66%     1.66%  mmtk-gc-worker   [.] <mmtk::plan::concurrent::concurrent_marking_work::ConcurrentTraceObjects<VM,P,_> as mmtk::scheduler::work::GCWork<VM>>::do_work                                                                                                                                         -      -            
+            |          
+             --1.48%--0x555555cd4ae0
+                       |          
+                        --1.45%--do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                  trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                  |          
+                                   --1.36%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                             |          
+                                              --1.06%--fetch_add (inlined)
+                                                        atomic_add<usize, usize> (inlined)
+
+     1.64%     1.64%  mmtk-gc-worker   [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::PlanTraceObject<VM>>::post_scan_object                                                                                                                                                   -      -            
+     1.64%     0.00%  mmtk-gc-worker   [.] 0xffffffffa961734e                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa961734e
+               |          
+                --1.62%--0xffffffffa99fe7ce
+                          |          
+                           --1.45%--0xffffffffa99fe443
+                                     |          
+                                      --1.44%--0xffffffffa99fdf7b
+                                                |          
+                                                 --1.17%--0xffffffffa99fcc0a
+
+     1.64%     0.00%  mmtk-gc-worker   [.] do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                      -      -            
+            |
+            ---do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --1.55%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --1.06%--fetch_add (inlined)
+                                     atomic_add<usize, usize> (inlined)
+
+     1.64%     0.00%  mmtk-gc-worker   [.] trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                -      -            
+            |
+            ---trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --1.55%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --1.06%--fetch_add (inlined)
+                                     atomic_add<usize, usize> (inlined)
+
+     1.62%     0.00%  mmtk-gc-worker   [.] 0xffffffffa99fe7ce                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa99fe7ce
+               |          
+                --1.45%--0xffffffffa99fe443
+                          |          
+                           --1.44%--0xffffffffa99fdf7b
+                                     |          
+                                      --1.17%--0xffffffffa99fcc0a
+
+     1.55%     0.00%  mmtk-gc-worker   [.] trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)                                                                                                                                                 -      -            
+            |
+            ---trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+               |          
+                --1.06%--fetch_add (inlined)
+                          atomic_add<usize, usize> (inlined)
+
+     1.52%     0.00%  mmtk-gc-worker   [.] 0x0000555555cd4ae0                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0x555555cd4ae0
+               |          
+                --1.45%--do_work<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          trace_objects<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                          |          
+                           --1.36%--trace_object<mmtk_ocaml::OCamlVM, mmtk::plan::concurrent::bactrian::global::Bactrian<mmtk_ocaml::OCamlVM>, 0> (inlined)
+                                     |          
+                                      --1.06%--fetch_add (inlined)
+                                                atomic_add<usize, usize> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] 0xffffffffa99fe443                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa99fe443
+               |          
+                --1.44%--0xffffffffa99fdf7b
+                          |          
+                           --1.17%--0xffffffffa99fcc0a
+
+     1.45%     0.00%  mmtk-gc-worker   [.] write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                 -      -            
+            |
+            ---write_forwarding_pointer<mmtk_ocaml::OCamlVM> (inlined)
+               store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+               store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+               store_atomic<usize> (inlined)
+               store_inner<usize> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)                                                                                                                                                                                                                      -      -            
+            |
+            ---store_atomic<mmtk_ocaml::OCamlVM, usize> (inlined)
+               store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+               store_atomic<usize> (inlined)
+               store_inner<usize> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)                                                                                                                                                                    -      -            
+            |
+            ---store_metadata_atomic<mmtk_ocaml::object_model::VMObjectModel, mmtk_ocaml::OCamlVM, usize> (inlined)
+               store_atomic<usize> (inlined)
+               store_inner<usize> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] store_atomic<usize> (inlined)                                                                                                                                                                                                                                           -      -            
+            |
+            ---store_atomic<usize> (inlined)
+               store_inner<usize> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] store_inner<usize> (inlined)                                                                                                                                                                                                                                            -      -            
+            |
+            ---store_inner<usize> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)                                                                                                                                                            -      -            
+            |
+            ---fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               fetch_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+               try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.45%     0.00%  mmtk-gc-worker   [.] try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)                                                                                                                                                              -      -            
+            |
+            ---try_update<mmtk::util::metadata::header_metadata::{impl#0}::store_inner::{closure_env#1}<usize>> (inlined)
+
+     1.44%     0.00%  mmtk-gc-worker   [.] 0xffffffffa99fdf7b                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa99fdf7b
+               |          
+                --1.17%--0xffffffffa99fcc0a
+
+     1.42%     0.00%  mmtk-gc-worker   [.] post_scan_object<mmtk_ocaml::OCamlVM> (inlined)                                                                                                                                                                                                                         -      -            
+            |
+            ---post_scan_object<mmtk_ocaml::OCamlVM> (inlined)
+
+     1.31%     0.00%  mmtk-gc-worker   [.] side_metadata_access<true, u8, u8, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#1}<u8>> (inlined)                                          -      -            
+            |
+            ---side_metadata_access<true, u8, u8, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#0}<u8>, mmtk::util::metadata::side_metadata::global::{impl#0}::load_atomic::{closure_env#1}<u8>> (inlined)
+               |          
+                --1.23%--{closure#0}<u8> (inlined)
+
+     1.30%     0.00%  mmtk-gc-worker   [k] 0x55cd2ec000000400                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0x55cd2ec000000400
+
+     1.28%     1.28%  mmtk-gc-worker   [.] mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access                                                                                                                                                                                     -      -            
+     1.24%     0.00%  mmtk-gc-worker   [.] is_in_mmtk_spaces (inlined)                                                                                                                                                                                                                                             -      -            
+            |
+            ---is_in_mmtk_spaces (inlined)
+
+     1.17%     0.00%  mmtk-gc-worker   [.] 0xffffffffa99fcc0a                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0xffffffffa99fcc0a
+
+     1.15%     1.15%  mmtk-gc-worker   [.] mmtk::memory_manager::is_in_mmtk_spaces                                                                                                                                                                                                                                 -      -            
+     1.11%     1.11%  mmtk-gc-worker   [.] <mmtk_ocaml_common::slot::FieldSlot as mmtk::vm::slot::Slot>::load                                                                                                                                                                                                      -      -            
+     1.10%     0.00%  mmtk-gc-worker   [.] get_checked (inlined)                                                                                                                                                                                                                                                   -      -            
+            |
+            ---get_checked (inlined)
+
+     1.10%     1.10%  mmtk-gc-worker   [.] <mmtk::policy::sft_map::space_map::SFTSpaceMap as mmtk::policy::sft_map::SFTMap>::get_checked                                                                                                                                                                           -      -            
+     1.09%     0.00%  mmtk-gc-worker   [.] load (inlined)                                                                                                                                                                                                                                                          -      -            
+            |
+            ---load (inlined)
+
+     1.09%     0.00%  mmtk-gc-worker   [.] load (inlined)                                                                                                                                                                                                                                                          -      -            
+            |
+            ---load (inlined)
+
+     1.06%     0.00%  mmtk-gc-worker   [.] fetch_add (inlined)                                                                                                                                                                                                                                                     -      -            
+            |
+            ---fetch_add (inlined)
+               atomic_add<usize, usize> (inlined)
+
+     1.06%     0.00%  mmtk-gc-worker   [.] atomic_add<usize, usize> (inlined)                                                                                                                                                                                                                                      -      -            
+            |
+            ---atomic_add<usize, usize> (inlined)
+
+     1.05%     0.00%  mmtk-gc-worker   [.] 0x004e0800000000b9                                                                                                                                                                                                                                                      -      -            
+            |
+            ---0x4e0800000000b9
+
+     1.01%     0.09%  binarytrees.nat  [.] 0xffffffffa920014d                                                                                                                                                                                                                                                      -      -            
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

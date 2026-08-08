@@ -1,0 +1,16 @@
+stretch tree of depth 21	 check: 4194303
+1048576	 trees of depth 4	 check: 32505856
+262144	 trees of depth 6	 check: 33292288
+65536	 trees of depth 8	 check: 33488896
+16384	 trees of depth 10	 check: 33538048
+4096	 trees of depth 12	 check: 33550336
+1024	 trees of depth 14	 check: 33553408
+256	 trees of depth 16	 check: 33554176
+64	 trees of depth 18	 check: 33554368
+16	 trees of depth 20	 check: 33554416
+long lived tree of depth 20	 check: 2097151
+[mmtk] initialised: plan=Bactrian heap=192MiB weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+[mmtk] mutator GC time: 99.351 ms (barrier 0.038 ms, alloc 99.314 ms; parked 1312.749 ms excluded)
+[mmtk] GCs: 57 (full: 6), GC time: 1020 ms, objects copied: 5772832
+  GC 1.58s  mutator 2.56s  total 4.14s  gc_fraction 0.3816  (1 GC threads, wall 3.62s)

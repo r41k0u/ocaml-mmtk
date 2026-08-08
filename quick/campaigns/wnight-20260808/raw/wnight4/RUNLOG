@@ -1,0 +1,28 @@
+[05:44:38] commit: 683521d7a Bactrian W-parity defaults: pitch jitter ON (6 bits), THP ON
+[05:44:38] === certification panel: vanilla vs new-default Bactrian ===
+[05:44:50] cell v.binarytrees done
+[05:45:00] cell d.binarytrees done
+[05:45:07] cell v.nbody done
+[05:45:13] cell d.nbody done
+[05:45:23] cell v.fannkuchredux done
+[05:45:34] cell d.fannkuchredux done
+[05:45:38] cell v.spectralnorm done
+[05:45:44] cell d.spectralnorm done
+[05:45:49] cell v.mandelbrot done
+[05:45:55] cell d.mandelbrot done
+[05:45:59] cell v.matrix_multiplication done
+[05:46:05] cell d.matrix_multiplication done
+[05:46:11] cell v.LU_decomposition done
+[05:46:18] cell d.LU_decomposition done
+[05:46:22] cell v.kb done
+[05:46:27] cell d.kb done
+[05:46:31] pt binarytrees done
+[05:46:32] pt kb done
+[05:46:35] pt LU_decomposition done
+[05:46:37] pt matrix_multiplication done
+[05:46:37] === M1 sanity with new defaults: par_binarytrees d=1,2,4,8 ===
+[05:46:53] par d=1 done
+[05:47:01] par d=2 done
+[05:47:08] par d=4 done
+[05:47:15] par d=8 done
+[05:47:15] === ROUND 4 COMPLETE ===

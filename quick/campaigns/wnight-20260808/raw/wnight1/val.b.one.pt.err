@@ -1,0 +1,3 @@
+The --per-thread option is only available when monitoring via -p -t -a options or only --per-thread.
+    -p, --pid <pid>       stat events on existing process id
+    -t, --tid <tid>       stat events on existing thread id
