@@ -1,0 +1,7 @@
+# started on Sat Aug  8 13:16:37 2026
+
+6622733882,,cycles,2079705102,100.00,,
+14049326983,,instructions,2079705102,100.00,,
+2631608,,ld_blocks_partial.address_alias,2079705102,100.00,,
+27350,,ld_blocks.store_forward,2079705102,100.00,,
+2081880095,,duration_time,1,100.00,,

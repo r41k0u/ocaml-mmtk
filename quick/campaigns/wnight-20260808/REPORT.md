@@ -95,3 +95,46 @@ on bt because Bactrian's G is *smaller* than vanilla's.
 - `fig3_nursery.png` — bt premature-promotion catastrophe; LU store frontier
 - `fig4_stalls.png` — the store-stall verdict (stalls up, loads clean)
 - `fig5_m1.png` — M1 scaling with new defaults (wins d=1-4, d=8 policy item)
+
+---
+
+# Addendum — rounds 5-6 (same day): the residual, named and bounded
+
+**Verdict counter: `resource_stalls.sb` (store buffer full).** The remaining
+cycle-ratio gap on every allocating bench is one mechanism:
+
+| bench | vanilla SB-full | Bactrian SB-full | cycle ratio |
+|-------|----------------|------------------|-------------|
+| LU_decomposition | 1.4% | **14.9%** | 1.38 |
+| spectralnorm | 0.1% | **7.6%** | 1.14 |
+| binarytrees | 1.1% | **4.4%** | 1.12 |
+
+LU's profile is >85% the *same three OCaml functions* on both runtimes — the
+same code, slower, waiting on stores. Allocation stores into the cold 64 MiB
+nursery stream must fetch each line from DRAM/L3 before retiring (RFO); the
+56-entry store buffer fills and the pipeline stalls. Vanilla's 2 MiB reused
+arena keeps the write frontier L2-resident, so its stores retire instantly.
+(Earlier `stalls_mem_any` numbers missed LU because that counter only sees
+stalls with pending *loads*.) See `fig6_storebuffer.png`.
+
+**Negative result — TLAB prefetch.** Warming each fresh 32 KB block with
+`prefetchw` at refill HURTS everywhere (LU +24%, kb +7%, bt +4%): burst
+prefetch floods the fill buffers. Knob `MMTK_TLAB_PREFETCH` kept, default off.
+
+**Worker cap (d=8), measured:** T=4 gives 2.17s vs T=8's 2.42s
+(par_binarytrees, 14 cores; vanilla 1.27s). Policy: **domains + workers ≤
+physical cores.** Recall Bactrian *beats* vanilla at d=1-4 (0.83-0.84×).
+
+**Jitter entropy: 6 bits confirmed optimal** (7/8 bits regress on matmul).
+
+## The honest tolerance statement
+
+With placement (jitter), THP, and the worker cap banked, the remaining
+1.1-1.4× cycle ratios are **not incidental overhead — they are the structural
+cost of a decoupled streaming nursery**, and no environment knob measured
+tonight moves them (nursery sweep, prefetch, LOS, entropy bits all tested).
+Reaching cycle-ratio ≈ 1 on allocating benches requires the small-warm-nursery
+architecture, which requires collections ~50× cheaper per occurrence:
+premature-promotion handling, park/futex churn (56 → 20.5k calls), and packet
+overhead. That is the next engineering phase, in mmtk-core scheduling — with
+this campaign as its measurement baseline.
