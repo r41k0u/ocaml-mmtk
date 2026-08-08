@@ -203,3 +203,25 @@ marking; W-instructions 0.98–1.04 everywhere):
 | LU (4 MiB) | 1.110 | 1.110 | per-minor warmth + L2-streaming floor |
 | spectralnorm (8 MiB) | 1.076 | 1.076 | near parity |
 | matmul | 1.311 | 1.311 | residual conflict stalls post-jitter |
+
+## Addendum 4 — survivor aging: tried, correct, and a measured negative
+
+`MMTK_NURSERY_AGE=1` (experimental, default off) implements survive-one-minor
+aging via a semispace aged pair inside the Bactrian plan (mmtk-core fork
+`bdcd5356f9`). It is correct on non-mutating workloads (outputs identical;
+OFF-mode byte-identical; a latent finalizer-processor unsoundness for movable
+young survivors was found and fixed in shared code behind a defaulted trait
+method — LXR and stock plans unchanged).
+
+Measured on binarytrees-20 (church): default nursery 12.10G→12.46G cycles;
+4 MiB nursery 31.09G→33.12G — full GCs drop (22→14) but objects copied rises
+34.5M→50.9M. **Negative**: bt's survivors live for a whole depth-class
+iteration, far beyond one aging step, so aging double-copies its entire
+promoted volume.
+
+The refined conclusion for bt's remaining W-gap (1.239): vanilla affords its
+tiny cache-warm allocation window because its **mature reclamation is
+incremental**, making premature promotion cheap — not because it avoids
+promotion. The next structural lever for bt-class lifetimes is incremental/
+concurrent mature-sweep economics, with aging kept for medium-lifetime
+workloads once the documented remset hole is closed (see NOTES).
