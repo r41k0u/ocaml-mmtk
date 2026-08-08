@@ -1,0 +1,6 @@
+  W mutator        92.46%   ( 92.5% of parsed)
+  G gc              7.20%   (  7.2%)
+  C coordination    0.35%   (  0.4%)
+  GC fraction: G/(W+G) = 0.0722   G/(W+G+C) = 0.0720
+  top G: mmtk_ocaml::scanning::collect_root_slot(1.9%), mmtk::plan::global::Plan::get_reserved_pages(0.9%), mmtk_ocaml_poll_finalizable(0.5%), mmtk::policy::space::Space::get_new_pages_and_initialize(0.5%), mmtk::util::metadata::side_metadata::helpers::try_mmap_contiguous_metadata_space(0.3%), mmtk::scheduler::gc_work::<impl mmtk::scheduler::work::GCWork<<E as mmtk::scheduler::gc_work::ProcessEdgesWork>::VM> for E>::do_work(0.3%), mmtk::policy::space::Space::acquire(0.3%), mmtk::memory_manager::is_in_mmtk_spaces(0.2%)
+  top C: <std::sys::sync::mutex::futex::Mutex>::lock_contended(0.1%), pthread_mutex_unlock@@GLIBC_2.2.5(0.1%), pthread_mutex_lock@@GLIBC_2.2.5(0.1%), caml_mmtk_park(0.1%), <std::sys::sync::condvar::futex::Condvar>::wait(0.1%)

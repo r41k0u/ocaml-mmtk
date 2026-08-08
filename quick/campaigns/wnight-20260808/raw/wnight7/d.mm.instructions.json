@@ -1,0 +1,17 @@
+{
+  "kind": "cpu_split",
+  "label": "d.mm.instructions",
+  "pct": {
+    "W": 99.21,
+    "G": 0.82,
+    "C": 0.0
+  },
+  "share": {
+    "W": 0.9918,
+    "G": 0.0082,
+    "C": 0.0
+  },
+  "gc_fraction_G_over_WG": 0.0082,
+  "gc_fraction_G_over_WGC": 0.0082,
+  "parsed_total_pct": 100.03
+}

@@ -1,0 +1,5 @@
+  W mutator        99.60%   ( 99.6% of parsed)
+  G gc              0.41%   (  0.4%)
+  C coordination    0.00%   (  0.0%)
+  GC fraction: G/(W+G) = 0.0041   G/(W+G+C) = 0.0041
+  top G: caml_modify(0.3%), do_some_marking(0.1%)

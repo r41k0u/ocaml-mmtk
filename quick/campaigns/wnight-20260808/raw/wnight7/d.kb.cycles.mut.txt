@@ -1,0 +1,112 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: kb.native
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'cycles'
+# Event count (approx.): 4980054473
+#
+# Overhead  Shared Object         Symbol                                                                                                                                                                 
+# ........  ....................  .......................................................................................................................................................................
+#
+    32.39%  kb.native             [.] Kb.mreduce_597
+    10.95%  kb.native             [.] Kb.match_rec_510
+     6.29%  kb.native             [.] caml_string_equal
+     3.51%  kb.native             [.] Stdlib.failwith_7
+     2.90%  kb.native             [.] caml_raise_exn
+     2.76%  kb.native             [.] Stdlib.List.fold_left2_435
+     2.12%  kb.native             [.] Kb.substitute_485
+     1.77%  kb.native             [.] Kb.matching_506
+     1.68%  kb.native             [.] Kb.reducible_593
+     1.64%  kb.native             [.] compare_val
+     1.32%  kb.native             [.] Stdlib.List.exists_458
+     1.18%  kb.native             [.] caml_apply3
+     1.06%  kb.native             [.] Kb.can_match_589
+     0.87%  kb.native             [.] Kb.mrewrite1_sons_603
+     0.83%  kb.native             [.] Kb.mrewrite1_602
+     0.64%  kb.native             [.] Kb.union_399
+     0.63%  kb.native             [.] Kb.get_rule_775
+     0.63%  kb.native             [.] caml_c_call
+     0.62%  [unknown]             [k] 0xffffffffa9a2c68a
+     0.60%  kb.native             [.] Stdlib.List.mem_479
+     0.56%  kb.native             [.] Kb.vars_of_list_478
+     0.51%  kb.native             [.] Kb.vars_477
+     0.50%  kb.native             [.] Stdlib.List.map_340
+     0.45%  kb.native             [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_post
+     0.32%  kb.native             [.] Stdlib.List.assoc_489
+     0.31%  kb.native             [.] Kb.super_693
+     0.26%  kb.native             [.] Kb.mrewrite_all_613
+     0.26%  kb.native             [.] Kb.partition_768
+     0.25%  kb.native             [.] <mmtk::util::heap::layout::mmapper::csm::ChunkStateMmapper as mmtk::util::heap::layout::mmapper::Mmapper>::ensure_mapped
+     0.25%  kb.native             [.] Kb.collate_697
+     0.24%  kb.native             [.] caml_reset_young_limit
+     0.19%  kb.native             [.] Kb.fun_1241
+     0.19%  kb.native             [.] Stdlib.List.map_dps_1380
+     0.19%  kb.native             [.] Kb.fun_1196
+     0.19%  kb.native             [.] <mmtk_ocaml::active_plan::VMActivePlan as mmtk::vm::active_plan::ActivePlan<mmtk_ocaml::OCamlVM>>::is_mutator
+     0.19%  kb.native             [.] <mmtk::util::heap::monotonepageresource::MonotonePageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::alloc_pages
+     0.19%  kb.native             [.] Kb.process_786
+     0.18%  kb.native             [.] Kb.next_criticals_787
+     0.18%  kb.native             [.] Kb.mk_rule_564
+     0.13%  kb.native             [.] Kb.fun_1280
+     0.13%  [unknown]             [k] 0xffffffffa920118a
+     0.13%  kb.native             [.] caml_compare
+     0.13%  kb.native             [.] mmtk_ocaml_stw_park
+     0.13%  kb.native             [.] Kb.unify_531
+     0.13%  kb.native             [.] Stdlib.List.mem_assoc_513
+     0.13%  kb.native             [.] caml_call_gc
+     0.13%  libc.so.6             [.] __memcmp_evex_movbe
+     0.12%  kb.native             [.] Kb.strict_critical_pairs_732
+     0.12%  kb.native             [.] mmtk::util::metadata::side_metadata::helpers::try_mmap_contiguous_metadata_space
+     0.12%  kb.native             [.] mmtk::policy::space::Space::acquire
+     0.12%  kb.native             [.] mmtk_ocaml_poll_finalizable
+     0.07%  [unknown]             [k] 0xffffffffa97a0ca6
+     0.06%  [unknown]             [k] 0xffffffffa97769a5
+     0.06%  [unknown]             [k] 0xffffffffa96d92af
+     0.06%  [unknown]             [k] 0xffffffffa97791d6
+     0.06%  kb.native             [.] Kb.rporec_681
+     0.06%  [unknown]             [k] 0xffffffffa9200ef0
+     0.06%  libc.so.6             [.] __printf_buffer
+     0.06%  kb.native             [.] mmtk::policy::space::Space::handle_obvious_oom_request
+     0.06%  kb.native             [.] caml_alloc_string
+     0.06%  kb.native             [.] caml_mmtk_region_barrier
+     0.06%  [unknown]             [k] 0xffffffffa9701bab
+     0.06%  [unknown]             [k] 0xffffffffaa932947
+     0.06%  [unknown]             [k] 0xffffffffa9ab71e0
+     0.06%  libc.so.6             [.] __printf_buffer_write
+     0.06%  kb.native             [.] core::ptr::drop_in_place<core::result::Result<(),std::io::error::Error>>
+     0.06%  kb.native             [.] Kb.right_reduce_806
+     0.06%  libc.so.6             [.] _itoa_word
+     0.06%  [unknown]             [k] 0xffffffffa978f50c
+     0.06%  kb.native             [.] caml_initialize
+     0.06%  [unknown]             [k] 0xffffffffa92011b9
+     0.06%  [unknown]             [k] 0xffffffffa96e6620
+     0.06%  [unknown]             [k] 0xffffffffa9eddf40
+     0.06%  [unknown]             [k] 0xffffffffa995d8c8
+     0.06%  [unknown]             [k] 0xffffffffa92001c4
+     0.06%  kb.native             [.] Stdlib.String.iter_425
+     0.06%  kb.native             [.] Stdlib.List.rev_append_318
+     0.06%  [unknown]             [k] 0xffffffffa96b8394
+     0.06%  kb.native             [.] Kb.rename_749
+     0.06%  kb.native             [.] mmtk::plan::global::CommonPlan<VM>::get_used_pages
+     0.06%  libc.so.6             [.] __strchrnul_evex
+     0.06%  [unknown]             [k] 0xffffffffa96db7b8
+     0.06%  kb.native             [.] Kb.critical_pairs_719
+     0.06%  kb.native             [.] caml_format_int
+     0.06%  kb.native             [.] <mmtk::util::heap::gc_trigger::FixedHeapSizeTrigger as mmtk::util::heap::gc_trigger::GCTriggerPolicy<VM>>::is_heap_full
+     0.06%  kb.native             [.] mmtk::plan::global::Plan::get_reserved_pages
+     0.06%  kb.native             [.] Kb.replace_nth_492
+     0.06%  [unknown]             [k] 0xffffffffaa4a47ed
+     0.06%  kb.native             [.] caml_do_pending_actions_res
+     0.06%  kb.native             [.] caml_final_do_calls_res
+     0.05%  [unknown]             [k] 0xffffffffa96b8e8f
+     0.05%  kb.native             [.] <mmtk::util::heap::layout::mmapper::csm::two_level_storage::TwoLevelStateStorage as mmtk::util::heap::layout::mmapper::csm::MapStateStorage>::bulk_transition_state
+     0.05%  libc.so.6             [.] __memmove_evex_unaligned_erms
+     0.04%  ld-linux-x86-64.so.2  [.] do_lookup_x
+     0.04%  [unknown]             [k] 0xffffffffa961d478
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

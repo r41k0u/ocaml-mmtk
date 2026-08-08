@@ -1,0 +1,46 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: matrix_multipli
+#
+# Total Lost Samples: 0
+#
+# Samples: 2K of event 'cycles'
+# Event count (approx.): 6348797245
+#
+# Overhead  Shared Object                 Symbol                                                                                                                                              
+# ........  ............................  ....................................................................................................................................................
+#
+    96.77%  matrix_multiplication.native  [.] Matrix_multiplication.matrix_multiply_411
+     0.74%  matrix_multiplication.native  [.] Stdlib.Random.int_aux_920
+     0.29%  matrix_multiplication.native  [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_post
+     0.24%  matrix_multiplication.native  [.] caml_lxm_next_unboxed
+     0.24%  matrix_multiplication.native  [.] Stdlib.Array.init_294
+     0.20%  matrix_multiplication.native  [.] caml_mmtk_region_barrier
+     0.15%  [unknown]                     [k] 0xffffffffa9a2c68a
+     0.15%  matrix_multiplication.native  [.] Stdlib.Domain.maybe_grow_580
+     0.15%  matrix_multiplication.native  [.] caml_modify
+     0.10%  matrix_multiplication.native  [.] mmtk_ocaml_region_barrier
+     0.10%  matrix_multiplication.native  [.] caml_mmtk_satb_barrier
+     0.05%  matrix_multiplication.native  [.] mmtk_ocaml_satb_barrier
+     0.05%  [unknown]                     [k] 0xffffffffa96aa2f2
+     0.05%  [unknown]                     [k] 0xffffffffaa9209a2
+     0.05%  [unknown]                     [k] 0xffffffffaa932947
+     0.05%  matrix_multiplication.native  [.] Matrix_multiplication.entry
+     0.05%  matrix_multiplication.native  [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_pre
+     0.05%  [unknown]                     [k] 0xffffffffa96c3332
+     0.05%  [unknown]                     [k] 0xffffffffa9688ede
+     0.05%  matrix_multiplication.native  [.] Stdlib.Domain.get_686
+     0.05%  [unknown]                     [k] 0xffffffffaa91d070
+     0.05%  matrix_multiplication.native  [.] caml_initialize
+     0.05%  matrix_multiplication.native  [.] caml_uniform_array_make
+     0.05%  matrix_multiplication.native  [.] <mmtk::util::heap::blockpageresource::BlockPageResource<VM,B> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.04%  [unknown]                     [k] 0xffffffffa9961017
+     0.04%  matrix_multiplication.native  [.] hashbrown::map::HashMap<K,V,S,A>::insert
+     0.04%  [unknown]                     [k] 0xffffffffa9c8b845
+     0.03%  [unknown]                     [k] 0xffffffffaa9126f4
+     0.02%  ld-linux-x86-64.so.2          [.] _dl_relocate_object_no_relro
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

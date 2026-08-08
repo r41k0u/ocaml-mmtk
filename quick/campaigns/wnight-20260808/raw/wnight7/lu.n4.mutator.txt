@@ -1,0 +1,46 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: LU_decompositio
+Warning:
+Kernel address maps (/proc/{kallsyms,modules}) were restricted.
+
+Check /proc/sys/kernel/kptr_restrict before running 'perf record'.
+
+As no suitable kallsyms nor vmlinux was found, kernel samples
+can't be resolved.
+
+Samples in kernel modules can't be resolved as well.
+
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cycles'
+# Event count (approx.): 6705170123
+#
+# Overhead  Shared Object            Symbol                                                                                                                                                                 
+# ........  .......................  .......................................................................................................................................................................
+#
+    34.30%  LU_decomposition.native  [.] LU_decomposition.get_416
+            |
+            ---LU_decomposition.get_416
+               0x200000000000007
+               0x47c748087f8d4930
+
+    30.65%  LU_decomposition.native  [.] LU_decomposition.lup_429
+            |
+            ---LU_decomposition.lup_429
+               0x200000000000007
+               0x47c748087f8d4930
+
+    12.66%  LU_decomposition.native  [.] LU_decomposition.set_421
+            |
+            ---LU_decomposition.set_421
+               0x200000000000007
+               0x47c748087f8d4930
+
+     1.20%  LU_decomposition.native  [.] <mmtk::util::heap::layout::mmapper::csm::ChunkStateMmapper as mmtk::util::heap::layout::mmapper::Mmapper>::ensure_mapped
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

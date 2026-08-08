@@ -1,0 +1,17 @@
+{
+  "kind": "cpu_split",
+  "label": "mut",
+  "pct": {
+    "W": 94.13,
+    "G": 2.24,
+    "C": 0.11
+  },
+  "share": {
+    "W": 0.97564,
+    "G": 0.02322,
+    "C": 0.00114
+  },
+  "gc_fraction_G_over_WG": 0.02324,
+  "gc_fraction_G_over_WGC": 0.02322,
+  "parsed_total_pct": 96.48
+}

@@ -1,0 +1,5 @@
+  W mutator        87.35%   ( 87.4% of parsed)
+  G gc             12.62%   ( 12.6%)
+  C coordination    0.00%   (  0.0%)
+  GC fraction: G/(W+G) = 0.1262   G/(W+G+C) = 0.1262
+  top G: mmtk::policy::copyspace::CopySpace<VM>::trace_object(1.6%), mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access(1.2%), <mmtk::plan::tracing::ObjectsClosure<E> as mmtk::vm::scanning::SlotVisitor<<<E as mmtk::scheduler::gc_work::ProcessEdgesWork>::VM as mmtk::vm::VMBinding>::VMSlot>>::visit_slot(1.2%), mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access(1.0%), mmtk::util::metadata::side_metadata::global::SideMetadataSpec::side_metadata_access(1.0%), mmtk_ocaml_common::slot::FieldSlot::from_address(0.9%), mmtk::util::copy::GCWorkerCopyContext<VM>::post_copy(0.8%), mmtk::memory_manager::is_in_mmtk_spaces(0.6%)

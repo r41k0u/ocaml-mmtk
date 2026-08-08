@@ -1,0 +1,6 @@
+  W mutator        96.21%   ( 96.2% of parsed)
+  G gc              3.70%   (  3.7%)
+  C coordination    0.11%   (  0.1%)
+  GC fraction: G/(W+G) = 0.0370   G/(W+G+C) = 0.0370
+  top G: mmtk::plan::global::CommonPlan<VM>::get_used_pages(0.5%), mmtk_ocaml_poll_finalizable(0.4%), mmtk_ocaml::scanning::collect_root_slot(0.4%), mmtk::util::metadata::side_metadata::helpers::try_mmap_contiguous_metadata_space(0.3%), mmtk::policy::space::Space::get_new_pages_and_initialize(0.2%), mmtk::plan::global::Plan::get_reserved_pages(0.2%), mmtk::memory_manager::is_in_mmtk_spaces(0.2%), mmtk::scheduler::work_bucket::WorkBucket<VM>::maybe_schedule_sentinel(0.1%)
+  top C: pthread_mutex_unlock@@GLIBC_2.2.5(0.1%), pthread_mutex_unlock@plt(0.1%)

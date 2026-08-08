@@ -1,0 +1,17 @@
+{
+  "kind": "cpu_split",
+  "label": "v.bt.cycles",
+  "pct": {
+    "W": 50.3,
+    "G": 49.76,
+    "C": 0.05
+  },
+  "share": {
+    "W": 0.50245,
+    "G": 0.49705,
+    "C": 0.0005
+  },
+  "gc_fraction_G_over_WG": 0.4973,
+  "gc_fraction_G_over_WGC": 0.49705,
+  "parsed_total_pct": 100.11
+}

@@ -1,0 +1,5 @@
+  W mutator        99.21%   ( 99.2% of parsed)
+  G gc              0.82%   (  0.8%)
+  C coordination    0.00%   (  0.0%)
+  GC fraction: G/(W+G) = 0.0082   G/(W+G+C) = 0.0082
+  top G: caml_mmtk_region_barrier(0.3%), mmtk_ocaml_satb_barrier(0.1%), caml_modify(0.1%), caml_mmtk_satb_barrier(0.1%), caml_initialize(0.1%), mmtk_ocaml_region_barrier(0.1%)

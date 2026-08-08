@@ -1,0 +1,12 @@
+Couldn't record kernel reference relocation symbol
+Symbol resolution may be skewed if relocation was used (e.g. kexec).
+Check /proc/kallsyms permission or run as root.
+[mmtk] initialised: plan=Bactrian heap=192MiB weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+[mmtk] GCs: 57 (full: 6), GC time: 1005 ms, objects copied: 5772832
+Couldn't record kernel reference relocation symbol
+Symbol resolution may be skewed if relocation was used (e.g. kexec).
+Check /proc/kallsyms permission or run as root.
+[mmtk] initialised: plan=Bactrian heap=192MiB weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+[mmtk] GCs: 57 (full: 6), GC time: 1007 ms, objects copied: 5772832

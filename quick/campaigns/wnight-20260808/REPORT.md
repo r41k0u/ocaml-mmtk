@@ -138,3 +138,46 @@ architecture, which requires collections ~50× cheaper per occurrence:
 premature-promotion handling, park/futex churn (56 → 20.5k calls), and packet
 overhead. That is the next engineering phase, in mmtk-core scheduling — with
 this campaign as its measurement baseline.
+
+---
+
+# Addendum 2 — the work-only verdict and the pacer fix
+
+**Operating metric refined:** W compared as *work-only* on both sides —
+vanilla's inline GC excluded by symbol classification (gcsplit, symmetric
+judgment calls), Bactrian's worker counted G by identity and its mutator
+classified by symbol.
+
+## W-instruction parity: achieved
+
+| bench | W-ins ratio | W-cyc ratio | vanilla G-cyc | Bactrian G-cyc |
+|-------|------------|-------------|---------------|----------------|
+| binarytrees | **1.022** | 1.355 | 5.72G | 5.12G |
+| kb | **1.022** | **1.039** | 0.57G | 0.82G |
+| LU (4 MiB nursery) | **1.042** | 1.110 | 0.01G | 0.76G |
+| spectralnorm (8 MiB nursery) | **1.028** | **1.076** | 0.00G | 0.32G |
+| matmul | **1.005** | 1.311 | 0.02G | 0.04G |
+
+The mutator executes vanilla's work instruction-for-instruction (1.005–1.042).
+kb and spectralnorm are at W-cycle parity; note binarytrees' collector is now
+*cheaper* than vanilla's in cycles.
+
+## The architectural change that unlocked it
+
+The GH#5 full-GC backstop was **re-denominated from minors to allocation**
+(commit `78ab9698a`, binding-side, LXR-inert — see NOTES.md): the old
+8-minors-per-domain law forced a whole-heap collection every ~16 MiB allocated
+at a 2 MiB nursery — a manufactured full-GC storm (186 fulls vs 6; 141G vs 46G
+cycles). With the new law, small nurseries became usable, which erased LU's and
+spectralnorm's store-buffer stalls (SB-full 1.13G → 0.08G cycles) — those two
+benches' W-cycle ratios fell to 1.11 / 1.08.
+
+## Remaining W-cycle offenders, named
+
+- **binarytrees 1.355** — store frontier at the 64 MiB nursery. A small warm
+  nursery is blocked by *real* premature promotion (live survivors), not by
+  the pacer anymore. The fix is nursery **aging** (survive N minors before
+  promotion) — Bactrian-plan-local, multi-session scale, LXR untouched.
+- **matmul 1.311** — residual conflict-miss stalls after jitter (LLC-loads
+  69M vs 57M; 6 entropy bits measured optimal, 7/8 regress).
+- LU 1.110 — post-GC cache-warmth loss across 3282 minors (per-minor cost).

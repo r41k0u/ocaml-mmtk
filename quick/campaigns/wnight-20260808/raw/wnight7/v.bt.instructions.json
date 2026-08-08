@@ -1,0 +1,17 @@
+{
+  "kind": "cpu_split",
+  "label": "v.bt.instructions",
+  "pct": {
+    "W": 45.14,
+    "G": 54.85,
+    "C": 0.0
+  },
+  "share": {
+    "W": 0.45145,
+    "G": 0.54855,
+    "C": 0.0
+  },
+  "gc_fraction_G_over_WG": 0.54855,
+  "gc_fraction_G_over_WGC": 0.54855,
+  "parsed_total_pct": 99.99
+}

@@ -1,0 +1,61 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: LU_decompositio
+#
+# Total Lost Samples: 0
+#
+# Samples: 2K of event 'instructions'
+# Event count (approx.): 22291236160
+#
+# Overhead  Shared Object            Symbol                                                                                                                                                  
+# ........  .......................  ........................................................................................................................................................
+#
+    39.73%  LU_decomposition.native  [.] LU_decomposition.get_416
+    33.76%  LU_decomposition.native  [.] LU_decomposition.lup_429
+    16.68%  LU_decomposition.native  [.] LU_decomposition.set_421
+     1.32%  LU_decomposition.native  [.] <mmtk::util::heap::layout::mmapper::csm::ChunkStateMmapper as mmtk::util::heap::layout::mmapper::Mmapper>::ensure_mapped
+     0.66%  LU_decomposition.native  [.] mmtk::plan::global::CommonPlan<VM>::get_used_pages
+     0.48%  LU_decomposition.native  [.] <mmtk_ocaml::active_plan::VMActivePlan as mmtk::vm::active_plan::ActivePlan<mmtk_ocaml::OCamlVM>>::is_mutator
+     0.46%  LU_decomposition.native  [.] core::hash::BuildHasher::hash_one
+     0.39%  LU_decomposition.native  [.] caml_reset_young_limit
+     0.29%  LU_decomposition.native  [.] mmtk::plan::global::Plan::get_reserved_pages
+     0.29%  LU_decomposition.native  [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::Plan>::collection_required
+     0.24%  LU_decomposition.native  [.] mmtk_ocaml_poll_finalizable
+     0.14%  LU_decomposition.native  [.] Stdlib.Random.rawfloat_1115
+     0.14%  LU_decomposition.native  [.] <mmtk::util::heap::freelistpageresource::FreeListPageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.14%  LU_decomposition.native  [.] LU_decomposition.create_411
+     0.14%  LU_decomposition.native  [.] <core::hash::sip::Hasher<S> as core::hash::Hasher>::write
+     0.14%  LU_decomposition.native  [.] caml_call_gc
+     0.14%  LU_decomposition.native  [.] mmtk::policy::space::Space::acquire
+     0.12%  LU_decomposition.native  [.] Stdlib.Random.float_1207
+     0.12%  LU_decomposition.native  [.] caml_lxm_next_unboxed
+     0.10%  LU_decomposition.native  [.] mmtk::policy::space::Space::get_new_pages_and_initialize
+     0.10%  LU_decomposition.native  [.] <mmtk::util::heap::blockpageresource::BlockPageResource<VM,B> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.10%  LU_decomposition.native  [.] mmtk::util::alloc::allocator::AllocationOptionsHolder::get_alloc_options
+     0.10%  LU_decomposition.native  [.] mmtk_ocaml_refill_tlab
+     0.10%  LU_decomposition.native  [.] <mmtk::util::heap::monotonepageresource::MonotonePageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::alloc_pages
+     0.10%  LU_decomposition.native  [.] LU_decomposition.fun_581
+     0.10%  LU_decomposition.native  [.] LU_decomposition.entry
+     0.09%  LU_decomposition.native  [.] mmtk::util::alloc::allocator::Allocator::alloc_slow_inline
+     0.07%  LU_decomposition.native  [.] Stdlib.Domain.get_686
+     0.05%  [unknown]                [k] 0xffffffffa920014d
+     0.05%  [unknown]                [k] 0xffffffffa9964d90
+     0.05%  [unknown]                [k] 0xffffffffa954858f
+     0.05%  LU_decomposition.native  [.] mmtk::util::metadata::side_metadata::helpers::try_mmap_contiguous_metadata_space
+     0.05%  [unknown]                [k] 0xffffffffa979efd5
+     0.05%  LU_decomposition.native  [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::Plan>::get_allocator_mapping
+     0.05%  [unknown]                [k] 0xffffffffa96aa61d
+     0.05%  LU_decomposition.native  [.] caml_mmtk_run_custom_finalizers
+     0.05%  [unknown]                [k] 0xffffffffaa917b69
+     0.05%  LU_decomposition.native  [.] caml_poll_gc_work
+     0.05%  LU_decomposition.native  [.] caml_mmtk_quiesce_ack
+     0.05%  [unknown]                [k] 0xffffffffa96b95b4
+     0.05%  LU_decomposition.native  [.] caml_find_frame_descr
+     0.04%  [unknown]                [k] 0xffffffffaa917b81
+     0.03%  LU_decomposition.native  [.] regex_automata::nfa::thompson::compiler::Utf8Compiler::add
+     0.02%  LU_decomposition.native  [.] caml_int64_to_float_unboxed
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

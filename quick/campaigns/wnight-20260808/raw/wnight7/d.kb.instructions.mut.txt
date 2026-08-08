@@ -1,0 +1,86 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: kb.native
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'instructions'
+# Event count (approx.): 8203230626
+#
+# Overhead  Shared Object     Symbol                                                                                                                                                                 
+# ........  ................  .......................................................................................................................................................................
+#
+    34.19%  kb.native         [.] Kb.mreduce_597
+    12.48%  kb.native         [.] Kb.match_rec_510
+     6.11%  kb.native         [.] caml_string_equal
+     3.76%  kb.native         [.] caml_raise_exn
+     3.30%  kb.native         [.] Stdlib.failwith_7
+     2.66%  kb.native         [.] compare_val
+     1.91%  kb.native         [.] Stdlib.List.fold_left2_435
+     1.51%  kb.native         [.] Kb.can_match_589
+     1.47%  kb.native         [.] Kb.substitute_485
+     1.46%  kb.native         [.] caml_apply3
+     0.88%  kb.native         [.] Kb.matching_506
+     0.77%  kb.native         [.] caml_compare
+     0.70%  kb.native         [.] caml_c_call
+     0.65%  kb.native         [.] Stdlib.List.map_340
+     0.64%  kb.native         [.] <mmtk::util::heap::layout::mmapper::csm::ChunkStateMmapper as mmtk::util::heap::layout::mmapper::Mmapper>::ensure_mapped
+     0.64%  kb.native         [.] Stdlib.List.mem_479
+     0.63%  kb.native         [.] Kb.union_399
+     0.63%  kb.native         [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_post
+     0.58%  kb.native         [.] Kb.vars_477
+     0.51%  kb.native         [.] Stdlib.List.exists_458
+     0.50%  kb.native         [.] Stdlib.List.assoc_489
+     0.45%  kb.native         [.] Stdlib.List.mem_assoc_513
+     0.39%  kb.native         [.] Kb.reducible_593
+     0.32%  kb.native         [.] Kb.vars_of_list_478
+     0.32%  kb.native         [.] Kb.get_rule_775
+     0.32%  kb.native         [.] Stdlib.List.map_dps_1380
+     0.31%  kb.native         [.] <mmtk_ocaml::active_plan::VMActivePlan as mmtk::vm::active_plan::ActivePlan<mmtk_ocaml::OCamlVM>>::is_mutator
+     0.26%  kb.native         [.] mmtk::plan::global::Plan::get_reserved_pages
+     0.26%  kb.native         [.] Kb.collate_697
+     0.26%  kb.native         [.] caml_reset_young_limit
+     0.25%  kb.native         [.] mmtk_ocaml_region_barrier
+     0.25%  kb.native         [.] caml_initialize
+     0.25%  kb.native         [.] Kb.mk_rule_564
+     0.25%  kb.native         [.] Kb.super_693
+     0.19%  kb.native         [.] mmtk_ocaml_poll_finalizable
+     0.19%  kb.native         [.] Kb.mrewrite1_sons_603
+     0.19%  kb.native         [.] caml_mmtk_region_barrier
+     0.14%  kb.native         [.] <mmtk::util::heap::layout::mmapper::csm::two_level_storage::TwoLevelStateStorage as mmtk::util::heap::layout::mmapper::csm::MapStateStorage>::bulk_transition_state
+     0.13%  kb.native         [.] Kb.fun_1280
+     0.13%  libc.so.6         [.] __memcmp_evex_movbe
+     0.13%  kb.native         [.] caml_alloc_sprintf
+     0.13%  kb.native         [.] Kb.fun_1196
+     0.13%  kb.native         [.] mmtk::policy::space::Space::acquire
+     0.13%  kb.native         [.] mmtk::plan::global::CommonPlan<VM>::get_used_pages
+     0.13%  kb.native         [.] Stdlib.List.rev_append_318
+     0.13%  kb.native         [.] mmtk::util::alloc::allocator::Allocator::alloc_slow_inline
+     0.13%  kb.native         [.] caml_call_gc
+     0.12%  libc.so.6         [.] __printf_buffer
+     0.06%  kb.native         [.] Kb.unify_531
+     0.06%  kb.native         [.] caml_garbage_collection
+     0.06%  kb.native         [.] Kb.fun_1175
+     0.06%  kb.native         [.] Kb.group_precedence_835
+     0.06%  kb.native         [.] <mmtk::util::heap::blockpageresource::BlockPageResource<VM,B> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.06%  libc.so.6         [.] __memmove_evex_unaligned_erms
+     0.06%  kb.native         [.] Kb.lex_ext_661
+     0.06%  kb.native         [.] Kb.fun_1241
+     0.06%  kb.native         [.] caml_find_frame_descr
+     0.06%  libc.so.6         [.] __printf_buffer_write
+     0.06%  kb.native         [.] Kb.partition_768
+     0.06%  kb.native         [.] Kb.mk_pair_725
+     0.06%  kb.native         [.] Kb.fun_1253
+     0.06%  kb.native         [.] Kb.process_786
+     0.06%  kb.native         [.] <mmtk::util::heap::freelistpageresource::FreeListPageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.06%  kb.native         [.] <mmtk::util::heap::monotonepageresource::MonotonePageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::alloc_pages
+     0.06%  kb.native         [.] mmtk::policy::space::Space::get_new_pages_and_initialize
+     0.06%  kb.native         [.] caml_get_frame_descrs
+     0.06%  kb.native         [.] Kb.collate_710
+     0.06%  kb.native         [.] caml_format_int
+     0.05%  [unknown]         [k] 0xffffffffa99c34a3
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

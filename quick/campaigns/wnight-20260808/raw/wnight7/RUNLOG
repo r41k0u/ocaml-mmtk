@@ -1,0 +1,14 @@
+[13:48:05] commit: 78ab9698a binding: denominate the GH#5 full-GC backstop in allocation, not minors
+[13:48:05] === work-only split cells ===
+[13:48:21] cell v.bt done
+[13:48:36] cell d.bt done
+[13:48:44] cell v.kb done
+[13:48:51] cell d.kb done
+[13:48:59] cell v.lu done
+[13:49:10] cell d.lu done
+[13:49:17] cell v.sp done
+[13:49:27] cell d.sp done
+[13:49:35] cell v.mm done
+[13:49:45] cell d.mm done
+[13:49:45] === per-minor overhead probe: LU n4, worker+mutator profile ===
+[13:49:56] === ROUND 7 COMPLETE ===

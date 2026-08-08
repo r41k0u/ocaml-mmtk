@@ -1,0 +1,5 @@
+  W mutator        99.78%   ( 99.8% of parsed)
+  G gc              0.24%   (  0.2%)
+  C coordination    0.00%   (  0.0%)
+  GC fraction: G/(W+G) = 0.0024   G/(W+G+C) = 0.0024
+  top G: oldify_one(0.1%), oldify_mopup(0.1%), caml_scan_stack(0.1%), caml_final_do_young_roots(0.1%)

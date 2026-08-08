@@ -1,0 +1,41 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: matrix_multipli
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'instructions'
+# Event count (approx.): 14044579459
+#
+# Overhead  Shared Object                 Symbol                                                                                                                                                                 
+# ........  ............................  .......................................................................................................................................................................
+#
+    96.86%  matrix_multiplication.native  [.] Matrix_multiplication.matrix_multiply_411
+     0.64%  matrix_multiplication.native  [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_post
+     0.38%  matrix_multiplication.native  [.] Stdlib.Random.int_aux_920
+     0.32%  matrix_multiplication.native  [.] caml_mmtk_region_barrier
+     0.27%  matrix_multiplication.native  [.] Stdlib.Domain.maybe_grow_580
+     0.21%  matrix_multiplication.native  [.] caml_lxm_next_unboxed
+     0.11%  matrix_multiplication.native  [.] Stdlib.Random.int_926
+     0.11%  matrix_multiplication.native  [.] mmtk_ocaml_satb_barrier
+     0.11%  matrix_multiplication.native  [.] Stdlib.Array.init_294
+     0.11%  matrix_multiplication.native  [.] caml_initialize
+     0.11%  matrix_multiplication.native  [.] caml_modify
+     0.11%  matrix_multiplication.native  [.] caml_mmtk_satb_barrier
+     0.06%  matrix_multiplication.native  [.] Stdlib.Domain.get_686
+     0.06%  matrix_multiplication.native  [.] caml_tuplify2
+     0.06%  matrix_multiplication.native  [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::Plan>::collection_required
+     0.06%  [unknown]                     [k] 0xffffffffa9aba0ab
+     0.06%  matrix_multiplication.native  [.] caml_uniform_array_make
+     0.06%  matrix_multiplication.native  [.] mmtk_ocaml_region_barrier
+     0.06%  matrix_multiplication.native  [.] <mmtk::util::heap::layout::mmapper::csm::two_level_storage::TwoLevelStateStorage as mmtk::util::heap::layout::mmapper::csm::MapStateStorage>::bulk_transition_state
+     0.06%  matrix_multiplication.native  [.] <mmtk::plan::concurrent::bactrian::barrier::BactrianBarrier<VM> as mmtk::plan::barriers::Barrier<VM>>::memory_region_copy_pre
+     0.05%  matrix_multiplication.native  [.] Stdlib.Random.int_1176
+     0.05%  matrix_multiplication.native  [.] Matrix_multiplication.entry
+     0.05%  [unknown]                     [k] 0xffffffffa95c548b
+     0.05%  [unknown]                     [k] 0xffffffffa96d9ac5
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

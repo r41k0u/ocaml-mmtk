@@ -1,0 +1,112 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: binarytrees.nat
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cycles'
+# Event count (approx.): 13076123252
+#
+# Overhead  Shared Object         Symbol                                                                                                                                                                 
+# ........  ....................  .......................................................................................................................................................................
+#
+    34.83%  binarytrees.native    [.] Binarytrees.check_280
+    15.90%  binarytrees.native    [.] Binarytrees.make_277
+     1.43%  [unknown]             [k] 0xffffffffa92001c4
+     1.06%  [unknown]             [k] 0xffffffffa920010d
+     0.89%  [unknown]             [k] 0xffffffffa920014d
+     0.56%  [unknown]             [k] 0xffffffffa920009f
+     0.47%  [unknown]             [k] 0xffffffffa92001b7
+     0.40%  binarytrees.native    [.] <mmtk_ocaml::active_plan::VMActivePlan as mmtk::vm::active_plan::ActivePlan<mmtk_ocaml::OCamlVM>>::is_mutator
+     0.33%  binarytrees.native    [.] <mmtk::plan::concurrent::bactrian::global::Bactrian<VM> as mmtk::plan::global::Plan>::collection_required
+     0.33%  binarytrees.native    [.] <std::sync::nonpoison::condvar::Condvar>::notify_all
+     0.31%  [unknown]             [k] 0xffffffffa9a2c68a
+     0.30%  binarytrees.native    [.] core::hash::BuildHasher::hash_one
+     0.29%  binarytrees.native    [.] <mmtk::util::heap::layout::mmapper::csm::ChunkStateMmapper as mmtk::util::heap::layout::mmapper::Mmapper>::ensure_mapped
+     0.21%  libc.so.6             [.] syscall
+     0.21%  binarytrees.native    [.] mmtk_ocaml_stw_park
+     0.19%  binarytrees.native    [.] mmtk::policy::space::Space::get_new_pages_and_initialize
+     0.19%  [unknown]             [k] 0xffffffffa9200080
+     0.18%  binarytrees.native    [.] <core::hash::sip::Hasher<S> as core::hash::Hasher>::write
+     0.17%  binarytrees.native    [.] mmtk::plan::global::Plan::get_reserved_pages
+     0.17%  binarytrees.native    [.] hashbrown::map::HashMap<K,V,S,A>::insert
+     0.16%  binarytrees.native    [.] mmtk_ocaml_try_mark_running
+     0.14%  binarytrees.native    [.] mmtk::plan::global::CommonPlan<VM>::get_used_pages
+     0.14%  binarytrees.native    [.] mmtk::policy::space::Space::not_acquiring
+     0.14%  binarytrees.native    [.] mmtk::policy::space::Space::acquire
+     0.14%  libc.so.6             [.] pthread_mutex_lock@@GLIBC_2.2.5
+     0.12%  binarytrees.native    [.] <mmtk::util::heap::monotonepageresource::MonotonePageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::alloc_pages
+     0.12%  [unknown]             [k] 0xffffffffa920008b
+     0.09%  binarytrees.native    [.] mmtk::util::heap::pageresource::PageResource::clear_request
+     0.07%  binarytrees.native    [.] caml_call_gc
+     0.07%  binarytrees.native    [.] mmtk::util::alloc::allocator::Allocator::alloc_slow_inline
+     0.07%  [unknown]             [k] 0xffffffffa92000a7
+     0.07%  libc.so.6             [.] pthread_mutex_unlock@@GLIBC_2.2.5
+     0.07%  binarytrees.native    [.] <mmtk::util::heap::freelistpageresource::FreeListPageResource<VM> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.07%  [unknown]             [k] 0xffffffffa9798de1
+     0.07%  binarytrees.native    [.] hashbrown::raw::RawTable<T,A>::remove_entry
+     0.07%  binarytrees.native    [.] caml_reset_young_limit
+     0.07%  [unknown]             [k] 0xffffffffa9797f3d
+     0.07%  [unknown]             [k] 0xffffffffa92000a9
+     0.05%  [unknown]             [k] 0xffffffffa9200083
+     0.05%  binarytrees.native    [.] Binarytrees.loop_depths_470
+     0.05%  [unknown]             [k] 0xffffffffa9200112
+     0.05%  [unknown]             [k] 0xffffffffa979e20d
+     0.05%  binarytrees.native    [.] <mmtk::util::heap::blockpageresource::BlockPageResource<VM,B> as mmtk::util::heap::pageresource::PageResource<VM>>::get_available_physical_pages
+     0.05%  [unknown]             [k] 0xffffffffa979abac
+     0.05%  [unknown]             [k] 0xffffffffa920018e
+     0.04%  [unknown]             [k] 0xffffffffa920014f
+     0.02%  [unknown]             [k] 0xffffffffa96b95a5
+     0.02%  binarytrees.native    [.] caml_find_frame_descr
+     0.02%  [unknown]             [k] 0xffffffffa960943d
+     0.02%  [unknown]             [k] 0xffffffffa96b8388
+     0.02%  [unknown]             [k] 0xffffffffa9778919
+     0.02%  binarytrees.native    [.] caml_get_frame_descrs
+     0.02%  [unknown]             [k] 0xffffffffa92015db
+     0.02%  [unknown]             [k] 0xffffffffa9757437
+     0.02%  binarytrees.native    [.] core::ptr::drop_in_place<core::result::Result<(),std::io::error::Error>>
+     0.02%  [unknown]             [k] 0xffffffffa92001b8
+     0.02%  binarytrees.native    [.] mmtk_ocaml_refill_tlab
+     0.02%  [unknown]             [k] 0xffffffffa9d27030
+     0.02%  [unknown]             [k] 0xffffffffaa9008c5
+     0.02%  [unknown]             [k] 0xffffffffa96f6d70
+     0.02%  binarytrees.native    [.] mmtk_ocaml_gc_count
+     0.02%  [unknown]             [k] 0xffffffffa9200ef0
+     0.02%  [unknown]             [k] 0xffffffffa920118a
+     0.02%  binarytrees.native    [.] caml_alloc_small_dispatch
+     0.02%  [unknown]             [k] 0xffffffffa979abaf
+     0.02%  binarytrees.native    [.] mmtk_ocaml_poll_finalizable
+     0.02%  [unknown]             [k] 0xffffffffaa2371d8
+     0.02%  [unknown]             [k] 0xffffffffa9546c00
+     0.02%  [unknown]             [k] 0xffffffffa92001bd
+     0.02%  [unknown]             [k] 0xffffffffaa917a60
+     0.02%  binarytrees.native    [.] caml_release_domain_lock
+     0.02%  binarytrees.native    [.] <mmtk::util::heap::layout::mmapper::csm::two_level_storage::TwoLevelStateStorage as mmtk::util::heap::layout::mmapper::csm::MapStateStorage>::bulk_transition_state
+     0.02%  [unknown]             [k] 0xffffffffa9200155
+     0.02%  [unknown]             [k] 0xffffffffa9546b32
+     0.02%  binarytrees.native    [.] caml_garbage_collection
+     0.02%  [unknown]             [k] 0xffffffffa9200147
+     0.02%  binarytrees.native    [.] mmtk::util::heap::accounting::PageAccounting::get_reserved_pages
+     0.02%  [unknown]             [k] 0xffffffffa9798dc2
+     0.02%  [unknown]             [k] 0xffffffffa96a5159
+     0.02%  [unknown]             [k] 0xffffffffa9546b6f
+     0.02%  [unknown]             [k] 0xffffffffa9797e1d
+     0.02%  [unknown]             [k] 0xffffffffa9744e20
+     0.02%  [unknown]             [k] 0xffffffffaa917a61
+     0.02%  [unknown]             [k] 0xffffffffa9797a10
+     0.02%  [unknown]             [k] 0xffffffffa9798e00
+     0.02%  [unknown]             [k] 0xffffffffc0cab874
+     0.02%  [unknown]             [k] 0xffffffffaa772d87
+     0.02%  [unknown]             [k] 0xffffffffaa917b9b
+     0.02%  [unknown]             [k] 0xffffffffa96aa305
+     0.02%  binarytrees.native    [.] caml_mmtk_park
+     0.02%  [unknown]             [k] 0xffffffffa979aa23
+     0.02%  binarytrees.native    [.] mmtk_ocaml_stw_active
+     0.02%  [unknown]             [k] 0xffffffffa920016e
+     0.02%  [unknown]             [k] 0xffffffffa979b225
+     0.02%  [unknown]             [k] 0xffffffffa9ab3b76
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

@@ -1,0 +1,28 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+# comm: mmtk-gc-worker
+Warning:
+Kernel address maps (/proc/{kallsyms,modules}) were restricted.
+
+Check /proc/sys/kernel/kptr_restrict before running 'perf record'.
+
+As no suitable kallsyms nor vmlinux was found, kernel samples
+can't be resolved.
+
+Samples in kernel modules can't be resolved as well.
+
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cycles'
+# Event count (approx.): 6705170123
+#
+# Overhead  Shared Object            Symbol                                                                                                                                                                              
+# ........  .......................  ....................................................................................................................................................................................
+#
+     1.77%  LU_decomposition.native  [.] mmtk_ocaml::scanning::collect_root_slot
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

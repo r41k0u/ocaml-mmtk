@@ -1,0 +1,4 @@
+  W mutator        99.99%   (100.0% of parsed)
+  G gc              0.00%   (  0.0%)
+  C coordination    0.00%   (  0.0%)
+  GC fraction: G/(W+G) = 0.0000   G/(W+G+C) = 0.0000
