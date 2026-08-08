@@ -45,7 +45,9 @@ configs (REPORT round 4, "cycle ratio stock"):*
 | 1.138 | 1.000 | 1.027 | 1.166 | 0.981 | 1.914 | 1.430 | 1.203 |
 
 *After — W-cycle and W-instruction ratios, work-only, hybrid attribution (SHAPE rounds
-7–8):*
+7–8). The work-only re-profile covered these five benches only; nbody, fannkuchredux and
+mandelbrot were not re-profiled because they were already at whole-process parity above
+(1.000 / 1.027 / 0.981) — they are absent, not dropped:*
 
 | bench | config | W-ins ratio | W-cyc ratio |
 |---|---|---|---|
@@ -61,13 +63,16 @@ in cycles (G-cyc 5.08 G vs 5.72 G).
 
 ## 2. Policy changes, in order
 
+Rows are lettered as in the change brief; note that **(e)**, being documentation-only,
+was recorded at 13:22, ~24 minutes *before* (d).
+
 | # | date | change | where (file · sha) | default + knob |
 |---|---|---|---|---|
 | a | 08-08 04:57→05:42 | allocation-pitch jitter (v1→v2→v3, then default ON) | `runtime/mmtk.c` · `c225f01d1`, `49ffd7e58`, `154de2d31`, `683521d7a` | **ON, 6 bits**; `MMTK_ALLOC_JITTER` (`0` off, `1`=5 bits, `2..8` explicit) |
 | b | 08-08 05:42 | transparent hugepages default ON | `gc/mmtk/binding/src/api.rs` · `683521d7a` | **ON**; `MMTK_TRANSPARENT_HUGEPAGES` honoured when set |
 | c | 08-08 13:14 | TLAB prefetch-on-refill (negative result) | `runtime/mmtk.c` · `cea35bddd` | **OFF**; `MMTK_TLAB_PREFETCH` |
 | d | 08-08 13:46 | full-GC backstop re-denominated: bytes, not minors | `gc/mmtk/binding/src/collection.rs` · `78ab9698a` | 8 × 64 MiB × ndomains; `MMTK_FULL_GC_CADENCE` (minor count) overrides |
-| e | 08-08 (rounds 5–6) | worker-cap policy for d≥8 (documented, no code) | `SHAPE.md` · `efdc6b5f4`; REPORT addendum 1 | policy only; `MMTK_THREADS` (default = nproc) |
+| e | 08-08 13:22 | worker-cap policy for d≥8 (documented, no code) | `SHAPE.md` · `efdc6b5f4`; REPORT addendum 1 | policy only; `MMTK_THREADS` (default = nproc) |
 | f | 08-08 14:05 | adaptive marking — STW-mark small live sets | mmtk-core fork `src/plan/concurrent/bactrian/global.rs` · `6d7588c4c2`, bumped by `a42cd306c`, documented `23e106d86` | threshold **256 MiB**; `MMTK_CONC_MARK_MIN_MATURE_MB` (`0` = always concurrent) |
 
 ### (a) Allocation-pitch jitter — default ON at 6 bits
@@ -233,8 +238,8 @@ mutator-CPU gap — establishing early that the gap is **not** misattributed GC 
    74 M) but *created* a new one at the benign size (mm800 140 M → 217 M). Entropy must be
    line-granular. Superseded by v2/v3. Likewise 7- and 8-bit entropy regress on matmul —
    6 bits is the measured knee.
-3. **TLAB `prefetchw` on refill** (§2c). Hurts everywhere: LU 7.38 G → 9.14 G,
-   kb 5.24 G → 5.62 G, bt 12.98 G → 13.46 G. Knob kept, default off.
+3. **TLAB `prefetchw` on refill** — hurts everywhere; numbers and mechanism in §2c. Knob
+   kept, default off.
 4. **Nursery-shrink-for-warmth.** The store-frontier diagnosis suggests a small,
    L2-resident nursery. Measured on binarytrees-20 (heap 192, T=1), it is a catastrophe:
 
