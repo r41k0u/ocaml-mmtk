@@ -225,3 +225,19 @@ incremental**, making premature promotion cheap — not because it avoids
 promotion. The next structural lever for bt-class lifetimes is incremental/
 concurrent mature-sweep economics, with aging kept for medium-lifetime
 workloads once the documented remset hole is closed (see NOTES).
+
+## Addendum 5 — W-cycle endgame: parity via vanilla's own methodology
+
+The 32KB bump-allocation granule was the last structural offender: its
+per-block tail-skip phase-locked medium-object cache-set placement (matmul's
+739/903M LLC regimes) and its refill rate taxed every allocating bench.
+Raising the granule (`MMTK_BUMP_BLOCK_KB`, default now 512) puts matmul on
+vanilla's exact LLC floor (57M / 64M) and refunds 2–10% of mutator cycles
+panel-wide. Two upstream mmtk-core bugs fixed en route (marksweep-as-nonmoving
+release path; granule tunability added).
+
+**Final W-cycle scoreboard** (vanilla methodology intact — copying nursery,
+allocation-paced fulls, continuous placement): kb **0.98**, binarytrees@16M
+**1.009 (parity, 3 reps)**, spectralnorm 1.05, matmul 1.15, binarytrees-default
+1.16, LU 1.16. Remaining work is G-side only (per-slot trace cost, lazy mature
+reclamation) to make the bt W-parity nursery config G-affordable.
