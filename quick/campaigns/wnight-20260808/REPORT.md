@@ -181,3 +181,25 @@ benches' W-cycle ratios fell to 1.11 / 1.08.
 - **matmul 1.311** — residual conflict-miss stalls after jitter (LLC-loads
   69M vs 57M; 6 entropy bits measured optimal, 7/8 regress).
 - LU 1.110 — post-GC cache-warmth loss across 3282 minors (per-minor cost).
+
+## Addendum 3 — adaptive marking (second architectural change)
+
+Concurrent marking of a small live set was measured to cost the mutator more
+(shared-LLC interference + SATB barrier activity: 7.84G→6.78G cycles,
+14.17G→13.40G instructions when disabled) than it saves in pause time.
+Bactrian now runs a requested major cycle STW when the mature size is below
+`MMTK_CONC_MARK_MIN_MATURE_MB` (default 256 MiB; 0 = always-concurrent).
+Large live sets — where pauses matter — keep the concurrent path, so the
+thesis is intact. Plan-local in the mmtk-core fork (`bactrian/global.rs`,
+commit `6d7588c4c2`); LXR does not consult this path.
+
+**W-cycle scoreboard after both architectural changes** (pacer + adaptive
+marking; W-instructions 0.98–1.04 everywhere):
+
+| bench | W-cyc before tonight | now | remaining mechanism |
+|-------|---------------------|-----|---------------------|
+| binarytrees | 1.355 | **1.239** | store frontier at 64 MiB (aging project) |
+| kb | 1.039 | ~1.04–1.12 (noise band) | — near parity |
+| LU (4 MiB) | 1.110 | 1.110 | per-minor warmth + L2-streaming floor |
+| spectralnorm (8 MiB) | 1.076 | 1.076 | near parity |
+| matmul | 1.311 | 1.311 | residual conflict stalls post-jitter |
