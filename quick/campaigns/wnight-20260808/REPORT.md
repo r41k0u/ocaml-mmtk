@@ -241,3 +241,28 @@ allocation-paced fulls, continuous placement): kb **0.98**, binarytrees@16M
 **1.009 (parity, 3 reps)**, spectralnorm 1.05, matmul 1.15, binarytrees-default
 1.16, LU 1.16. Remaining work is G-side only (per-slot trace cost, lazy mature
 reclamation) to make the bt W-parity nursery config G-affordable.
+
+## Addendum 6 — combined D1 panel (post G-slim rounds 14–16)
+
+Symbol-split hybrid attribution, cycles (G), all 8 benches, current defaults
+(granule 512, jitter, THP, pacer, adaptive marking, phase-dynamic trusted
+loads, gated copy telemetry):
+
+| bench | vanilla W / G (D1) | Bactrian W / G (D1) | W-ratio |
+|-------|--------------------|---------------------|---------|
+| binarytrees | 5.81 / 5.70 (0.495) | 6.95 / 4.62 (**0.399**) | 1.20 |
+| binarytrees @16M nursery | " | 6.42 / 12.00 (0.651) | **1.10** |
+| nbody | ~0 G | ~0 G | 1.00 |
+| fannkuchredux | ~0 G | ~0 G | 1.03 |
+| spectralnorm | 4.88 / 0.00 | 5.21 / 0.09 | 1.07 |
+| mandelbrot | ~0 G | ~0 G | **0.97** |
+| matrix_multiplication | 4.62 / 0.01 | 5.71 / 0.04 | 1.24 |
+| LU_decomposition | 5.38 / 0.00 | 6.50 / 0.27 | 1.21 |
+| kb | 3.92 / 0.59 (0.131) | 4.04 / 0.75 (0.157) | 1.03 |
+
+- bt default: Bactrian's GC fraction 0.399 vs vanilla 0.495 — the D1 shape
+  favours Bactrian at near-equal totals (11.6 vs 11.5G).
+- bt@16M: the W-dial row — W-ratio 1.10 on this instrument (1.02 pt-attach;
+  the two instruments bracket it), G 12.0G pending the UP-trace slim.
+- matmul/LU's 1.21-1.24 on this instrument vs 1.15-1.16 pt-attach: same
+  ±0.05 instrument spread seen all campaign; mandelbrot runs below vanilla.
