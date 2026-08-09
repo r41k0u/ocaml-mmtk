@@ -266,3 +266,28 @@ loads, gated copy telemetry):
   the two instruments bracket it), G 12.0G pending the UP-trace slim.
 - matmul/LU's 1.21-1.24 on this instrument vs 1.15-1.16 pt-attach: same
   ±0.05 instrument spread seen all campaign; mandelbrot runs below vanilla.
+
+## Addendum 7 — the definitive D1 panel (post poll-trap-livelock fix)
+
+The livelock (generated polls trap on <=, C-side checks test < — NOTES
+2026-08-09) is fixed; the 16MB-nursery matmul catastrophe fell 57G -> 8.3G.
+Definitive D1, clean full rebuild, cycles, hybrid attribution:
+
+| bench | vanilla W / G (D1) | Bactrian W / G (D1) | W-ratio |
+|-------|--------------------|---------------------|---------|
+| binarytrees | 5.74 / 5.76 (0.501) | 6.94 / 4.65 (**0.401**) | 1.21 |
+| binarytrees @16M | " | 6.46 / 12.04 (0.651) | 1.13 |
+| nbody | — | — | 1.00 |
+| fannkuchredux | — | — | 1.03 |
+| spectralnorm | 4.88 / 0.00 | 5.18 / 0.09 | 1.06 |
+| mandelbrot | — | — | **0.97** |
+| matmul | 4.64 / 0.00 | 5.69 / 0.03 | 1.23* |
+| LU | 5.36 / 0.00 | 6.43 / 0.27 | 1.20* |
+| kb | 3.94 / 0.58 (0.129) | 4.07 / 0.72 (0.151) | 1.03 |
+
+*matmul/LU carry the characterized fork-ambient effect (plan-independent,
+NoGC-reproducible, all PMU counters at parity; open item, not GC). D1 verdict:
+Bactrian's GC fraction is BELOW vanilla's on the only heavily-collecting
+bench (0.401 vs 0.501) at whole-process parity; kb near-parity; zero-GC
+benches identical. D1 is presentation-ready; next dimensions: D2 pacing,
+D3 stalls/MMU, D4 RSS, D5 space-time (instruments from phase3 stand ready).
