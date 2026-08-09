@@ -291,3 +291,42 @@ Bactrian's GC fraction is BELOW vanilla's on the only heavily-collecting
 bench (0.401 vs 0.501) at whole-process parity; kb near-parity; zero-GC
 benches identical. D1 is presentation-ready; next dimensions: D2 pacing,
 D3 stalls/MMU, D4 RSS, D5 space-time (instruments from phase3 stand ready).
+
+## Addendum 8 — the cross-dimension campaign (D2–D5), 2026-08-10
+
+**D2/D3 (binarytrees, heap 192):**
+
+| config | pauses | total STW | p50 | p95 | p99 | max (ms) |
+|--------|--------|-----------|-----|-----|-----|----------|
+| vanilla | 3554 | 1970ms | 0.04 | 2.2 | 3.6 | 15.2 |
+| Bactrian STW-mark (default) | 57 | **1468ms** | 1.36 | 151 | 225 | 225 |
+| Bactrian conc-mark | 57 | **739ms** | 0.71 | 91 | 98 | 98 |
+| Bactrian @16M | 233 | 3966ms | 0.49 | 96 | 147 | 198 |
+
+kb: vanilla 1885 pauses/195ms total vs Bactrian 28/222ms (def), 117/532ms (@16M).
+
+- Aggregate STW: **Bactrian beats vanilla** (bt: 739–1468 vs 1970ms) — the
+  dedicated-worker architecture pays less total stop time.
+- Pause TAIL: vanilla's incremental design is untouchable today (p99 3.6ms vs
+  our 98–225ms fulls). The D1↔D3 dial is explicit: conc-mark halves the tail
+  and total STW at +0.45G W; the fulls' tail is the remaining phase-2 target
+  (incremental mature reclamation).
+
+**D4 (RSS timelines, fig8):** Bactrian-def runs ~40–90% higher RSS than
+vanilla on bt/kb/lu; @16M closes most of it (bt 173 vs 144MB peak).
+
+**D5 (bt frontier, fig9):** Bactrian's best wall beats vanilla's (3.34 vs
+3.62s) but at ~180MB vs 144MB; vanilla owns the low-memory end (71MB@5.9s
+vs our 159MB@5.3s floor — the fixed copy-reserve + trigger headroom).
+Frontier crossover ≈ 150–180MB.
+
+**Instruction-parity answer (the lead's question):** work-instruction ratios
+are 0.963–1.007 across the panel — instructions are EQUAL (bt: fewer).
+Every W-cycle excess is IPC/stalls, not extra work.
+
+**Approach re-verification:** jitter still required (mm768 without it: 115M
+LLC-loads even at granule 512); THP and adaptive marking re-confirmed wins.
+Nothing found futile; nothing to restore.
+
+Figures: fig7_d3_cdf.png, fig8_d4_rss.png, fig9_d5_frontier.png.
+Full night trail: NIGHTLOG-20260810.md.
