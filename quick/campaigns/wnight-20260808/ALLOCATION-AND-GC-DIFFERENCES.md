@@ -1,13 +1,11 @@
 # Allocation and GC architecture — `mmtk-ocaml` vs stock OCaml 5.5
 
 Two questions from the project lead, answered from the repositories only. Every claim
-below cites a file (`ocaml-mmtk/…` = the fork; `vanilla-5.5.0/…` = stock OCaml 5.5.0)
-or a numbered round in `ocaml-mmtk/gc/mmtk/SHAPE.md`.
-
-*Numbering note.* SHAPE.md's W-night section runs **rounds 1–19** (HEAD `a93f4a79d`);
-there is no round 20, and no round-4 heading — the "Tiny-nursery mutator CPU: solved"
-block sits in its place. Later material is in this directory's `REPORT.md`
-(Addendum 7) and `NOTES.md` 2026-08-09.
+cites a file (`ocaml-mmtk/…` = the fork; `vanilla-5.5.0/…` = stock 5.5.0) or a
+numbered round in `ocaml-mmtk/gc/mmtk/SHAPE.md`. *Numbering note*: SHAPE.md's W-night
+section runs **rounds 1–19** (HEAD `a93f4a79d`); there is no round 20, and no round-4
+heading — "Tiny-nursery mutator CPU: solved" sits in its place. Later material is in
+this directory's `REPORT.md` (Addendum 7) and `NOTES.md` 2026-08-09.
 
 ---
 
@@ -23,9 +21,9 @@ block sits in its place. Later material is in this directory's `REPORT.md`
 | major, `whsize > 128` | **`malloc` per object** (`large_allocate`, `shared_heap.c:480–491`, call at `:515`) | DEFAULT semantics until 16 KiB |
 | `≥ 16 KiB` | still `malloc` (same path) | **MMTk LOS**, `CAML_MMTK_LOS_THRESHOLD` (`mmtk.c:130`), routed by `caml_mmtk_semantics` (`mmtk.c:538–545`) |
 
-The two stock thresholds are **not** the same number and do not coincide:
-`Max_young_wosize` = 256 words decides minor-vs-major *at the call site*;
-`SIZECLASS_MAX` = 128 words *whsize* decides pool-vs-`malloc` *inside* the major heap.
+The two stock thresholds are different numbers: `Max_young_wosize` = 256 words decides
+minor-vs-major *at the call site*; `SIZECLASS_MAX` = 128 words *whsize* decides
+pool-vs-`malloc` *inside* the major heap.
 
 ## 1.2 The small-object path
 
@@ -150,13 +148,9 @@ architectural difference with a *measured-null* performance consequence.
 
 ---
 
----
-
 # Q2 — Bactrian vs the vanilla collector
 
-## 2.1 Axis by axis
-
-Condensed from `BACTRIAN.md:13–23`, which is the authoritative table.
+## 2.1 Axis by axis (condensed from `BACTRIAN.md:13–23`, the authoritative table)
 
 | axis | vanilla OCaml 5.5 | Bactrian | matched? |
 |---|---|---|---|
@@ -181,12 +175,11 @@ which is also what makes it sound for the concurrent marker to skip young object
 
 **Adaptive marking (round 8, `NOTES.md` 2026-08-08 "later").** A concurrent marker
 streaming a *small* live set through the shared LLC costs more in mutator stalls and
-SATB traffic than it saves in pause time, so a requested major cycle now runs as a
-plain STW `Pause::Full` when the Immix reserved size is below
+SATB traffic than it saves in pause time, so a major cycle now runs as a plain STW
+`Pause::Full` when the Immix reserved size is below
 **`MMTK_CONC_MARK_MIN_MATURE_MB` (default 256; 0 restores always-concurrent)** —
-`gc/mmtk-core/src/plan/concurrent/bactrian/global.rs:687,806`, strictly
-Bactrian-plan-local. bt-20: mutator 7.84 → 6.78 G cycles, 14.17 → 13.40 G
-instructions, W-cyc 1.355 → 1.239.
+`gc/mmtk-core/src/plan/concurrent/bactrian/global.rs:687,806`, strictly plan-local.
+bt-20: mutator 7.84 → 6.78 G cycles, 14.17 → 13.40 G instructions, W-cyc 1.355 → 1.239.
 
 ## 2.3 Barriers
 
@@ -235,11 +228,9 @@ block is gated on `plan.generational()`, so LXR is inert here.
 | `MMTK_HEAP_SIZE_MB` | dynamic, `live × 2.2` after each full | pin for reproducibility — D2 is not reproducible unpinned (SHAPE "Protocol") | `mmtk.c:283–290` |
 | `MMTK_THREADS` | `nproc` | worker count; policy from round 5–6: domains + workers ≤ physical cores | `CLAUDE.md` |
 | `MMTK_BUMP_BLOCK_KB` | **512** (upstream 32) | bump granule; reaches vanilla's LLC floor on matmul | `bumpallocator.rs:12–35` |
-| `MMTK_LOS_THRESHOLD` | 16384 B | large-object routing | `mmtk.c:130`, `:356–359` |
-| `MMTK_ALLOC_JITTER` | **6** (bits, 0 = off) | de-regularizes ≥ 2 KB bump pitch | `mmtk.c:156–162` |
+| `MMTK_LOS_THRESHOLD` / `MMTK_ALLOC_JITTER` | 16384 B / **6** bits | large-object routing; de-regularizing the ≥ 2 KB bump pitch | `mmtk.c:130`, `:156–162` |
 | `MMTK_CONC_MARK_MIN_MATURE_MB` | 256 | below this, mark STW instead of concurrently | `bactrian/global.rs:806` |
-| `MMTK_FULL_GC_CADENCE` | unset (bytes law) | reverts the backstop to a minor count | `collection.rs:236–243` |
-| `MMTK_NURSERY_AGE` | 0 (off) | survivor aging; correct but negative for bt, with two known holes | `NOTES.md` 2026-08-08 (night) |
+| `MMTK_FULL_GC_CADENCE` / `MMTK_NURSERY_AGE` | unset (bytes law) / 0 | revert the backstop to a minor count; survivor aging (correct but negative for bt, two known holes) | `collection.rs:236–243`; `NOTES.md` 2026-08-08 (night) |
 | `MMTK_TLAB_PREFETCH`, `MMTK_FRONTIER_WARMER`, `MMTK_MEDIUM_NONMOVING`, `MMTK_TEST_MALLOC_MEDIUM` | off | measured-negative or instrument-only | `mmtk.c:137–172`, `:490–523` |
 | `BACTRIAN_TRACE`, `BACTRIAN_NO_CONCURRENT` | off | pause counters; degrade cycles to STW `Full` | `BACTRIAN.md:129–134` |
 
