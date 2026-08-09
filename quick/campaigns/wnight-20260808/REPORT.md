@@ -330,3 +330,32 @@ Nothing found futile; nothing to restore.
 
 Figures: fig7_d3_cdf.png, fig8_d4_rss.png, fig9_d5_frontier.png.
 Full night trail: NIGHTLOG-20260810.md.
+
+## Addendum 9 — dimension-tightening session (D3 workers, D4 anatomy)
+
+**D3, worker-count lever (bt, STW-mark):** T=1→8 cuts max pause 224→166→146
+→138ms and total STW 1467→988ms with ZERO W cost (mutCyc 6.75G at T=4 =
+baseline; workers only run while the mutator is parked). Scaling is weak
+(1.6× at 8 workers — the full's trace is packet/dependency-bound; a phase-2
+sub-item). Conc-mark remains the D3-optimal config: total 739ms, max 98ms
+(conc+T4 adds nothing). Recipe table:
+
+| config | totSTW | max | W (mutCyc) | note |
+|--------|--------|-----|------------|------|
+| vanilla | 1970ms | 15ms | 5.74G | untouchable tail (p99 3.6ms) |
+| Bactrian STW-mark T=1 (default) | 1468 | 224 | 6.74G | D1-optimal |
+| Bactrian STW-mark T=4 | 1044 | 146 | 6.75G | free tail cut |
+| Bactrian conc-mark T=1 | **739** | **98** | ~7.2G | D3-optimal |
+
+Kept default = STW-mark (per the do-not-lose-D1 directive); the D3 configs
+are documented dials pending the incremental-mature work that collapses the
+tension.
+
+**D4, RSS anatomy (smaps, definitive):** at bt-default the nursery space
+holds exactly its 62MB and the Immix mature space holds 96MB resident
+against ~35MB live — **released blocks never return pages to the OS** (no
+DONTNEED path exists in mmtk-core's page resources; only the THP madvise).
+Quantified fixes, in order: (1) nursery residency == nursery size (the n16
+dial: 173 vs 207MB measured); (2) madvise-on-release for Immix blocks freed
+at Full GCs (rare events → negligible refault cost; expected bt-default RSS
+207 → ~145MB ≈ vanilla parity) — scoped as the next fork work item.
