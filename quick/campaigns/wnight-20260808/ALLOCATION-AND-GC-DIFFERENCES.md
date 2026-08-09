@@ -4,8 +4,9 @@ Two questions from the project lead, answered from the repositories only. Every 
 cites a file (`ocaml-mmtk/…` = the fork; `vanilla-5.5.0/…` = stock 5.5.0) or a
 numbered round in `ocaml-mmtk/gc/mmtk/SHAPE.md`. *Numbering note*: SHAPE.md's W-night
 section runs **rounds 1–19** (HEAD `a93f4a79d`); there is no round 20, and no round-4
-heading — "Tiny-nursery mutator CPU: solved" sits in its place. Later material is in
-this directory's `REPORT.md` (Addendum 7) and `NOTES.md` 2026-08-09.
+heading — "Tiny-nursery mutator CPU: solved" sits in its place. Later material, which
+supersedes SHAPE.md where they disagree, is in this directory's `REPORT.md`
+(**Addenda 7–8**) and `NIGHTLOG-20260810.md`, plus `NOTES.md` 2026-08-09.
 
 ---
 
@@ -21,28 +22,26 @@ this directory's `REPORT.md` (Addendum 7) and `NOTES.md` 2026-08-09.
 | major, `whsize > 128` | **`malloc` per object** (`large_allocate`, `shared_heap.c:480–491`, call at `:515`) | DEFAULT semantics until 16 KiB |
 | `≥ 16 KiB` | still `malloc` (same path) | **MMTk LOS**, `CAML_MMTK_LOS_THRESHOLD` (`mmtk.c:130`), routed by `caml_mmtk_semantics` (`mmtk.c:538–545`) |
 
-The two stock thresholds are different numbers: `Max_young_wosize` = 256 words decides
-minor-vs-major *at the call site*; `SIZECLASS_MAX` = 128 words *whsize* decides
-pool-vs-`malloc` *inside* the major heap.
+The two stock thresholds differ: `Max_young_wosize` (256 words) decides minor-vs-major
+at the call site; `SIZECLASS_MAX` (128 *whsize*) pool-vs-`malloc` inside the major heap.
 
 ## 1.2 The small-object path
 
 **Stock.** Each STW-participating domain commits its own minor arena
 (`domain.c:478–500`), default `Minor_heap_def` = 262144 words = **2 MiB**
 (`config.h:203`). `Alloc_small` is fully inline: subtract `Whsize_wosize(wosize)` from
-`young_ptr`, one interrupt check, one header store with colour 0
-(`memory.h:233–238`). On exhaustion `caml_alloc_small_dispatch` (`minor_gc.c:1020`)
-runs a **minor GC** — the arena is emptied and re-bumped from the top.
+`young_ptr`, one interrupt check, one header store with colour 0 (`memory.h:233–238`).
+On exhaustion `caml_alloc_small_dispatch` (`minor_gc.c:1020`) runs a **minor GC** —
+the arena is emptied and re-bumped from the top.
 
-**Fork.** The same inline sequence survives, but the region under it is an MMTk
-block. `caml_mmtk_refill_tlab` (`mmtk.c:690–739`) takes `[start,end)` from the plan's
-Default allocator and repoints `young_start / young_end / young_ptr`, setting
-`young_trigger = young_start` so the fast path bumps the whole block before the next
-refill. Exhaustion **does not run a minor GC** — `caml_alloc_small_dispatch` calls
-refill instead (`minor_gc.c:262–281`, call at `:272`); a collection only happens if
-MMTk's block acquisition polls one. The first refill is at domain init
-(`mmtk.c:442–487`), which also gates the plan: a native fork run requires a
-bump/Immix Default allocator or it fatals (`mmtk.c:479–486`).
+**Fork.** The same inline sequence survives, but the region under it is an MMTk block.
+`caml_mmtk_refill_tlab` (`mmtk.c:690–739`) takes `[start,end)` from the plan's Default
+allocator and repoints `young_start / young_end / young_ptr`, setting `young_trigger =
+young_start` so the fast path bumps the whole block before the next refill. Exhaustion
+**does not run a minor GC** — `caml_alloc_small_dispatch` calls refill instead
+(`minor_gc.c:262–281`, call at `:272`); a collection only happens if MMTk's block
+acquisition polls one. The first refill is at domain init (`mmtk.c:442–487`), which
+also gates the plan: native code needs a bump/Immix Default allocator or it fatals.
 
 The **granule** replaces stock's arena size: `MMTK_BUMP_BLOCK_KB`
 (`gc/mmtk-core/src/util/alloc/bumpallocator.rs:12–35`), **default 512 KB** where
@@ -55,12 +54,12 @@ stock's 2 MiB, while the *nursery* behind it is 2–64 MiB scaled by live domain
 
 **Stock** splits medium objects twice. Anything with `wosize > 256` goes straight to
 `caml_shared_try_alloc` (`shared_heap.c:493`), which pools it if `whsize ≤ 128` and
-otherwise `malloc`s it individually (`:504` vs `:515`). Because `wosize > 256`
-implies `whsize > 257 > 128`, **every direct over-`Max_young_wosize` allocation is a
-`malloc`** — it never transits the minor heap and is never copied by any GC.
-Promotion uses the same entry (`alloc_shared` → `caml_shared_try_alloc`,
-`minor_gc.c:150–158`), so pools serve `whsize ≤ 128` from *any* caller (promotion
-dominates), and a survivor of 128–256 words also lands in `malloc`.
+otherwise `malloc`s it individually (`:504` vs `:515`). Because `wosize > 256` implies
+`whsize > 257 > 128`, **every direct over-`Max_young_wosize` allocation is a
+`malloc`** — never transiting the minor heap, never copied by any GC. Promotion uses
+the same entry (`alloc_shared` → `caml_shared_try_alloc`, `minor_gc.c:150–158`), so
+pools serve `whsize ≤ 128` from *any* caller (promotion dominates) and a survivor of
+128–256 words also lands in `malloc`.
 
 **Fork** has no such split. `caml_mmtk_alloc_shr` (`mmtk.c:630–656`) asks
 `caml_mmtk_semantics` (`mmtk.c:538–545`), which returns `SEM_DEFAULT` for everything
@@ -77,9 +76,9 @@ inserts a pseudo-random dead `Abstract_tag` filler before ≥ 2 KB DEFAULT alloc
 
 Stock has **no separate large space**: `large_allocate` is `malloc(sz +
 LARGE_ALLOC_HEADER_SZ)` (`shared_heap.c:481`), threaded onto `local->swept_large` and
-marked/swept in place. The fork routes ≥ 16 KiB to MMTk's **LOS** (`mmtk.c:130`,
-`:541`) — page-granular, non-moving, mark-only (`BACTRIAN.md:32–39`); the threshold
-sits deliberately below the smallest line/block of any collecting plan.
+marked/swept in place. The fork routes ≥ 16 KiB to MMTk's **LOS** (`mmtk.c:130`, `:541`)
+— page-granular, non-moving, mark-only (`BACTRIAN.md:32–39`); the threshold sits
+deliberately below the smallest line/block of any collecting plan.
 
 ## 1.5 Allocation-time metadata — the cost is *inverted*, not added
 
@@ -93,7 +92,7 @@ sits deliberately below the smallest line/block of any collecting plan.
 So the allocation *point* is not where MMTk pays; the metadata tax lands at **GC
 time**. Round 16's worker profile at a 16 MiB nursery: **three side-metadata ops per
 promoted object** (unlog + object mark + line mark, 11.5%) plus forwarding/metadata
-CAS pairs at 11.6% — ~650 cycles/object against vanilla's ~300, because "vanilla's
+CAS pairs at 11.6% — ~650 cycles/object vs vanilla's ~300, because "vanilla's
 domain-local minor uses ZERO atomics and ZERO side metadata; MMTk pays them for
 parallel-tracer generality even at `MMTK_THREADS=1`".
 
@@ -101,37 +100,37 @@ parallel-tracer generality even at `MMTK_THREADS=1`".
 
 Stock calls `malloc` per object for every major-heap block above `SIZECLASS_MAX`
 (`shared_heap.c:481`). The fork **never calls `malloc` for an OCaml heap object** —
-every object comes from an MMTk space. SHAPE **round 19** measured it directly with
-`ltrace`: **914 `malloc`s ≥ 2 KB on matmul-300 under vanilla vs 0 under the fork.**
-(The Rust side still `malloc`s its own internal structures; the measurement is
-OCaml-object allocations ≥ 2 KB.)
+every object comes from an MMTk space. Round 19 measured it with `ltrace`: **914
+`malloc`s ≥ 2 KB on matmul-300 under vanilla vs 0 under the fork** (the Rust side still
+`malloc`s its own internal structures; the measurement is OCaml objects ≥ 2 KB).
 
 **Do not read that as a performance explanation.** Round 19 is a *refutation*:
-`MMTK_TEST_MALLOC_MEDIUM` gave the fork literal glibc placement for the medium band
-and changed nothing (5.73–5.78 G cycles vs stock 5.82–5.88 G; vanilla 4.65–4.71 G).
+`MMTK_TEST_MALLOC_MEDIUM` gave the fork literal glibc placement for the medium band and
+changed nothing (5.73–5.78 G cycles vs stock 5.82–5.88 G; vanilla 4.65–4.71 G).
 `MMTK_PLAN=NoGC` reads 5.80 G and the residual is identical across
-NoGC/Immix/GenImmix/Bactrian — **ambient to the fork runtime process**, not a GC,
-plan, barrier, placement, alignment, frequency or layout effect. 914-vs-0 is a real
+NoGC/Immix/GenImmix/Bactrian — **ambient to the fork runtime process**, not a GC, plan,
+barrier, placement, alignment, frequency or layout effect. 914-vs-0 is a real
 architectural difference with a *measured-null* performance consequence.
 
 ## 1.7 Measured consequences (SHAPE.md)
 
 - **Store-frontier stalls (rounds 3b, 5–6).** Bactrian's bt mutator hits L1 on 98.9%
-  of loads yet burns `cycle_activity.stalls_mem_any` = 1.42 G (18% of mutator
-  cycles): bump stores into never-touched cold lines drain through the store buffer
-  at RFO latency. `resource_stalls.sb`: LU 14.9% vs vanilla 1.4%, spectralnorm 7.6%
-  vs 0.1%, bt 4.4% vs 1.1%. Vanilla's 2 MiB arena keeps the write frontier
-  L2-resident; a 64 MiB streaming nursery cannot. Prefetching the fresh block at
-  refill was **refuted** (`MMTK_TLAB_PREFETCH`: LU 7.38 → 9.14 G). The dial is real —
-  round 11: bt W-ratio 1.21 at the default nursery, **1.06** at an L3-resident
-  `Fixed:16M`, at 2.7× the GC cost.
+  of loads yet burns `cycle_activity.stalls_mem_any` = 1.42 G (18% of mutator cycles):
+  bump stores into never-touched cold lines drain through the store buffer at RFO
+  latency. `resource_stalls.sb`: LU 14.9% vs vanilla 1.4%, spectralnorm 7.6% vs 0.1%,
+  bt 4.4% vs 1.1%. Vanilla's 2 MiB arena keeps the write frontier L2-resident; a
+  64 MiB streaming nursery cannot. Prefetching the fresh block at refill was
+  **refuted** (`MMTK_TLAB_PREFETCH`: LU 7.38 → 9.14 G). The dial is real — round 11:
+  bt W-ratio 1.21 at the default nursery, **1.06** at an L3-resident `Fixed:16M`.
 - **Placement regimes (rounds 1, 10, 13).** The *same binary* measured LLC-loads of
   213 M / 739 M / 903–1021 M depending on layout, against vanilla's 57 M floor from
   size-class pools. Round 1 established causality (jitter cut matmul-768's excess 10×,
   739 → 74 M) and refuted LOS routing (page alignment = zero low-bit entropy). Round
   13 closed it: the 32 KB granule's **tail-skip** phase-locked cache-set placement; at
   `MMTK_BUMP_BLOCK_KB=512` matmul lands exactly on vanilla's floor (57.1 M), and
-  rarer refills pay every allocating bench 2–10% of mutator cycles.
+  rarer refills pay every allocating bench 2–10% of mutator cycles. The two fixes are
+  **not redundant** — Addendum 8's re-verification at HEAD: mm768 without jitter
+  reads 115.5 M LLC-loads *even at granule 512*, vs 57.1 M with it.
 - **All-medium-through-the-nursery (round 17).** A global `Fixed:16M` is impossible:
   matmul's live matrices (~19 MB) exceed the nursery, where vanilla pretenures
   > `Max_young_wosize` blocks straight to the major heap — measured 41.4 G (8.9×).
@@ -139,12 +138,15 @@ architectural difference with a *measured-null* performance consequence.
   poll-trap livelock (emitted polls trap on `young_ptr <= young_limit`, every C-side
   check tests strict `<`; ~453 M round-trips, 82 G mutator instructions). Fixed in
   `domain.c`; mm@16M fell 3.66 s → 0.95 s (default 0.83 s) and 57 G → 8.3 G
-  (`REPORT.md` Addendum 7). Medium-object pretenuring's remaining justification is
-  liberating the nursery dial, not matmul.
-- **Panel as certified (round 13, pt-attach W-ratios):** kb 0.98, bt @ `Fixed:16M`
-  **1.009**, spectralnorm 1.05, matmul-768 1.15, bt default 1.16, LU 1.16 — with
-  vanilla's methodology intact (copying nursery, allocation-paced fulls, continuous
-  placement).
+  (Addendum 7). Post-fix (`NIGHTLOG-20260810.md` item A4) a 16 MiB nursery now
+  dominates **both W and RSS on 4 of 5 benches** (bt 6.72 → 5.90 G W, 207 → 173 MB;
+  LU 6.18 → 5.63 G, 93 → 44 MB); the sole blocker class is allocation bursts larger
+  than the nursery — matmul, where every medium object transits it. So the medium
+  band is what gates a small-nursery default; matmul is no longer the argument for it.
+- **Panel as certified:** W-cycle ratios (round 13, pt-attach) kb 0.98, bt @
+  `Fixed:16M` **1.009**, spectralnorm 1.05, matmul-768 1.15, bt default 1.16, LU 1.16.
+  Addendum 8 settles the companion question: **work-instruction ratios are 0.963–1.007
+  panel-wide** (bt *fewer*) — every W-cycle excess is IPC/stalls, never extra work.
 
 ---
 
@@ -170,8 +172,8 @@ Bactrian: [InitialMark = minor GC + snapshot seeding]
           -> GC WORKERS mark concurrently (minors interleave; SATB catches deletions)
           -> [FinalMark = minor GC + remark + weak/finalisers + STW MATURE SWEEP]
 ```
-(`BACTRIAN.md:56–71`.) Every Bactrian cycle transition rides a minor collection —
-which is also what makes it sound for the concurrent marker to skip young objects.
+(`BACTRIAN.md:56–71`.) Every Bactrian transition rides a minor collection — which is
+also what makes it sound for the concurrent marker to skip young objects entirely.
 
 **Adaptive marking (round 8, `NOTES.md` 2026-08-08 "later").** A concurrent marker
 streaming a *small* live set through the shared LLC costs more in mutator stalls and
@@ -189,7 +191,7 @@ Both have **no read barrier** and no barrier on initializing writes
 - **SATB deletion barrier**, marking-gated, slot-granular, no dedup bit, young-value
   filtered — deliberately "literally stock's `caml_darken(old)` shape" rather than
   ConcurrentImmix's per-object unlog-bit protocol, which would collide with the
-  generational barrier's ownership of that bit.
+  generational half's ownership of that bit.
 - **Generational object-remembering barrier** for mature→young edges, coarser than
   stock's: stock records a slot only when the *stored value* is young, the fork's
   region barrier records every mutated mature slot regardless. A value-filtered
@@ -198,14 +200,13 @@ Both have **no read barrier** and no barrier on initializing writes
 
 ## 2.4 Pacing — the full-GC backstop
 
-Vanilla budgets major work by **allocated words**: `alloc_counter`
-(`major_gc.c:755`, advanced at `:983`) and the slice formula
-`PH = allocated_words / G` against `caml_percent_free` (`major_gc.c:895–925`), so a
-major cycle always progresses under allocation whatever the headroom. Bactrian
-collects on **memory pressure** — at a big pinned heap a program can legitimately
-finish with zero collections (`BACTRIAN.md:78–86`). The backstop that keeps
-`Gc.major_collections` advancing is `collection.rs:556–623`; its denomination changed
-during W-night:
+Vanilla budgets major work by **allocated words**: `alloc_counter` (`major_gc.c:755`,
+advanced at `:983`) and the slice formula `PH = allocated_words / G` against
+`caml_percent_free` (`major_gc.c:895–925`), so a major cycle always progresses under
+allocation whatever the headroom. Bactrian collects on **memory pressure** — at a big
+pinned heap a program can legitimately finish with zero collections
+(`BACTRIAN.md:78–86`). The backstop that keeps `Gc.major_collections` advancing is
+`collection.rs:556–623`; its denomination changed during W-night:
 
 | trigger | rule | source |
 |---|---|---|
@@ -213,11 +214,11 @@ during W-night:
 | cadence backstop (default) | **allocated bytes** ≥ 8 × 64 MiB × ndomains | `collection.rs:203–222`, `:614–618` |
 | cadence backstop (override) | `MMTK_FULL_GC_CADENCE` = a minor count, 8 × ndomains | `collection.rs:225–245` |
 
-The old minor-denominated law scaled **inversely** with nursery size: at
-`Fixed:2MiB` it forced a whole-heap collection every ~16 MiB allocated — 186 fulls on
-bt-20 where the default does 6, i.e. a manufactured full-GC storm (141 G cycles vs
-46 G with it suppressed; `NOTES.md` 2026-08-08, `collection.rs:203–212`). The whole
-block is gated on `plan.generational()`, so LXR is inert here.
+The old minor-denominated law scaled **inversely** with nursery size: at `Fixed:2MiB`
+it forced a whole-heap collection every ~16 MiB allocated — 186 fulls on bt-20 where
+the default does 6, a manufactured full-GC storm (141 G cycles vs 46 G with it
+suppressed; `NOTES.md` 2026-08-08, `collection.rs:203–212`). The whole block is gated
+on `plan.generational()`, so LXR is inert here.
 
 ## 2.5 Knobs
 
@@ -242,8 +243,8 @@ block is gated on `plan.generational()`, so LXR is inert here.
 | fewer, larger collections (57 vs ~1800) | **D1** | Bactrian's collector executes *fewer* instructions than vanilla's (9.4 G vs ~15.7 G est., round 2); after adaptive marking + trace-path slim its GC **fraction is below vanilla's** on bt — 0.401 vs 0.501 at whole-process parity (`REPORT.md` Addendum 7) |
 | 64 MiB streaming nursery vs 2 MiB L2-resident arena; bump placement vs size-class pools | **D1 (W side)** | the store-frontier residual (rounds 3b/5–6): round 10 shows bt mutator cycles *invariant* to worker cache domain, GC count and nursery size — purely cold-frontier stores. Placement closed by round 13's granule fix; round 19 rules the matmul remainder fork-ambient, not placement |
 | pressure/allocation-byte pacing vs allocated-words slices | **D2** | the shipped default runs **58 collections against vanilla's ~1839** — 32× fewer. Stock-parity pacing is pure configuration (`Fixed:2097152` + `MMTK_FULL_GC_CADENCE` → 1867 vs 1839) but costs 5.4–7.7× wall, because the per-minor floor is ~7.5 ms against vanilla's 0.63 ms. **D2 matching is blocked on the per-collection floor, not on trigger design** (church 2026-08-07) |
-| STW rendezvous + STW FinalMark sweep vs incremental everything | **D3** | the shapes are *opposite* and neither dominates: bt — vanilla stalls 3553× for 1.98 s (MMU@100 ms = 0.063), MMTk 57–59× for 1.0–1.25 s (MMU@100 ms = 0); kb — vanilla MMU@10 ms = 0.77 vs MMTk 0.00. This is the argument for reporting MMU curves, not pause percentiles |
-| concurrent marking | **D3** | cuts the *median* full-GC pause 11× (12.5 → 1.1 ms) and leaves the **max unchanged** (119 → 112 ms) — in both plans the worst pauses are nursery collections, not marking |
-| mid-cycle floating garbage held until FinalMark; side-metadata tables | **D4** | ~26 MiB program-independent startup floor vs vanilla's ~2 MiB; sequentially RSS == GenImmix's, but under multi-domain anti-scaling cycles stretch and it compounds — par_binarytrees d=8 ballooned to ~1.7 GB (`BACTRIAN.md:88–99`) |
-| space-for-time headroom (`live × 2.2`) | **D5** | round 12's existence proof: sticky-nm at h384/cadence128 runs bt at **79%** of vanilla's total cycles at RSS ~172 MB vs vanilla `o=500` ~140 MB — the same trade vanilla itself makes via `space_overhead` |
-| worker pool vs inline slices, under domain scaling | **M1** | MMTk beats vanilla on wall *and* CPU at d=2–4 (d=4: 1.90–1.98 s vs 2.08 s); collapses at d=8 (15–17 CPU s vs 7.1) purely from oversubscription — policy fix, T=4–6 optimal (round 5–6) |
+| few large STW pauses (rendezvous + FinalMark sweep) vs many tiny incremental ones | **D3** | **Addendum 8 splits the verdict.** *Aggregate* STW favours Bactrian — bt: 57 pauses / **739 ms** (conc-mark) or 1468 ms (STW-mark) against vanilla's 3554 / 1970 ms. The *tail* is vanilla's, untouchably: p99 3.6 ms and max 15.2 ms vs our 98–225 ms fulls. (kb inverts on totals: vanilla 1885 / 195 ms vs 28 / 222 ms.) Reporting one summed number could support either claim — hence MMU/CDF curves |
+| concurrent vs adaptive-STW marking | **D3 ↔ D1 dial** | conc-mark **halves both the tail and total STW** (1468 → 739 ms, p99 225 → 98) for +0.45 G mutator cycles (Addendum 8) — the explicit price of pause relief. Earlier framing stands: the worst pauses are nursery/full collections, not marking |
+| mid-cycle floating garbage held to FinalMark; side-metadata tables | **D4** | ~26 MiB program-independent startup floor vs vanilla's ~2 MiB (`BACTRIAN.md:88–99`); measured timelines (Addendum 8, fig8): Bactrian-def **+40–90% RSS** on bt/kb/lu, most of which `Fixed:16M` closes (bt 173 vs 144 MB peak). Under multi-domain anti-scaling cycles stretch and it compounds — par_binarytrees d=8 at ~1.7 GB |
+| space-for-time headroom (`live × 2.2`) + fixed copy reserve | **D5** | Addendum 8's bt frontier (fig9): Bactrian owns the **fast** end (3.34 s vs vanilla 3.62 s) at ~180 MB vs 144 MB; vanilla owns the **small** end (71 MB @ 5.9 s against our 159 MB @ 5.3 s floor). **Crossover ≈ 150–180 MB.** Round 12's sticky-nm proof (bt at 79% of vanilla's cycles, RSS ~172 vs ~140 MB) is the same trade seen from the plan side |
+| worker pool vs inline slices, under domain scaling | **M1** | MMTk beats vanilla on wall *and* CPU at d=2–4 (d=4: 1.90–1.98 s vs 2.08 s); collapses at d=8 (15–17 CPU s vs 7.1) purely from oversubscription (church 2026-08-07). Policy fix, T=4–6 optimal at d=8 (rounds 5–6) |
