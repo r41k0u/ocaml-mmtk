@@ -204,6 +204,27 @@ identical; `BACTRIAN_TRACE` shows 7× `Full` at the default threshold against 7�
 `Pause` decision in `bactrian/global.rs` plus a file-local helper, 32 lines. LXR does not
 consult this path. `BACTRIAN_NO_CONCURRENT` retains its unconditional-bisection meaning.
 
+## 2b. Policy changes, 2026-08-10 session (after the list above)
+
+- **Max_young_wosize pretenuring — DEFAULT ON for Bactrian.** The >=2056B band is born
+  in the mature Immix space (NonMoving-semantic remap to a reserved plan-local
+  ImmixAllocator; unlog-at-birth; allocate-as-live in marking windows). This is stock's
+  placement law for the band (shared_heap.c pools/malloc), so it removes a vanilla-vs-
+  Bactrian difference rather than adding one. `MMTK_MEDIUM_NONMOVING=0` reverts.
+  Resolves the matmul residual (previous section 5): matmul default 1.03x vanilla,
+  nursery-independent 1.05-1.08x, LLC-loads at the 57-58M floor.
+- **Overflow-block line-phase rotation** (mmtk-core, `MMTK_OVERFLOW_PHASE_LINES=16`,
+  mutator allocators only): fresh Immix overflow blocks start a rotating number of
+  lines in, replacing the 32KB re-alignment that phase-locked same-sized medium
+  streams (904M/205M LLC-load regimes -> 58M). Allocator-internal scaffolding standing
+  in for glibc-arena contiguity.
+- **Remset immediate filter**: caml_initialize / write_barrier's generational half skip
+  values that are not blocks — stock's own ref-table filter. Kills per-slot remset
+  buffering on born-mature immediate-array inits (46MB retained modbuf on matmul;
+  RSS 81 -> 35.6MB).
+- **Jitter pads follow the object's semantics** (were always nursery-bound; a diverted
+  pad leaves the pretenure stream unjittered).
+
 ## 3. Instrumentation-only changes (not policy)
 
 These change what is *observable*, not what the collector does. The first three predate
@@ -280,9 +301,9 @@ mutator-CPU gap — establishing early that the gap is **not** misattributed GC 
   binarytrees, whose W-cyc 1.239 leaves ~1.4 G excess cycles decomposing into store
   frontier (SB-full 0.45 G), post-GC warmth loss, and streaming L2/L3 latency at the
   64 MiB nursery. Bactrian-plan-local by construction; keep it out of LXR paths.
-- **matmul residual (W-cyc 1.311).** Conflict-miss stalls surviving the jitter fix:
-  LLC-loads 69 M against vanilla's 57 M, with 6 entropy bits already measured optimal
-  (7 and 8 regress). Needs a different placement mechanism, not more entropy.
+- **matmul residual — RESOLVED 2026-08-10** by Max_young_wosize pretenuring + the
+  overflow-block phase rotation (section 2b): 1.03x vanilla at bare defaults,
+  LLC-loads at the floor. The "different placement mechanism" was stock's own law.
 - **Per-minor cost (LU, W-cyc 1.110).** Post-GC cache-warmth loss across 3282 minors. LU
   has zero survivors, which pins the marginal cost of an *empty* collection at ~113 µs —
   so the per-collection floor is copy-cost × survivors plus a small constant, not a large

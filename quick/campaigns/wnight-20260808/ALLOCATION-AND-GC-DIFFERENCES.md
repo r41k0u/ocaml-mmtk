@@ -61,16 +61,26 @@ the same entry (`alloc_shared` → `caml_shared_try_alloc`, `minor_gc.c:150–15
 pools serve `whsize ≤ 128` from *any* caller (promotion dominates) and a survivor of
 128–256 words also lands in `malloc`.
 
-**Fork** has no such split. `caml_mmtk_alloc_shr` (`mmtk.c:630–656`) asks
-`caml_mmtk_semantics` (`mmtk.c:538–545`), which returns `SEM_DEFAULT` for everything
-below 16 KiB — **the same nursery CopySpace bump allocator the small path uses**. So
-medium objects transit the nursery, are copied by minors, and are promoted. Two knobs
-emulate stock's split, both **off by default**: `MMTK_MEDIUM_NONMOVING` (≥ 2056 B =
-`Max_young_wosize` + header, to a swept free-list space; `mmtk.c:137–145`) and
-`MMTK_TEST_MALLOC_MEDIUM` (a *measurement instrument*, never a default;
-`mmtk.c:147–155`, `:638–645`). Because bump placement is pitch-regular, the fork also
-inserts a pseudo-random dead `Abstract_tag` filler before ≥ 2 KB DEFAULT allocations
-(`caml_mmtk_jitter_pad`, 6 bits of line entropy; `mmtk.c:156–162`, `:556–601`).
+**Fork — divergence CLOSED under Bactrian (2026-08-10).** `caml_mmtk_alloc_shr`
+(`mmtk.c`) asks `caml_mmtk_semantics`, which under Bactrian routes ≥ 2056 B
+(= `Max_young_wosize` + header) to `SEM_NONMOVING` **by default**: the plan remaps
+the NonMoving semantic to a reserved mutator ImmixAllocator on the **mature** space,
+so the band is born old — never transiting the nursery, never copied by a minor —
+exactly stock's law (the MMTk-idiomatic stand-in for stock's per-object `malloc`:
+mature Immix bump + sweep instead of glibc chunks). Born-mature objects are unlogged
+at birth so the generational barrier remembers their young stores. `MMTK_MEDIUM_NONMOVING=0`
+reverts to the old everything-through-the-nursery shape (which measures as an
+alignment lottery: 118M-vs-900M-class LLC regimes across builds). On other plans the
+knob stays off by default (the NonMoving semantic there maps to the common mark-sweep
+space, unmeasured). `MMTK_TEST_MALLOC_MEDIUM` remains a *measurement instrument*,
+never a default. Two placement supports: the ≥ 2 KB `Abstract_tag` jitter pad
+(`caml_mmtk_jitter_pad`, 6 bits of line entropy) now follows the object's semantics
+into the same stream, and mmtk-core rotates each fresh Immix overflow block's start
+phase (`MMTK_OVERFLOW_PHASE_LINES=16`) — standing in for the phase continuity a
+contiguous malloc arena gives stock for free. A remset parity fix landed with it:
+initialising/modifying stores of **immediates** no longer enter the remembered set
+(stock's own young-value filter; born-mature int-array inits had buffered one entry
+per slot — 46 MB of retained modbuf on matmul-768).
 
 ## 1.4 The large path
 

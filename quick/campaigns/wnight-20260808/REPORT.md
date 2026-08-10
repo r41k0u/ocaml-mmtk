@@ -375,3 +375,50 @@ term. D4 parity therefore routes through the same gate as W-parity: an
 affordable small nursery (cheap-G work), with the @16M dial already
 measured at kb 52MB / bt 173MB. madvise remains the footprint dial for
 deployments that want it.
+
+## Addendum 11 — Max_young_wosize pretenuring lands (2026-08-10, default ON)
+
+The round-22 "pools gate" closed. Bactrian now enforces stock's law that a
+>Max_young_wosize (>=2056B) block never transits the minor heap: the band is
+born in the mature Immix space (NonMoving-semantic remap to a reserved
+plan-local ImmixAllocator; unlogged at birth; allocate-as-live during
+marking windows). Default ON under Bactrian; MMTK_MEDIUM_NONMOVING=0
+reverts. Three stacked mechanisms, each measured separately:
+
+1. **Placement** alone regressed matmul default-nursery +6-8% — LLC-loads
+   205M vs the 57M floor: the Immix overflow cursor re-aligns every 32KB
+   block, so a same-sized medium stream re-enters the same cache-set phase
+   each block (904M LLC-loads unpadded), and object pads cannot decorrelate
+   ~4-5 objects/block (205M). glibc's contiguous arena gives vanilla phase
+   continuation for free.
+2. **Overflow-block line-phase rotation** (new mmtk-core knob
+   MMTK_OVERFLOW_PHASE_LINES=16, mutator allocators only): each fresh
+   overflow block starts one line further in. matmul reaches the floor:
+   58M LLC-loads.
+3. **Remset immediate filter**: caml_initialize / write_barrier's
+   generational half now skip immediates (stock's own ref-table filter).
+   Born-mature int-array inits had been buffering one remset entry PER
+   SLOT: 46MB of retained modbuf (721 x 64KB mallocs, LD_PRELOAD-traced),
+   RSS 81MB -> 35.6MB.
+
+Final bare-default numbers (church, T=1, 192MB, vs vanilla):
+
+    bench     cycles           RSS
+    matmul    4.83G = 1.03x    35.6MB (v 17.7, knob-off 28.9)
+    bt        10.51G = 0.91x   206MB (unchanged)
+    kb        4.58G = 1.01x    (unchanged)
+    LU        1.24x            92MB (unchanged; open item, not medium-band)
+
+matmul is nursery-INDEPENDENT (1.05-1.08x at 2M/16M/64M) — vanilla's shape,
+since its mediums never see the minor heap either; knob-off was an
+alignment lottery (same build drew 118M- and 900M-class LLC regimes across
+batteries). At the round-22 vanilla-matched 2MB operating point matmul
+improves 1.80x -> 1.05x. bt/kb worker shares identical to 0.1pp.
+
+Doctrine note: this REMOVES an implementation difference — the medium band
+now follows vanilla's placement law, the remset now applies vanilla's
+young-value filter, and the phase rotation is allocator-internal
+scaffolding standing in for glibc-arena continuation. Discovered en route,
+pre-existing and unrelated: StickyImmix kb aborts on a
+pending_release_packets underflow (verified present before this work;
+logged in fork NOTES 2026-08-10).
