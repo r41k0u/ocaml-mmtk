@@ -359,3 +359,19 @@ Quantified fixes, in order: (1) nursery residency == nursery size (the n16
 dial: 173 vs 207MB measured); (2) madvise-on-release for Immix blocks freed
 at Full GCs (rare events → negligible refault cost; expected bt-default RSS
 207 → ~145MB ≈ vanilla parity) — scoped as the next fork work item.
+
+## Addendum 10 — madvise-on-release: implemented, measured, made opt-in
+
+Freed Immix blocks can now return pages to the OS (`MMTK_RELEASE_FREED_PAGES=1`;
+mmtk-core `6fef253c2a`+flip). Measured: bt mean RSS 124→119MiB, kb 82→78, LU
+unchanged — and +0.9% whole-process cycles on bt, which crossed its D1
+headline from below vanilla (11.47G) to above (11.59G). Default therefore
+OPT-IN per the do-not-lose-D1 directive; bt restored to 11.46G.
+
+The instructive result: **the D4 gap is nursery-residency dominated** —
+vanilla's kb mean footprint is 10MiB against our 78 (the always-resident
+61MB streaming nursery), and LU 18 vs 90. Mature retention was the minor
+term. D4 parity therefore routes through the same gate as W-parity: an
+affordable small nursery (cheap-G work), with the @16M dial already
+measured at kb 52MB / bt 173MB. madvise remains the footprint dial for
+deployments that want it.
