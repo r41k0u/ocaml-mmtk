@@ -1,0 +1,62 @@
+== D1: median cycles (G), wall (s), ratios vs vanilla ==
+bench         v-cyc    d-cyc    o-cyc    d/v    o/v |  v-wall  d-wall  o-wall   dW/v   oW/v | spr%
+bt            11.51    14.11    12.80   1.23   1.11 |    3.63    4.47    4.06   1.23   1.12 |  0.5
+nbody          6.69     6.72     6.68   1.00   1.00 |    2.10    2.11    2.10   1.00   1.00 |  0.8
+fannkuch       8.93     8.98     8.98   1.01   1.01 |    2.81    2.83    2.82   1.00   1.00 |  0.0
+sp             4.92     5.18     5.19   1.05   1.06 |    1.55    1.63    1.64   1.06   1.06 |  0.1
+mandel         5.44     5.43     5.43   1.00   1.00 |    1.71    1.71    1.70   1.00   1.00 |  0.0
+matmul         5.15     4.97     5.08   0.96   0.99 |    1.62    1.56    1.60   0.96   0.99 |  3.1
+LU             5.44     6.22     6.18   1.14   1.14 |    1.72    2.03    1.97   1.18   1.14 |  1.8
+kb             4.54     5.08     4.84   1.12   1.07 |    1.43    1.61    1.54   1.13   1.08 |  0.1
+matmut         2.46     4.36     3.98   1.77   1.62 |    0.78    1.38    1.26   1.77   1.62 |  0.2
+weakmemo       4.28     4.38     4.16   1.02   0.97 |    1.35    1.39    1.33   1.03   0.98 |  0.2
+fragmed        0.25     0.76     0.76   3.06   3.07 |    0.08    0.25    0.24   3.00   2.95 |  0.1
+GEOMEAN                                1.220  1.190 |                          1.223  1.190
+
+== D1: peak RSS (MiB) ==
+bench             v        d    d/v
+bt            141.0    178.2   1.26
+nbody           2.8      9.9   3.54
+fannkuch        2.8      9.6   3.45
+sp              5.4     28.1   5.20
+mandel          2.8      9.6   3.42
+matmul         17.3     34.9   2.01
+LU             17.8     42.5   2.39
+kb             10.3     41.3   4.03
+matmut         26.0    111.1   4.28
+weakmemo        8.5     42.5   5.00
+fragmed        45.2    189.3   4.19
+
+== D3: pause stats (ms) ==
+stream                      n    mean     p50     p95     p99      max
+v.binarytrees            3553    0.55    0.03    2.21    3.51     15.0
+d.binarytrees             246   10.75    0.32   56.05  128.22    130.1
+dn2.binarytrees          2362    1.73    0.28    7.01   10.86     16.6
+v.kb                     1884    0.10    0.11    0.23    0.34      0.8
+d.kb                      122    2.81    3.02    3.70    4.89      6.6
+dn2.kb                   1205    0.45    0.44    0.56    1.21      2.2
+v.LU_decomposition      11180    0.00    0.00    0.00    0.00      0.1
+d.LU_decomposition        767    0.11    0.11    0.13    0.14      1.1
+dn2.LU_decomposition     7505    0.05    0.05    0.06    0.07      0.8
+v.spectralnorm           5492    0.00    0.00    0.00    0.01      0.1
+d.spectralnorm            377    0.09    0.08    0.11    0.12      1.1
+dn2.spectralnorm         3689    0.05    0.05    0.06    0.07      0.8
+v.mature_mutation         515    1.03    1.14    1.59    1.75      1.8
+d.mature_mutation          26   32.63   32.27   35.05   41.26     41.3
+dn2.mature_mutation       254    3.74    3.21    5.51    9.18     20.0
+
+== pacing from verbose (D3 stream runs) ==
+d.binarytrees          GCs=  246 full= 13 gc_ms=  2643 copied=19696969
+dn2.binarytrees        GCs= 2362 full= 16 gc_ms=  4081 copied=39713222
+d.kb                   GCs=  122 full=  5 gc_ms=   342 copied=3323831
+dn2.kb                 GCs= 1205 full= 16 gc_ms=   542 copied=4282147
+d.LU_decomposition     GCs=  767 full= 23 gc_ms=    85 copied=102
+dn2.LU_decomposition   GCs= 7505 full= 29 gc_ms=   403 copied=102
+d.spectralnorm         GCs=  377 full= 11 gc_ms=    34 copied=37
+dn2.spectralnorm       GCs= 3689 full= 14 gc_ms=   178 copied=37
+d.mature_mutation      GCs=   26 full=  2 gc_ms=   848 copied=4562684
+dn2.mature_mutation    GCs=  254 full=  3 gc_ms=   949 copied=7775020
+
+== attribution A/B (bt@n8) ==
+oldify=0: whole=14.75G wshare=64.3% copied=24.53M gc_ms=2981 -> 387 cy/obj
+oldify=1: whole=13.82G wshare=61.3% copied=24.55M gc_ms=2574 -> 345 cy/obj
