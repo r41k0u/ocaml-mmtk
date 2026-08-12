@@ -26,7 +26,7 @@ open SquareMatrix
 let lup (a0 : float array) =
   let a = copy a0 in
   for k = 0 to (mat_size - 2) do
-    for row = k + 1 to (mat_size - 1) do
+    for row = k + 1 to (mat_size - 1) do (*PROBE*)
         let factor = get a row k /. get a k k in
         for col = k + 1 to mat_size-1 do
             set a row col (get a row col -. factor *. (get a k col))

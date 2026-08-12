@@ -12,7 +12,7 @@ let eval_A i j = 1. /. float((i+j)*(i+j+1)/2+i+1)
 
 let eval_A_times_u u v =
   let n = Array.length v - 1 in
-  for i = 0 to  n do
+  for i = 0 to  n do (*PROBE*)
     let vi = ref 0. in
       for j = 0 to n do vi := !vi +. eval_A i j *. u.(j) done;
       v.(i) <- !vi

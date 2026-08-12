@@ -69,7 +69,7 @@ $(BUILD)/%.native: src/%.ml | $(BUILD)
 # unboxing) and would corrupt the allocation odometer that D2 divides by. The
 # probe refuses to arm there; see lib/probe.ml.
 UNIXDIR ?= $(ROOT)/otherlibs/unix
-PROBE_BENCHES ?= binarytrees kb par_binarytrees
+PROBE_BENCHES ?= binarytrees kb par_binarytrees LU_decomposition spectralnorm
 PROBED := $(addprefix $(BUILD)/,$(addsuffix .probe.native,$(PROBE_BENCHES)))
 
 .PHONY: probe
