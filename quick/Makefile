@@ -24,7 +24,8 @@ STDLIB   ?= $(ROOT)/stdlib
 BUILD    ?= build
 
 SEQ_BENCHES := binarytrees nbody fannkuchredux spectralnorm mandelbrot \
-               matrix_multiplication LU_decomposition kb
+               matrix_multiplication LU_decomposition kb \
+               mature_mutation weak_memo fragmed
 # chameneos_redux was missing here while quickbench.py, mkgolden.sh and
 # PARITY_HEAPS all list it, so `make native` never built it and the panel
 # silently reported it as n/a — hiding the effect-handler/fiber workload, which
