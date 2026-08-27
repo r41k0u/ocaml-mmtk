@@ -93,10 +93,10 @@ def majors_bactrian(f):
         if 'GCs:' in line:
             import re; m=re.search(r'full:\s*(\d+)',line); return int(m.group(1)) if m else None
 def majors_vanilla(f):
-    n=0
+    # v=0x400 prints a Gc.stat-style dump at exit; major_collections is the count
     for line in open(f, errors='replace'):
-        if 'Starting major cycle' in line or 'starting new major GC cycle' in line: n+=1
-    return n or None
+        if line.startswith('major_collections:'):
+            return int(line.split(':')[1]) or None
 vb=(R/'v.bt.verbose'); db=(R/'d2m.bt.verbose')
 if vb.exists() and db.exists():
     vn, dn = majors_vanilla(vb), majors_bactrian(db)
@@ -106,7 +106,7 @@ if vb.exists() and db.exists():
             bar(ax,x,v,c,0.5); ax.text(x,v+0.6,str(v),ha='center',fontsize=12,color=TEXT2)
         ax.set_xticks([0,1]); ax.set_xticklabels(['Bactrian (2 MB)','Vanilla (o=500)'],fontsize=10,color=TEXT1)
         ax.set_ylabel('major collections per run',fontsize=10,color=TEXT1)
-        ax.set_ylim(0,max(vn,dn)*1.15)
+        ax.set_ylim(0,max(vn,dn)*1.15); ax.set_xlim(-0.6,1.6)
         ax.set_title('D2 - major collections, binarytrees',fontsize=12,color=TEXT1,loc='left',pad=12,fontweight='bold')
         plt.tight_layout(); plt.savefig(OUT/'d2_count.png',facecolor=SURFACE); plt.close()
 
@@ -142,6 +142,7 @@ if rows:
             bar(ax,x,val,c,w); ax.text(x,val+top*0.02,f'{val:.0f}',ha='center',fontsize=9,color=TEXT2)
     ax.set_xticks(range(len(rows))); ax.set_xticklabels([SHORT[b] for b,_,_ in rows],fontsize=9,color=TEXT1)
     ax.set_ylabel('peak RSS, MB',fontsize=10,color=TEXT1); ax.set_ylim(0,top*1.15)
+    ax.set_xlim(-0.85,len(rows)-0.15)
     ax.legend(handles=[mpatches.Patch(color=AQUA,label='Vanilla (o=500)'),
                        mpatches.Patch(color=ORANGE,label='Bactrian (192 MB fixed heap)')],
               loc='upper left',frameon=False,fontsize=9.5,labelcolor=TEXT1)

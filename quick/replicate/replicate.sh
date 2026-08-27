@@ -41,6 +41,15 @@ say(){ echo "[replicate] $*" | tee -a "$LOG"; }
 stamp(){ touch "$WORK/.stamps/$1"; }
 stamped(){ [ -f "$WORK/.stamps/$1" ]; }
 want(){ case " $STAGES " in *" $1 "*) return 0;; *) return 1;; esac; }
+clone_retry(){ # clone_retry <branch> <dir> — shallow, survives flaky networks
+  local t
+  for t in 1 2 3; do
+    git clone --depth 1 --branch "$1" "$FORK_URL" "$2" && return 0
+    say "clone of $2 (branch $1) failed, attempt $t/3 — retrying in 15s"
+    rm -rf "$2"; sleep 15
+  done
+  say "ERROR: could not clone $FORK_URL branch $1"; return 1
+}
 
 # Core pinning: first N physical cores of NUMA node 0.
 if [ -z "${TASKSET:-}" ]; then
@@ -53,7 +62,8 @@ say "pinning benchmark runs to cores $TASKSET"
 # ---------------------------------------------------------------- deps
 if want deps && ! stamped deps; then
   say "stage: deps"
-  need=(git curl make gcc g++ pkg-config autoconf python3 python3-venv linux-tools-generic)
+  need=(git curl make gcc g++ pkg-config autoconf python3 python3-venv linux-tools-generic
+        opam bubblewrap unzip cmake libffi-dev zlib1g-dev)
   if command -v apt-get >/dev/null; then
     say "installing packages (sudo): ${need[*]}"
     sudo apt-get update -qq && sudo apt-get install -y -qq "${need[@]}" || \
@@ -77,7 +87,7 @@ if want vanilla && ! stamped vanilla; then
   say "stage: vanilla (opam switch $SWITCH, ocaml 5.5.0)"
   opam init -a --bare 2>/dev/null || true
   opam switch list 2>/dev/null | grep -q "$SWITCH" || opam switch create "$SWITCH" ocaml-base-compiler.5.5.0 -y
-  opam install -y --switch="$SWITCH" dune runtime_events_tools || \
+  opam install -y --confirm-level=unsafe-yes --switch="$SWITCH" dune runtime_events_tools || \
     say "WARNING: olly (runtime_events_tools) unavailable — vanilla pause tails will be skipped"
   stamp vanilla
 fi
@@ -87,9 +97,14 @@ VOPT(){ opam exec --switch="$SWITCH" -- "$@"; }
 if want fork && ! stamped fork; then
   say "stage: fork (ocaml-mmtk @ $FORK_BRANCH — this builds a full OCaml; ~15-30 min)"
   cd "$WORK"
-  [ -d ocaml-mmtk ] || git clone --branch "$FORK_BRANCH" "$FORK_URL" ocaml-mmtk
+  [ -d ocaml-mmtk ] || clone_retry "$FORK_BRANCH" ocaml-mmtk
   cd ocaml-mmtk
-  git submodule update --init gc/mmtk-core
+  sub=0
+  for t in 1 2 3; do
+    git submodule update --init --depth 1 gc/mmtk-core && { sub=1; break; }
+    say "submodule fetch failed, attempt $t/3 — retrying in 15s"; sleep 15
+  done
+  [ "$sub" = 1 ]
   export PATH="$HOME/.cargo/bin:$PATH"
   ./configure --prefix="$WORK/mmtk-install"
   setarch "$(uname -m)" -R make -j"$JOBS" world.opt
@@ -102,7 +117,7 @@ FORKBIN="$WORK/mmtk-install/bin"
 if want bench && ! stamped bench; then
   say "stage: bench (quick panel under both runtimes)"
   cd "$WORK"
-  [ -d benches ] || git clone --branch "$BENCH_BRANCH" "$FORK_URL" benches
+  [ -d benches ] || clone_retry "$BENCH_BRANCH" benches
   Q="$WORK/benches/quick"
   make -C "$Q" native BUILD=build_vanilla \
     OCAMLOPT="$(VOPT which ocamlopt)" STDLIB="$(VOPT ocamlc -where)"
@@ -153,7 +168,7 @@ if want run; then
   say "run: D2 (major-collection counts) + D3 (pause streams)"
   env $B2 MMTK_VERBOSE=1 $SA ./build/mmtk/binarytrees.native 20 >/dev/null 2>"$R/d2m.bt.verbose"
   env $B  MMTK_VERBOSE=1 $SA ./build/mmtk/binarytrees.native 20 >/dev/null 2>"$R/ddef.bt.verbose"
-  env OCAMLRUNPARAM=o=500,v=1 $SA ./build_vanilla/binarytrees.native 20 >/dev/null 2>"$R/v.bt.verbose"
+  env OCAMLRUNPARAM=o=500,v=0x400 $SA ./build_vanilla/binarytrees.native 20 >/dev/null 2>"$R/v.bt.verbose"
   for cfg in "d2m $B2" "ddef $B"; do
     set -- $cfg; tag=$1; shift; envs="$*"
     for b in binarytrees kb; do
