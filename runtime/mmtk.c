@@ -750,7 +750,11 @@ void caml_mmtk_custom_mem_pressure(size_t bytes)
         if (starter_bytes == 0) {
           const char *s = getenv("MMTK_CUSTOM_GC_BYTES");
           long v = s != NULL ? atol(s) : 0;
-          starter_bytes = (v > 0) ? (size_t) v : (16u << 20);
+          /* Default 64MiB: strictly dominates the nursery-sized 16MiB batch
+             on the frame-pool macro bench (wall 235s -> 96s AND peak RSS
+             604 -> 574MB single-worker; the extra starts freed nothing
+             because mature customs only release at fulls). */
+          starter_bytes = (v > 0) ? (size_t) v : (64u << 20);
         }
         sacc = atomic_fetch_add_explicit(&starter_acc, acc,
                                          memory_order_relaxed) + acc;

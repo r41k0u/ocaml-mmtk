@@ -272,9 +272,32 @@ fn nursery_max_bytes() -> usize {
 /// never be forced through this path.
 fn cadence_budget_bytes() -> usize {
     let ndomains = crate::active_plan::domain_addrs().len().max(1);
-    MATURE_PRESSURE_FULL_GC_NURSERY_CADENCE_PER_DOMAIN
+    let floor = MATURE_PRESSURE_FULL_GC_NURSERY_CADENCE_PER_DOMAIN
         * (64 * 1024 * 1024)
-        * ndomains
+        * ndomains;
+    // Scale the backstop with the heap: a fixed 512MiB budget forced a
+    // whole-heap collection every 512MiB allocated REGARDLESS of heap size —
+    // at a 13GiB heap that meant 40 full marks of a growing 10GiB live set
+    // where the margin law alone needs ~8 (macro ydump: 137s of GC in a
+    // 175s run, 3.5x stock; backstop suppressed: 78s, 1.58x). One
+    // heap-worth of allocation is the principled budget: stock completes
+    // roughly one full cycle per heap-worth allocated (space_overhead), and
+    // the margin law already reproduces that pacing — so anything tighter
+    // makes the backstop a second, competing pacer instead of the GH#5
+    // safety net it is. The 512MiB floor keeps small-heap (GH#5,
+    // weaklifetime-class) timing unchanged: it dominates below a 512MiB
+    // heap, and at CLBG scale (192MiB pins) behaviour is byte-identical.
+    // Denominate the heap-worth in the POST-FULL LIVE BASELINE, not the
+    // current heap: the current heap includes the off-heap credit
+    // (vm_live_bytes), so a custom-memory-heavy program would grow the heap
+    // with its own uncollected pool and thereby defer the very fulls that
+    // clear it (measured: a 179MB-under-stock 4K frame pool reached 9.3GB at
+    // defaults with the current-heap denomination). The baseline is what the
+    // last full sweep actually kept — off-heap accumulation cannot inflate
+    // it. x2 approximates one live-derived heap-worth (space_overhead 2.2).
+    let baseline_bytes = LAST_FULL_GC_MATURE_PAGES.load(Ordering::Relaxed)
+        * mmtk::util::constants::BYTES_IN_PAGE;
+    floor.max(baseline_bytes * 2)
 }
 
 /// Cadence threshold for the current run: 8 minors per registered domain.
