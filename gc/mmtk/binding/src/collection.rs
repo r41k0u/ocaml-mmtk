@@ -149,6 +149,25 @@ struct PauseRecord {
 /// has happened yet (every collection so far has been a nursery GC).
 static LAST_FULL_GC_MATURE_PAGES: AtomicUsize = AtomicUsize::new(0);
 
+/// Off-heap custom-block bytes allocated since the last completed full GC,
+/// credited by the runtime from alloc_custom_gen (raw byte sizes). Reported to
+/// mmtk-core via `Collection::vm_live_bytes`, so memory held OUTSIDE the MMTk
+/// heap (Bigarrays, GMP limbs, video-frame pools) counts toward heap-full
+/// checks and the space-overhead heap sizing — stock's custom_major_ratio
+/// pacing, in MMTk terms. Flow approximation: reset when a full GC's sweep
+/// completes, i.e. when the dead customs' finalizers have run and released
+/// their memory. Without this, a program whose OCaml-side live set is tiny
+/// never triggers a collection while its off-heap pool grows without bound
+/// (measured: a ~180MB-under-stock frame pool reached 61GB).
+static OFFHEAP_BYTES_SINCE_FULL: AtomicUsize = AtomicUsize::new(0);
+
+/// C entry: credit off-heap custom-block bytes (called from the runtime's
+/// caml_mmtk_custom_mem_pressure alongside the pacing tick).
+#[no_mangle]
+pub extern "C" fn mmtk_ocaml_offheap_credit(bytes: usize) {
+    OFFHEAP_BYTES_SINCE_FULL.fetch_add(bytes, Ordering::Relaxed);
+}
+
 /// Number of nursery (minor) GCs since the last FULL collection. A pure
 /// mature-size trigger starves on a steady-state-live-set program that churns the
 /// nursery heavily (weaklifetime: a near-constant live set, so mature barely grows
@@ -759,6 +778,13 @@ impl Collection<OCamlVM> for VMCollection {
         unsafe { caml_mmtk_collection_enabled() != 0 }
     }
 
+    /// Off-heap custom-block memory counts toward reserved pages, so it drives
+    /// heap-full checks and the space-overhead heap sizing like heap memory
+    /// does (see OFFHEAP_BYTES_SINCE_FULL).
+    fn vm_live_bytes() -> usize {
+        OFFHEAP_BYTES_SINCE_FULL.load(Ordering::Relaxed)
+    }
+
     /// GC worker: stop every running domain, then visit each registered mutator
     /// so its roots are scanned.
     fn stop_all_mutators<F>(_tls: VMWorkerThread, mut mutator_visitor: F)
@@ -925,6 +951,9 @@ impl Collection<OCamlVM> for VMCollection {
                 LAST_FULL_GC_MATURE_PAGES.store(mature, Ordering::Relaxed);
                 AWAITING_SWEEP_BASELINE.store(false, Ordering::Relaxed);
                 note_swept_baseline(mature);
+                // Full cycle + sweep complete: dead custom blocks have been
+                // finalized and their off-heap memory released.
+                OFFHEAP_BYTES_SINCE_FULL.store(0, Ordering::Relaxed);
             } else if was_full {
                 AWAITING_SWEEP_BASELINE.store(true, Ordering::Relaxed);
             } else if AWAITING_SWEEP_BASELINE.load(Ordering::Relaxed) && sweep_done {
@@ -933,6 +962,7 @@ impl Collection<OCamlVM> for VMCollection {
                 LAST_FULL_GC_MATURE_PAGES.store(mature, Ordering::Relaxed);
                 AWAITING_SWEEP_BASELINE.store(false, Ordering::Relaxed);
                 note_swept_baseline(mature);
+                OFFHEAP_BYTES_SINCE_FULL.store(0, Ordering::Relaxed);
             }
             if was_full {
                 // (kept: was_full also feeds the pause-log flag below)

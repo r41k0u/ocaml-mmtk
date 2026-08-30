@@ -284,11 +284,22 @@ CAMLexport void caml_free_dependent_memory (mlsize_t nbytes)
 */
 CAMLexport void caml_adjust_gc_speed (mlsize_t res, mlsize_t max)
 {
+  double ratio;
   if (max == 0) max = caml_custom_get_max_major ();
   if (res > max) res = max;
   Caml_state->extra_heap_resources += (double) res / (double) max;
   if (Caml_state->extra_heap_resources > 0.2){
     CAML_EV_COUNTER (EV_C_REQUEST_MAJOR_ADJUST_GC_SPEED, 1);
+    /* Under always-on MMTk the stock consumer of this accumulator
+       (update_major_slice_work, reached via the major slice) never runs — the
+       slice request lands in an inert stub — so without a reset here the
+       accumulator ratchets past the threshold once and then every later
+       custom allocation re-fires an interrupt for nothing. The MMTk-side
+       pressure credit happens with raw bytes in alloc_custom_gen
+       (caml_mmtk_custom_mem_pressure); here we only consume the stock
+       accumulator to kill the ratchet. */
+    (void) ratio;
+    Caml_state->extra_heap_resources = 0.0;
     caml_request_major_slice (1);
   }
 }
@@ -302,6 +313,13 @@ CAMLexport void caml_adjust_minor_gc_speed (mlsize_t res, mlsize_t max)
   if (max == 0) max = 1;
   Caml_state->extra_heap_resources_minor += (double) res / (double) max;
   if (Caml_state->extra_heap_resources_minor > 1.0) {
+    /* Reset here under MMTk: the stock reset point
+       (caml_empty_minor_heap_domain_clear) is only reached on the bytecode
+       minor path, so on native the accumulator would ratchet and every later
+       small-custom allocation would re-request a minor GC. Stock zeroes it at
+       the minor GC this request triggers; consuming it at the request point
+       is the same cadence. */
+    Caml_state->extra_heap_resources_minor = 0.0;
     caml_request_minor_gc ();
   }
 }
