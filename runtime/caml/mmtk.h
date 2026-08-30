@@ -183,6 +183,15 @@ extern uintnat caml_mmtk_heap_size_bytes(void);
 extern void caml_mmtk_region_barrier(volatile value *start, mlsize_t count);
 /* Rust-side mature-direct pacing tick (pretenure/LOS bytes; SHAPE round 30). */
 extern void mmtk_ocaml_mature_alloc_tick(size_t bytes);
+/* Rust-side off-heap accounting: credited bytes count toward reserved pages
+ * (Collection::vm_live_bytes), so off-heap custom memory drives heap-full
+ * checks and heap sizing; reset binding-side when a full GC's sweep ends. */
+extern void mmtk_ocaml_offheap_credit(size_t bytes);
+/* Off-heap custom-block pressure -> the mature pacing tick. Called from
+ * alloc_custom_gen with the block's RAW out-of-heap byte size (the stock
+ * accumulators clamp per-block resources before summing, under-counting large
+ * blocks by orders of magnitude). */
+extern void caml_mmtk_custom_mem_pressure(size_t bytes);
 
 /* SATB (snapshot-at-the-beginning) deletion write barrier for the concurrent
  * plan (ConcurrentImmix). Greys the OLD referents in `count` value-sized slots

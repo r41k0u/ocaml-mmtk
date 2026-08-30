@@ -679,11 +679,92 @@ value caml_mmtk_alloc_shr(mlsize_t wosize, tag_t tag, reserved_t reserved)
     size_t acc = atomic_fetch_add_explicit(&mature_tick_acc, b,
                                            memory_order_relaxed) + b;
     if (acc >= (2u << 20)) {
-      atomic_fetch_sub_explicit(&mature_tick_acc, acc, memory_order_relaxed);
-      mmtk_ocaml_mature_alloc_tick(acc);
+      /* CAS the counter to zero rather than fetch_sub(acc): two domains
+         crossing the threshold together would each subtract their own
+         observed total, over-subtracting and wrapping the unsigned counter.
+         On CAS failure another domain raced an add in; the bytes stay
+         counted and the next crossing ticks. */
+      size_t expected = acc;
+      if (atomic_compare_exchange_strong_explicit(
+              &mature_tick_acc, &expected, 0,
+              memory_order_relaxed, memory_order_relaxed))
+        mmtk_ocaml_mature_alloc_tick(acc);
     }
   }
   return (value)p;
+}
+
+/* Off-heap (custom-block) allocation pressure -> the same pacing tick as
+   mature-direct allocation. Stock consumes caml_adjust_gc_speed's accumulator
+   in update_major_slice_work; under always-on MMTk that consumer never runs
+   (the major slice is inert), so nothing told the GC about memory held
+   OUTSIDE the MMTk heap — Bigarrays, GMP limbs, video frames. A frame pool
+   holding ~180MB under stock grew to ~25GB of dead off-heap frames here
+   because the OCaml-side live set never filled the heap, so no collection
+   ever ran the finalizers that release the frames.
+
+   `bytes` is the raw out-of-heap size of the custom block, taken at the
+   allocation site in alloc_custom_gen (the stock accumulators clamp per-block
+   resources to ~heap/150 before summing, which under-counts large blocks by
+   orders of magnitude). Batched ~2MB like the mature-direct tick above, then
+   the binding evaluates the same cycle-trigger laws. */
+void caml_mmtk_custom_mem_pressure(size_t bytes)
+{
+  static _Atomic size_t custom_tick_acc = 0;
+  size_t b, acc;
+  if (!caml_mmtk_collects) return;
+  /* Count the bytes as VM-held memory so the ordinary poll path sees them
+     (Collection::vm_live_bytes -> reserved pages). The tick below only FLAGS
+     the next collection full; with a tiny OCaml-side live set no collection
+     would otherwise ever start (measured: 1 GC in a whole frame-pool run). */
+  mmtk_ocaml_offheap_credit(bytes);
+  b = bytes;
+  acc = atomic_fetch_add_explicit(&custom_tick_acc, b,
+                                  memory_order_relaxed) + b;
+  if (acc >= (2u << 20)) {
+    size_t expected = acc;
+    if (atomic_compare_exchange_strong_explicit(
+            &custom_tick_acc, &expected, 0,
+            memory_order_relaxed, memory_order_relaxed)) {
+      mmtk_ocaml_mature_alloc_tick(acc);
+      /* The tick and the vm_live_bytes credit only make the NEXT collection
+         see the pressure — but a program whose OCaml-side allocation is tiny
+         (a pool of small records fronting huge off-heap frames) may never
+         reach an allocation poll to START one, and on native the poll's TLAB
+         early-return makes caml_request_minor_gc() a no-op as well (measured
+         both ways: 1 GC across a 6GB frame churn). Start a real collection
+         through the binding — non-exhaustive, so it is a nursery GC unless
+         the tick's laws above escalated it to full.
+
+         Starter cadence: one collection per nursery-max of off-heap bytes
+         (stock's custom-minor law: a minor GC per minor-heap-worth of custom
+         mem), NOT per 2MB credit batch — at 2MB the probe run was 95%% GC
+         time while still pooling 3x stock's RSS. MMTK_CUSTOM_GC_BYTES
+         overrides. Guarded: unmarshalling allocates customs with collection
+         disabled; the credit keeps accumulating and the next enabled batch
+         collects. */
+      {
+        static _Atomic size_t starter_acc = 0;
+        static size_t starter_bytes = 0;
+        size_t sacc;
+        if (starter_bytes == 0) {
+          const char *s = getenv("MMTK_CUSTOM_GC_BYTES");
+          long v = s != NULL ? atol(s) : 0;
+          starter_bytes = (v > 0) ? (size_t) v : (16u << 20);
+        }
+        sacc = atomic_fetch_add_explicit(&starter_acc, acc,
+                                         memory_order_relaxed) + acc;
+        if (sacc >= starter_bytes && caml_mmtk_collection_enabled()) {
+          size_t sexp = sacc;
+          if (atomic_compare_exchange_strong_explicit(
+                  &starter_acc, &sexp, 0,
+                  memory_order_relaxed, memory_order_relaxed))
+            mmtk_ocaml_handle_user_minor_collection_request(
+                (uintptr_t) Caml_state);
+        }
+      }
+    }
+  }
 }
 
 /* Non-raising variant of caml_mmtk_alloc_shr: returns (value)0 on exhaustion
