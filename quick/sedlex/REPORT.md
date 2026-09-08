@@ -100,19 +100,7 @@ once. Vanilla agrees: `minor_remembered_set` 0.001 / 0.002 / 0.003 s at
 
 ![remset growth](charts/remset_growth.png)
 
-## 4. Cycles per KB promoted (same program, same bytes on both sides)
-
-Vanilla `Gc.stat`: 171,168,062 promoted words = 1.369 GB at n=1M; Bactrian
-copies 63.5M objects (avg 21.6 B). Nothing dies, so both runtimes promote the
-same bytes.
-
-| | promotion time | per KB | cycles/KB (~3.0 GHz) | per object |
-|---|---:|---:|---:|---:|
-| vanilla (`minor_local_roots_promote`) | 2.08 s | 1.55 µs | ~4.7k | ~98 cyc |
-| Bactrian (nursery pauses) | 11.55 s | 8.64 µs | ~25.9k | ~546 cyc |
-| ratio | | | **5.56x** | |
-
-## 5. Experiment C — stage coloring by busy-wait injection
+## 4. Experiment C — stage coloring by busy-wait injection
 
 Probed build: `MMTK_SPIN_STAGE=<stage> MMTK_SPIN_NS=<ns>` spins for `ns` at
 every invocation of one stage. Wall increase is linear in the delay with slope
@@ -152,7 +140,7 @@ seen twice, so their costs are not additive) and the full re-marks (11 at
 invocations, and the mark/sweep quanta are too few and too cheap to register.
 Nothing else in the collector is on the critical path for this workload.
 
-## 6. What moves the number (measured, n=1M)
+## 5. What moves the number (measured, n=1M)
 
 Full pacing diagnosis (trigger trace, cadence and margin-law sweeps, stacked
 knobs, CLBG spot-check) in
@@ -174,7 +162,7 @@ dynamic-heap case is unchecked. Beyond pacing, the promotion copy itself is
 the architectural cost; StickyImmix (in-place young marking) is the fix and
 currently panics under the native binding (`epilogue.rs:11`).
 
-## 7. Reproducing
+## 6. Reproducing
 
 ```
 scp sedlex_experiments.sh trace_split.py church:shape/
