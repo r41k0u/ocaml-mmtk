@@ -3,13 +3,13 @@
 #   1. nursery-size sweep (long-lived sedlex vs short-lived binarytrees, both runtimes)
 #   2. remembered-set growth vs n and vs nursery size (probed build: MMTK_REMSET_DEBUG)
 #   3. stage "coloring": busy-wait injection per GC stage (probed build: MMTK_SPIN_STAGE/NS)
-# Usage: sedlex_experiments.sh <results-dir> [stages]   stages ⊆ {nursery,control,remset,coloring,vanilla}
+# Usage: sedlex_experiments.sh <results-dir> [stages]   stages ⊆ {nursery,control,remset,coloring,cycles,vanilla}
 # Env: MMTK_SEDLEX (Bactrian sedlex exe), MMTK_SEDLEX_PROBE (probed exe), VAN_SEDLEX (vanilla exe),
 #      MMTK_BT / VAN_BT (binarytrees natives), OLLY (olly binary), CORES (taskset list)
 set -u
-R=${1:?results dir}; STAGES=${2:-nursery control remset coloring vanilla}; mkdir -p "$R"
+R=${1:?results dir}; STAGES=${2:-nursery control remset coloring cycles vanilla}; mkdir -p "$R"
 MMTK_SEDLEX=${MMTK_SEDLEX:-$HOME/shape/macro/mmtk/sedlex/sedlex_bench.exe}
-MMTK_SEDLEX_PROBE=${MMTK_SEDLEX_PROBE:-$HOME/shape/macro/mmtk-probe3/sedlex/sedlex_bench.exe}
+MMTK_SEDLEX_PROBE=${MMTK_SEDLEX_PROBE:-$HOME/shape/macro/mmtk-probe4/sedlex/sedlex_bench.exe}
 VAN_SEDLEX=${VAN_SEDLEX:-$HOME/shape/macro/vanilla/sedlex/sedlex_bench.exe}
 MMTK_BT=${MMTK_BT:-$HOME/shape/shape-bench/quick/build/mmtk/binarytrees.native}
 VAN_BT=${VAN_BT:-$HOME/shape/shape-bench/quick/build_vanilla/binarytrees.native}
@@ -44,6 +44,11 @@ if want coloring; then { echo "stage ns wall_s"
       st=${spec%%:*}; for ns in ${spec#*:}; do
         out=$(env $B $e MMTK_SPIN_STAGE=$st MMTK_SPIN_NS=$ns /usr/bin/time -f "wall=%e" $PIN $SA "$MMTK_SEDLEX_PROBE" 1000000 2>&1 >/dev/null)
         echo "$cfg $st $ns $(grep -oE "wall=[0-9.]+" <<<"$out" | cut -d= -f2)"; done; done; done; } | tee "$R/coloring.txt"; fi
+if want cycles; then # direct per-stage rdtsc accounting (probed build, MMTK_STAGE_CYCLES=1); the last [cycles] line is cumulative
+  for run in "default:1000000:" "off:1000000:MMTK_FULL_GC_CADENCE=100000" "default:2000000:" "off:2000000:MMTK_FULL_GC_CADENCE=100000"; do
+    cfg=${run%%:*}; rest=${run#*:}; n=${rest%%:*}; e=${rest#*:}
+    env $B $e MMTK_STAGE_CYCLES=1 MMTK_VERBOSE=1 /usr/bin/time -f "wall=%e" $PIN $SA "$MMTK_SEDLEX_PROBE" $n 2>&1 >/dev/null | grep -E "^\[cycles\]|GCs:|wall=" | tail -3 > "$R/cycles.$cfg.$n.txt"
+    echo "cycles $cfg n=$n: $(grep -E 'wall=|GCs:' "$R/cycles.$cfg.$n.txt" | tr '\n' ' ')"; done; fi
 if want vanilla; then for n in 500000 1000000 2000000; do $PIN env OCAMLRUNPARAM=o=500 "$OLLY" trace --format=json "$R/vanilla.$n.trace.json" "$VAN_SEDLEX $n" >/dev/null 2>&1
     python3 "$(dirname "$0")/trace_split.py" "$R/vanilla.$n.trace.json" > "$R/vanilla.$n.phases.txt"; echo "vanilla n=$n: $(grep -E '^minor |^major ' "$R/vanilla.$n.phases.txt" | tr -s ' ' | tr '\n' ';')"; done | tee "$R/vanilla_phases.txt"; fi
 echo "EXPERIMENTS-DONE -> $R"

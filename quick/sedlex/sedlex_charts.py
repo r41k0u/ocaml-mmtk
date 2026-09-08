@@ -159,4 +159,52 @@ if col:
             cost=(f'{T/n*1e9:,.0f} ns' if n>1e5 else f'{T/n*1e3:,.1f} ms') if (T and n>0.5) else 'n/a'
             fh.write(f'{cfg} {st} N={n:,.0f} pool={T if T is not None else "?"}s cost={cost}\n')
     print(open(os.path.join(OUT,'coloring_counts.txt')).read())
+# ---- 5. direct per-stage cycles (rdtsc inside the probes; no wall-time attribution) ----
+cyc=sorted(glob.glob(os.path.join(R,'cycles.*.*.txt')))
+if cyc:
+    stages=['object_copy','scan_object','nursery_pause','full_pause','cycle_pause','modbuf_object','mark_quantum','sweep_quantum']
+    data={}
+    for fn in cyc:
+        m=re.search(r'cycles\.(\w+)\.(\d+)\.txt',fn); cfg,n=m.group(1),int(m.group(2))
+        line=[l for l in open(fn) if l.startswith('[cycles]')]
+        if not line: continue
+        line=line[-1]; hz=num(r'tsc_hz=([\d.]+)',line); ovh=num(r'timer_overhead_ticks=([\d.]+)',line)
+        st={}
+        for part in line.split('|')[1:]:
+            mm=re.match(r'\s*(\w+): n=(\d+) ticks=(\d+) per_call=([\d.\-]+) corrected_per_call=([\d.\-]+) secs=([\d.\-]+)',part)
+            if mm: st[mm.group(1)]=dict(n=int(mm.group(2)),ticks=int(mm.group(3)),per=float(mm.group(4)),cper=float(mm.group(5)),secs=float(mm.group(6)))
+        wall=None
+        for l in open(fn):
+            w=num(r'wall=([\d.]+)',l)
+            if w: wall=w
+        data[(cfg,n)]=dict(hz=hz,ovh=ovh,st=st,wall=wall)
+    # chart: per-stage seconds (direct), n=1M, default vs off; pause-log pools as hollow markers for cross-check
+    keys=[k for k in [('default',1000000),('off',1000000)] if k in data]
+    if keys:
+        f,ax=fig(9.5,4.8); title(ax,'Direct per-stage time from rdtsc inside the probes (sedlex n=1M)')
+        w=0.38
+        for j,k in enumerate(keys):
+            d=data[k]['st']; col=ORANGE if k[0]=='default' else MUTED
+            for i,stg in enumerate(stages):
+                v=d.get(stg,{}).get('secs',0.0)
+                ax.bar(i+(j-0.5)*w,max(v,0),width=w*0.92,color=col,linewidth=0)
+                if v>0.3: ax.text(i+(j-0.5)*w,v+0.4,f'{v:.1f}',ha='center',fontsize=7.5,color=TEXT2)
+        # cross-check markers from the pause log (pause_split.txt)
+        pools={'default':ps.get('bactrian',{}),'off':ps.get('bactrian_backstop_off',{})} if ps else {}
+        for j,k in enumerate(keys):
+            pl=pools.get(k[0],{})
+            for stg,key in (('nursery_pause','nursery'),('full_pause','full')):
+                if key in pl: ax.plot([stages.index(stg)+(j-0.5)*w],[pl[key]],marker='D',markersize=6,markerfacecolor='none',markeredgecolor=TEXT1,markeredgewidth=1.2,linestyle='none')
+        ax.set_ylim(0,max([v.get('secs',0) for k in keys for v in data[k]['st'].values()]+[1])*1.28)
+        ax.set_xticks(range(len(stages))); ax.set_xticklabels(stages,fontsize=8.5,color=TEXT1,rotation=20,ha='right')
+        ax.set_ylabel('seconds (TSC ticks ÷ TSC rate, timer overhead subtracted)',fontsize=9,color=TEXT1)
+        ax.text(0.01,0.97,'orange = backstop default, pink = backstop off; hollow diamonds = pause-log class totals (independent cross-check)',transform=ax.transAxes,fontsize=8.5,color=TEXT2,va='top')
+        save(f,'stage_cycles.png')
+    with open(os.path.join(OUT,'stage_cycles.txt'),'w') as fh:
+        for k,d in sorted(data.items()):
+            fh.write(f"# {k[0]} n={k[1]} wall={d['wall']} tsc_hz={d['hz']:.0f} timer_overhead_ticks={d['ovh']:.1f}\n")
+            for stg in stages:
+                if stg in d['st']:
+                    x=d['st'][stg]; fh.write(f"{k[0]} {k[1]} {stg} n={x['n']} ticks/call={x['per']:.0f} corrected={x['cper']:.0f} secs={x['secs']:.3f}\n")
+    print(open(os.path.join(OUT,'stage_cycles.txt')).read())
 print('done')

@@ -21,8 +21,8 @@ vanilla's `minor_remembered_set` phase totals 1–3 ms across n = 0.5M–2M.
 sedlex is pure functional consing (young → old pointers), which the barrier
 never logs.
 
-**Promotion is real, and its per-KB cost is 5.6x vanilla — but it is a quarter
-of the gap.** The dominant term (61%) is eleven cadence-triggered full re-marks
+**Promotion is real, and it is a quarter of the gap — and within it the copy
+itself is ~10%: the per-object tracing path around the copy is the cost (§4a).** The dominant term (61%) is eleven cadence-triggered full re-marks
 of a growing live set: a pacing law, not a copy cost. Mutator is the rest.
 
 | component (n=1M) | vanilla | Bactrian | share of the 35.6 s gap |
@@ -100,45 +100,81 @@ once. Vanilla agrees: `minor_remembered_set` 0.001 / 0.002 / 0.003 s at
 
 ![remset growth](charts/remset_growth.png)
 
-## 4. Experiment C — stage coloring by busy-wait injection
+## 4. Experiment C — per-stage cost measured directly, and stage coloring
 
-Probed build: `MMTK_SPIN_STAGE=<stage> MMTK_SPIN_NS=<ns>` spins for `ns` at
-every invocation of one stage. Wall increase is linear in the delay with slope
-= invocation count N, independent of what the stage itself costs; combined
-with the pause-class durations this gives natural per-invocation cost.
-Stages: `nursery_pause`, `full_pause`, `cycle_pause` (InitialMark/FinalMark),
-`object_copy` (every promoted object, hooked in `object_forwarding::forward_object`), `modbuf_object`
-(every remembered object), `scan_object` (every object scanned in the UP
-drain), `mark_quantum`, `sweep_quantum`.
+### 4a. Direct per-stage cycles (rdtsc inside the probes)
 
-![coloring](charts/coloring.png)
+The probed build times every stage invocation with `rdtsc` (constant-rate
+TSC, 2.195 GHz on this Xeon; the timer's own cost, 89 ticks per begin/end
+pair, is calibrated at startup and subtracted). Per-stage totals are
+accumulated in the collector and printed at exit under `MMTK_STAGE_CYCLES=1`.
+Nothing here is derived from wall time or from the pause log; the pause-log
+class totals appear only as an independent cross-check. Nesting: `scan_object`
+times the whole per-object path in the drain (scan the object, trace each
+slot, write back), which *contains* the `object_copy` timer (the copy itself
+plus the forwarding-pointer install); the pause timers (`prepare` →
+`end_of_gc`) contain everything.
 
-Fitted invocation counts N (slope of Δwall against injected delay, three
-delays per stage), the count the pause log / probe counters give
-independently, and the natural per-invocation cost (pause-class pool ÷ N):
+![stage cycles](charts/stage_cycles.png)
 
-| stage | N, backstop default | log / counter | N, backstop off | log / counter | natural cost |
-|---|---:|---:|---:|---:|---:|
-| `nursery_pause` | 485 | 491 | 391* | 491 | 23.8 ms / pause |
-| `object_copy` | 66.2M | 63.4M copied | 61.5M | 63.4M | } 175–186 ns per promoted object |
-| `scan_object` | 60.7M | 63.4M scanned | 63.3M | 63.4M | } (copy + scan + slot processing, same pool) |
-| `full_pause` | 10 | 11 | 3 | 4 | 2.2 s / full re-mark |
-| `cycle_pause` | 2 | 3 (startup) | 2 | 3 | part of the full pool |
-| `modbuf_object` | ≈0 | 0 | ≈0 | 0 | — |
-| `mark_quantum` | ≈0 | few | ≈0 | few | — |
-| `sweep_quantum` | ≈0 | few | ≈0 | few | — |
+n=1M, backstop default (backstop off in parentheses):
+
+| stage | invocations | corrected ticks / call | seconds | pause-log cross-check |
+|---|---:|---:|---:|---:|
+| `full_pause` | 10 (3) | 4.9 G (5.2 G) | **22.35** (7.15) | 22.36 (6.85) |
+| `nursery_pause` | 490 (490) | 69.5 M = 31.6 ms | **15.52** (15.29) | 11.55 (11.42)† |
+| `scan_object` — per-object trace path, includes copy | 63.46M | **310** (306) | 8.97 (8.83) | — |
+| `object_copy` — copy + forwarding install only | 63.47M | **30** (29) | 0.87 (0.84) | — |
+| `cycle_pause` / `mark_quantum` / `sweep_quantum` / `modbuf_object` | 2 / 2 / 1 / 0 | — | ≈0 | — |
+
+† the pause log records the STW window; the `prepare`→`end_of_gc` timer also
+covers the pre-/post-pause work the plan does around it (nursery reset, release,
+bookkeeping), which is why the direct figure is the larger of the two.
+
+Three things this establishes, none of which the wall-time attribution could:
+
+1. **The full re-marks are 22.35 s by direct count.** The pause log's 22.36 s
+   is now a confirmation, not an input.
+2. **Inside promotion, the copy itself is ~10%.** Copy + forwarding costs
+   30 ticks (~14 ns) per object. The other ~280 ticks per object are the
+   scan-and-trace machinery around it: reading each slot, `trace_object`
+   dispatch, forwarding and mark-bit checks, the slot write-back. The cost is
+   the per-object *tracing path*, not the memcpy.
+3. **~42% of nursery-pause time is outside the per-object loop**: 15.5 s of
+   pauses vs 9.0 s of per-object work leaves ~6.5 s, i.e. ~13 ms of fixed
+   cost per pause (root scanning, nursery reset, pause setup/teardown, worker
+   hand-off). That is what a larger nursery amortises — the 256 MB nursery's
+   −30% in §5 is this term.
+
+For comparison, vanilla's own per-phase timer (runtime events,
+`minor_local_roots_promote`) puts its promotion of the same 63.5M objects at
+2.08 s, i.e. ~33 ns or ~72 TSC ticks per object, against Bactrian's 310 on the
+per-object path — about 4.3x per object, before Bactrian's ~13 ms per-pause
+fixed cost is counted.
+
+At n=2M the per-object trace cost creeps from 310 to 326 ticks as the heap
+grows (cache), and the per-full cost from 2.2 s to 3.2 s with the live set;
+the structure is unchanged.
+
+### 4b. Stage coloring by busy-wait injection (independent invocation counts)
+
+`MMTK_SPIN_STAGE=<stage> MMTK_SPIN_NS=<ns>` spins for `ns` at every
+invocation of one stage; the wall-time slope against the delay is the
+invocation count N, independent of any timer. It reproduces the counters:
+
+| stage | N, backstop default | counter / log | N, backstop off | counter / log |
+|---|---:|---:|---:|---:|
+| `nursery_pause` | 485 | 490 | 391* | 490 |
+| `object_copy` | 66.2M | 63.5M | 61.5M | 63.4M |
+| `scan_object` | 60.7M | 63.5M | 63.3M | 63.4M |
+| `full_pause` | 10 | 10 | 3 | 3 |
+| `cycle_pause` | 2 | 2 | 2 | 2 |
+| `modbuf_object`, `mark_quantum`, `sweep_quantum` | ≈0 | 0 / 2 / 1 | ≈0 | 0 / 2 / 1 |
 
 \* the 10 ms point of the backstop-off series sits inside the ~1 s
 run-to-run noise; the 40 ms point alone gives 403.
 
-Reading: the busy-wait injection recovers the same structure the pause logs
-and counters describe, from the timing side. Exactly two stages carry the GC
-time — the per-object promotion path (~63M invocations at ~180 ns, i.e. the
-~546 cycles/object of §4; `object_copy` and `scan_object` are the same objects
-seen twice, so their costs are not additive) and the full re-marks (11 at
-~2.2 s each; 4 with the backstop off). The remembered-set stage has zero
-invocations, and the mark/sweep quanta are too few and too cheap to register.
-Nothing else in the collector is on the critical path for this workload.
+![coloring](charts/coloring.png)
 
 ## 5. What moves the number (measured, n=1M)
 
@@ -171,5 +207,8 @@ scp -r church:shape/sedlex/results ./results && python3 sedlex_charts.py results
 ```
 Env overrides: `MMTK_SEDLEX`, `MMTK_SEDLEX_PROBE`, `VAN_SEDLEX`, `MMTK_BT`,
 `VAN_BT`, `OLLY`, `CORES`; stages ⊆ {nursery, control, remset, coloring,
-vanilla}. The probed build is the `sedlex-probe` branch of the `mmtk-inst`
-tree's `gc/mmtk-core` (`src/util/probe.rs` + 9 hook lines), not for merging.
+cycles, vanilla}. The probed build is the `sedlex-probe` branch of the
+`mmtk-inst` tree's `gc/mmtk-core` (`src/util/probe.rs` + the hook lines it
+documents): `MMTK_REMSET_DEBUG=1` prints per-GC remset counters,
+`MMTK_SPIN_STAGE`/`MMTK_SPIN_NS` inject the coloring delays, and
+`MMTK_STAGE_CYCLES=1` prints the direct per-stage rdtsc totals. Not for merging.

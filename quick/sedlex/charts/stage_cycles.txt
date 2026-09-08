@@ -1,0 +1,32 @@
+# default n=1000000 wall=46.77 tsc_hz=2194751111 timer_overhead_ticks=89.0
+default 1000000 object_copy n=63468267 ticks/call=119 corrected=30 secs=0.865
+default 1000000 scan_object n=63456859 ticks/call=399 corrected=310 secs=8.965
+default 1000000 nursery_pause n=490 ticks/call=69526231 corrected=69526142 secs=15.522
+default 1000000 full_pause n=10 ticks/call=4905077291 corrected=4905077202 secs=22.349
+default 1000000 cycle_pause n=2 ticks/call=1296063 corrected=1295974 secs=0.001
+default 1000000 mark_quantum n=2 ticks/call=8540 corrected=8451 secs=0.000
+default 1000000 sweep_quantum n=1 ticks/call=53110 corrected=53021 secs=0.000
+# default n=2000000 wall=92.07 tsc_hz=2194760335 timer_overhead_ticks=90.1
+default 2000000 object_copy n=127366522 ticks/call=125 corrected=35 secs=2.018
+default 2000000 scan_object n=127355586 ticks/call=416 corrected=326 secs=18.933
+default 2000000 nursery_pause n=993 ticks/call=71471933 corrected=71471843 secs=32.337
+default 2000000 full_pause n=13 ticks/call=7081914539 corrected=7081914449 secs=41.948
+default 2000000 cycle_pause n=4 ticks/call=1279858 corrected=1279767 secs=0.002
+default 2000000 mark_quantum n=4 ticks/call=27632 corrected=27542 secs=0.000
+default 2000000 sweep_quantum n=2 ticks/call=198355 corrected=198265 secs=0.000
+# off n=1000000 wall=31.32 tsc_hz=2194754486 timer_overhead_ticks=87.8
+off 1000000 object_copy n=63444668 ticks/call=117 corrected=29 secs=0.840
+off 1000000 scan_object n=63437413 ticks/call=393 corrected=306 secs=8.833
+off 1000000 nursery_pause n=490 ticks/call=68483911 corrected=68483823 secs=15.290
+off 1000000 full_pause n=3 ticks/call=5227469285 corrected=5227469198 secs=7.145
+off 1000000 cycle_pause n=2 ticks/call=1184165 corrected=1184077 secs=0.001
+off 1000000 mark_quantum n=2 ticks/call=8387 corrected=8299 secs=0.000
+off 1000000 sweep_quantum n=1 ticks/call=49840 corrected=49752 secs=0.000
+# off n=2000000 wall=62.4 tsc_hz=2194758284 timer_overhead_ticks=91.7
+off 2000000 object_copy n=127093068 ticks/call=117 corrected=25 secs=1.452
+off 2000000 scan_object n=127093071 ticks/call=394 corrected=302 secs=17.500
+off 2000000 nursery_pause n=993 ticks/call=67644829 corrected=67644737 secs=30.605
+off 2000000 full_pause n=3 ticks/call=10256489586 corrected=10256489494 secs=14.020
+off 2000000 cycle_pause n=2 ticks/call=1263558 corrected=1263466 secs=0.001
+off 2000000 mark_quantum n=2 ticks/call=8322 corrected=8230 secs=0.000
+off 2000000 sweep_quantum n=1 ticks/call=53494 corrected=53402 secs=0.000
