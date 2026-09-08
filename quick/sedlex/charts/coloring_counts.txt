@@ -1,0 +1,17 @@
+config stage N_from_slope pool_total_s natural_cost_per_invocation
+default cycle_pause N=2 pool=22.36s cost=9,637.9 ms
+default full_pause N=10 pool=22.36s cost=2,196.5 ms
+default mark_quantum N=0 pool=22.36s cost=n/a
+default modbuf_object N=0 pool=11.55s cost=n/a
+default nursery_pause N=485 pool=11.55s cost=23.8 ms
+default object_copy N=66,150,000 pool=11.55s cost=175 ns
+default scan_object N=60,664,286 pool=11.55s cost=190 ns
+default sweep_quantum N=0 pool=22.36s cost=n/a
+off cycle_pause N=2 pool=6.85s cost=3,200.9 ms
+off full_pause N=3 pool=6.85s cost=2,253.3 ms
+off mark_quantum N=0 pool=6.85s cost=n/a
+off modbuf_object N=0 pool=11.42s cost=n/a
+off nursery_pause N=391 pool=11.42s cost=29.2 ms
+off object_copy N=61,535,714 pool=11.42s cost=186 ns
+off scan_object N=63,335,714 pool=11.42s cost=180 ns
+off sweep_quantum N=0 pool=6.85s cost=n/a
