@@ -160,7 +160,11 @@ the structure is unchanged.
 
 `MMTK_SPIN_STAGE=<stage> MMTK_SPIN_NS=<ns>` spins for `ns` at every
 invocation of one stage; the wall-time slope against the delay is the
-invocation count N, independent of any timer. It reproduces the counters:
+invocation count N, independent of any timer. 
+
+Each run injects a fixed busy-wait at every invocation of one GC stage and nothing else. If a stage runs N times, adding d seconds per invocation adds exactly N·d to wall time — whatever the stage itself costs. So the chart plots the extra wall time (Δ, y-axis) against the injected delay (x-axis, log scale because stages differ by five orders of magnitude), one line per stage, left panel with the backstop on, right with it off. The slope of each line is N. That's why the per-objec
+
+It reproduces the counters:
 
 | stage | N, backstop default | counter / log | N, backstop off | counter / log |
 |---|---:|---:|---:|---:|
