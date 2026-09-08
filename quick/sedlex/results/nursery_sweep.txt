@@ -1,0 +1,18 @@
+bactrian nursery=2MB backstop=default wall=31.29s rss=1478MB | GCs: 4920 (full: 7), GC time: 20267 ms
+bactrian nursery=2MB backstop=off wall=30.21s rss=1475MB | GCs: 4911 (full: 3), GC time: 19018 ms
+bactrian nursery=4MB backstop=default wall=29.17s rss=1494MB | GCs: 2113 (full: 5), GC time: 18479 ms
+bactrian nursery=4MB backstop=off wall=28.07s rss=1476MB | GCs: 2107 (full: 2), GC time: 17399 ms
+bactrian nursery=8MB backstop=default wall=45.57s rss=1441MB | GCs: 993 (full: 11), GC time: 35315 ms
+bactrian nursery=8MB backstop=off wall=31.26s rss=1440MB | GCs: 986 (full: 4), GC time: 21017 ms
+bactrian nursery=16MB backstop=default wall=40.95s rss=1439MB | GCs: 502 (full: 11), GC time: 32220 ms
+bactrian nursery=16MB backstop=off wall=27.28s rss=1435MB | GCs: 495 (full: 4), GC time: 18547 ms
+bactrian nursery=64MB backstop=default wall=35.73s rss=1389MB | GCs: 132 (full: 11), GC time: 30444 ms
+bactrian nursery=64MB backstop=off wall=21.41s rss=1448MB | GCs: 125 (full: 4), GC time: 16061 ms
+bactrian nursery=256MB backstop=default wall=30.23s rss=1654MB | GCs: 39 (full: 9), GC time: 25272 ms
+bactrian nursery=256MB backstop=off wall=22.61s rss=1650MB | GCs: 33 (full: 3), GC time: 17714 ms
+vanilla nursery=2MB wall=7.23s rss=1371MB minors=3682 majors=5
+vanilla nursery=4MB wall=7.20s rss=1370MB minors=1842 majors=5
+vanilla nursery=8MB wall=7.14s rss=1376MB minors=922 majors=5
+vanilla nursery=16MB wall=7.18s rss=1380MB minors=462 majors=5
+vanilla nursery=64MB wall=7.23s rss=1402MB minors=117 majors=5
+vanilla nursery=256MB wall=7.16s rss=1556MB minors=31 majors=4

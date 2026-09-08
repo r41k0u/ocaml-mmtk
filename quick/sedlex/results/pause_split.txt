@@ -1,0 +1,4 @@
+# n=1M, church, MMTK_THREADS=1, pinned 8 GB; seconds
+vanilla minor=2.078 major=0.562 mutator=4.31 wall=7.09
+bactrian nursery=11.55 full=22.36 mutator=8.8 wall=42.7
+bactrian_backstop_off nursery=11.42 full=6.85 mutator=8.5 wall=26.8

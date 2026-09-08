@@ -1,0 +1,9 @@
+remset n=500000 nursery=2MB: 2448 GCs, last: [probe] gc=2447 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=65535 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=31873059
+remset n=500000 nursery=16MB: 252 GCs, last: [probe] gc=251 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=655350 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=31385935
+remset n=500000 nursery=256MB: 20 GCs, last: [probe] gc=19 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1769149 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=21396639
+remset n=1000000 nursery=2MB: 4920 GCs, last: [probe] gc=4919 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=65535 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=63804483
+remset n=1000000 nursery=16MB: 502 GCs, last: [probe] gc=501 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=655350 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=63496707
+remset n=1000000 nursery=256MB: 39 GCs, last: [probe] gc=38 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=10682205 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=62664922
+remset n=2000000 nursery=2MB: 9959 GCs, last: [probe] gc=9958 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=65535 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=127581908
+remset n=2000000 nursery=16MB: 1010 GCs, last: [probe] gc=1009 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=655350 | cum modbuf=0 region=1941 satb=1 copied=0 scanned=127375621
+remset n=2000000 nursery=256MB: 73 GCs, last: [probe] gc=72 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=10682205 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=117277527

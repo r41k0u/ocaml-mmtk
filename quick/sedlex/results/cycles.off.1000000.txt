@@ -1,0 +1,3 @@
+[cycles] tsc_hz=2194754486 timer_overhead_ticks=87.8 | nursery_pause: n=490 ticks=33557116428 per_call=68483911 corrected_per_call=68483823 secs=15.290 | cycle_pause: n=2 ticks=2368330 per_call=1184165 corrected_per_call=1184077 secs=0.001 | full_pause: n=3 ticks=15682407856 per_call=5227469285 corrected_per_call=5227469198 secs=7.145 | object_copy: n=63444668 ticks=7415471950 per_call=117 corrected_per_call=29 secs=0.840 | mark_quantum: n=2 ticks=16774 per_call=8387 corrected_per_call=8299 secs=0.000 | sweep_quantum: n=1 ticks=49840 per_call=49840 corrected_per_call=49752 secs=0.000 | scan_object: n=63437413 ticks=24956450596 per_call=393 corrected_per_call=306 secs=8.833
+[mmtk] GCs: 495 (full: 4), GC time: 22591 ms, objects copied: 63444668
+wall=31.32

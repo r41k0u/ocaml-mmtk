@@ -1,0 +1,9 @@
+stage ns wall_s
+default none 0 42.87
+default object_copy 100 51.23
+default object_copy 200 58.87
+default object_copy 400 71.28
+off none 0 27.15
+off object_copy 100 37.00
+off object_copy 200 43.65
+off object_copy 400 55.56

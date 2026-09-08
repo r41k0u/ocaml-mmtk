@@ -1,0 +1,10 @@
+bactrian bt nursery=2MB wall=10.04s GCs: 2360 (full: 15) copied=40182868
+bactrian bt nursery=4MB wall=9.79s GCs: 1023 (full: 12) copied=37421225
+bactrian bt nursery=8MB wall=6.75s GCs: 483 (full: 17) copied=24955014
+bactrian bt nursery=16MB wall=5.82s GCs: 246 (full: 13) copied=19875595
+bactrian bt nursery=64MB wall=3.66s GCs: 65 (full: 8) copied=4374441
+vanilla bt nursery=2MB wall=3.92s minors=1762 promoted_w=136627468
+vanilla bt nursery=4MB wall=3.61s minors=886 promoted_w=114924808
+vanilla bt nursery=8MB wall=3.33s minors=446 promoted_w=91323643
+vanilla bt nursery=16MB wall=3.25s minors=226 promoted_w=71857393
+vanilla bt nursery=64MB wall=2.87s minors=57 promoted_w=25899349

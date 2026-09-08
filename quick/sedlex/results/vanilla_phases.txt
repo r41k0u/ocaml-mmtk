@@ -1,0 +1,3 @@
+vanilla n=500000: minor 1831 1.096s 598.7us; major 1833 0.296s; minor_remembered_set 1831 0.001s; minor_local_roots_promote 1831 1.092s
+vanilla n=1000000: minor 3682 2.078s 564.4us; major 3684 0.562s; minor_remembered_set 3682 0.002s; minor_local_roots_promote 3682 2.072s
+vanilla n=2000000: minor 7456 4.391s 588.9us; major 7457 1.176s; minor_remembered_set 7456 0.003s; minor_local_roots_promote 7456 4.376s

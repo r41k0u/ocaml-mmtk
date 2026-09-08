@@ -1,0 +1,21 @@
+[probe] gc=0 kind=Nursery modbuf_objs=0 region_entries=1940 satb_nodes=0 copied=0 scanned=271 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=271
+[probe] gc=1 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=17 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=288
+[probe] gc=2 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=288
+[probe] gc=3 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1241030 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=1241318
+[probe] gc=4 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1889767 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=3131085
+[probe] gc=5 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=3131085
+[probe] gc=6 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1874312 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=5005397
+[probe] gc=7 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1845390 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=6850787
+[probe] gc=8 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=6850787
+[probe] gc=9 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1833436 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=8684223
+[probe] gc=10 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1833441 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=10517664
+[probe] gc=11 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=10517664
+[probe] gc=12 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1833564 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=12351228
+[probe] gc=13 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1833552 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=14184780
+[probe] gc=14 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=14184780
+[probe] gc=15 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1814815 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=15999595
+[probe] gc=16 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1813975 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=17813570
+[probe] gc=17 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1813920 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=19627490
+[probe] gc=18 kind=Full modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=0 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=19627490
+[probe] gc=19 kind=Nursery modbuf_objs=0 region_entries=0 satb_nodes=0 copied=0 scanned=1769149 | cum modbuf=0 region=1940 satb=0 copied=0 scanned=21396639
+[mmtk] GCs: 20 (full: 6), GC time: 10682 ms, objects copied: 21400314
