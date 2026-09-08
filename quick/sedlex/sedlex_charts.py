@@ -56,7 +56,7 @@ if sed or bt:
     import matplotlib.ticker as mt; ax.yaxis.set_major_locator(mt.FixedLocator([2,3,5,7,10,20,30,50])); ax.yaxis.set_major_formatter(mt.FormatStrFormatter('%g')); ax.yaxis.set_minor_locator(mt.NullLocator())
     ax.set_xlabel('nursery size, MB (log2)',fontsize=9.5,color=TEXT1); ax.set_ylabel('wall time, s (log)',fontsize=9.5,color=TEXT1)
     ax.text(0.01,0.03,'solid = sedlex n=1M (long-lived), dashed = binarytrees n=20 (short-lived); orange = Bactrian, green = Vanilla',transform=ax.transAxes,fontsize=8.5,color=TEXT2)
-    save(f,'nursery_sweep.png')
+    save(f,'nursery_sweep_log.png')
 
 # ---- 2. pause-class split at n=1M ----
 ps={}

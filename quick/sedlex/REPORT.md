@@ -48,7 +48,7 @@ Prediction: a promotion-bound long-lived workload is nursery-size-invariant
 (the copy volume is the live set, whatever the nursery), while a short-lived
 workload speeds up with a bigger nursery (more objects die before promotion).
 
-![nursery sweep](charts/nursery_sweep.png)
+![nursery sweep](charts/nursery_sweep_log.png)
 
 All five series share one axis with wall time in seconds on a log scale, so
 equal ratios are equal vertical distances and both workloads keep their true
