@@ -31,16 +31,32 @@ def series(lines, key):
     return {k:sorted(v) for k,v in out.items()}
 sed=series(rd('nursery_sweep.txt'),'sedlex'); bt=series(rd('bt_control.txt'),'bt')
 if sed or bt:
-    f,axes=plt.subplots(1,2,figsize=(11,4.6),dpi=150); f.patch.set_facecolor(SURFACE)
-    for ax,(name,data) in zip(axes,[('sedlex n=1M — long-lived (nothing dies young)',sed),('binarytrees n=20 — short-lived control',bt)]):
-        frame(ax); title(ax,name)
+    # one axis: wall time normalised to each series' own value at the smallest nursery (2 MB).
+    # colour = runtime, line style = workload. A promotion-bound workload stays near 1.0;
+    # a short-lived one falls as the nursery grows and more objects die before promotion.
+    f,ax=fig(9.5,5.2); title(ax,'Nursery-size sensitivity: wall time ÷ wall time at a 2 MB nursery')
+    style={('sedlex','Bactrian (default)'):(ORANGE,'-','sedlex: Bactrian (default)'),
+           ('sedlex','Bactrian, backstop off'):(MUTED,'-','sedlex: Bactrian, backstop off'),
+           ('sedlex','Vanilla'):(AQUA,'-','sedlex: Vanilla'),
+           ('bt','Bactrian (default)'):(ORANGE,(0,(4,2)),'binarytrees: Bactrian'),
+           ('bt','Vanilla'):(AQUA,(0,(4,2)),'binarytrees: Vanilla')}
+    ends=[]
+    for wl,data in (('sedlex',sed),('bt',bt)):
         for lbl,pts in data.items():
-            c={'Bactrian (default)':ORANGE,'Bactrian, backstop off':MUTED,'Vanilla':AQUA}[lbl]
-            xs=[p[0] for p in pts]; ys=[p[1] for p in pts]
-            ax.plot(xs,ys,color=c,linewidth=2,marker='o',markersize=6,label=lbl)
-            ax.text(xs[-1],ys[-1],f' {lbl}',fontsize=8.5,color=c,va='center')
-        ax.set_xscale('log',base=2); ax.set_xlabel('nursery size, MB',fontsize=9.5,color=TEXT1); ax.set_ylabel('wall, s',fontsize=9.5,color=TEXT1)
-        ax.set_ylim(bottom=0); ax.set_xlim(right=ax.get_xlim()[1]*3.5)
+            if (wl,lbl) not in style or not pts: continue
+            c,ls,name=style[(wl,lbl)]; base=pts[0][1]
+            xs=[p[0] for p in pts]; ys=[p[1]/base for p in pts]
+            ax.plot(xs,ys,color=c,linestyle=ls,linewidth=2.2,marker='o',markersize=5.5)
+            ends.append((xs[-1],ys[-1],c,name,f'{pts[-1][1]:.1f} s'))
+    ax.axhline(1.0,color=TEXT2,linewidth=1,linestyle=(0,(2,3)),alpha=0.6)
+    # direct labels at line ends, nudged apart if they collide
+    ends.sort(key=lambda e:e[1]); last=None
+    for x,y,c,name,abs_ in ends:
+        yy=y if last is None or y-last>0.06 else last+0.06; last=yy
+        ax.text(x*1.15,yy,f'{name}  ({abs_} at {x:.0f} MB)',fontsize=8.6,color=c,va='center')
+    ax.set_xscale('log',base=2); ax.set_xlim(1.6,2**8*6.5); ax.set_ylim(0,1.6)
+    ax.set_xlabel('nursery size, MB (log2)',fontsize=9.5,color=TEXT1); ax.set_ylabel('wall time ÷ wall time at 2 MB nursery',fontsize=9.5,color=TEXT1)
+    ax.text(0.01,0.03,'solid = sedlex n=1M (long-lived), dashed = binarytrees n=20 (short-lived); orange = Bactrian, green = Vanilla',transform=ax.transAxes,fontsize=8.5,color=TEXT2)
     save(f,'nursery_sweep.png')
 
 # ---- 2. pause-class split at n=1M ----

@@ -50,6 +50,14 @@ workload speeds up with a bigger nursery (more objects die before promotion).
 
 ![nursery sweep](charts/nursery_sweep.png)
 
+The chart normalises every series to its own time at a 2 MB nursery so the
+five can share one axis: colour is the runtime, line style the workload. The
+two short-lived (dashed) series fall to 0.37x (Bactrian) and 0.74x (vanilla)
+by 64 MB; vanilla sedlex is a flat 1.0; Bactrian sedlex with the backstop off
+stays within 0.7-1.0x over a 128x range of nursery sizes. The default Bactrian
+sedlex line's spike to 1.46x at 8 MB is the sliced-to-monolithic regime switch
+(7 -> 11 fulls), i.e. pacing, and disappears with the backstop off.
+
 sedlex n=1M, wall (s):
 
 | nursery | 2 MB | 4 MB | 8 MB | 16 MB | 64 MB | 256 MB |
