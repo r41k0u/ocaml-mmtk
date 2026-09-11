@@ -202,6 +202,30 @@ dynamic-heap case is unchecked. Beyond pacing, the promotion copy itself is
 the architectural cost; StickyImmix (in-place young marking) is the fix and
 currently panics under the native binding (`epilogue.rs:11`).
 
+### Landed: the slicing gate rework (mmtk-core 50f56f5987, binding e4af0d336)
+
+The old feasibility gate (`MMTK_SLICE_MAX_NURSERY_MB`=4, `MMTK_MAX_QUANTUM_MS`=50,
+plus a redundant 200 ms quantum ceiling) is replaced by two measured tests:
+slice iff the monolithic Full would be too long (`debt_ms` = live / mark-rate
+> `MMTK_SLICE_WORTH_MS`, default 200) AND the sliced pause would fit
+(nursery-pause EWMA + quantum <= `MMTK_SLICE_MAX_PAUSE_MS`, default 100).
+`MMTK_PACE_DEBUG` prints each decision.
+
+| bench (1 worker) | before | after |
+|---|---|---|
+| sedlex 1M, 8 GiB | 40.7 s, 11 fulls, max pause 6.3 s, GC 32.5 s | **22.6 s**, 6 fulls, max pause **1.4 s**, GC 14.2 s |
+| sedlex 2M, 8 GiB | 80.5 s, 15 fulls, max pause 10.9 s | **42.4 s**, 8 fulls, max pause **1.1 s** |
+| binarytrees n16, 192 MiB | 5.76 s, 13 fulls, max 118 ms | 5.59 s, 13 fulls, max 114 ms (unchanged; debt never exceeds ~28 ms) |
+
+Full 11-bench quick panel, before vs after, 3 reps: wall geomean 0.993 (T=1)
+and 0.989 (T=4), RSS unchanged, GC/full counts identical, pause maxima within
+noise, golden outputs 33/33 in all four batteries. No CLBG bench reaches a
+200 ms Full estimate, so the panel takes the old path exactly; only
+large-live-set workloads take the new one. Residual: sedlex's max pause is
+~1.1-1.4 s, not tens of ms -- a few early cycles the gate judged short
+(debt < 200 ms at the default 1 MB/ms mark rate) ran longer; a lower
+`MMTK_SLICE_WORTH_MS` is the tuning follow-up.
+
 ## 6. Reproducing
 
 ```
