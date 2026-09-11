@@ -259,6 +259,62 @@ large-live-set workloads take the new one. Residual: sedlex's max pause is
 (debt < 200 ms at the default 1 MB/ms mark rate) ran longer; a lower
 `MMTK_SLICE_WORTH_MS` is the tuning follow-up.
 
+### Macro panel, before vs after the gate (default rungs, dynamic heap, 1 worker)
+
+Six runnable macro benches, built from one tree that differs only in the
+gate, run on church node 0 at their default rungs with the **default dynamic
+heap** and the default 16 MB nursery: wall = median of 3, RSS = peak over the
+3, pause stream from a fourth run (`macro_gate.sh`; raw lines in
+`results/macro-gate/panel.log`, gate decisions in
+`results/macro-gate/gate-decisions.*.log`).
+
+| bench | wall before → after | peak RSS | fulls | GC time | max pause |
+|---|---:|---:|---:|---:|---:|
+| decompress | 53.6 → 55.0 s (+2.7%) | 1.32 → 1.45 GB | 54 → 54 | 2.1 → 2.4 s | 33 → 8 ms |
+| eio_conc | 132.5 → 135.6 s (+2.3%) | **3.3 → 24.1 GB** | 31 → 8 | 86.3 → 72.3 s | 1.85 s → 470 ms |
+| liq_video_frames | 100.4 → 96.2 s (−4%) | 0.61 → 0.61 GB | 417 → 417 | 58.0 → 54.5 s | 301 → 295 ms |
+| sedlex 6M | 281.1 → **138.4 s** (−51%) | 8.4 → 8.7 GB | 20 → 13 | 227 → 89.6 s | **40.1 s → 131 ms** |
+| ydump 6M | 85.6 → **67.7 s** (−21%) | 9.2 → 11.6 GB | 10 → 8 | 46.1 → 29.7 s | **13.9 s → 166 ms** |
+| zarith_pi | 46.8 → 46.8 s | 69 → 63 MB | 25618 → 25617 | 17.8 → 17.6 s | 3 → 3 ms |
+
+Wall geomean 0.855. liq and zarith never reach the 200 ms worth bar and are
+unchanged; decompress slices its ~30 ms Fulls at a small RSS cost. On the
+pinned 8 GB heap sedlex's RSS is unchanged by the gate (1435 → 1438 MB at 1M,
+2866 → 2868 MB at 2M; `results/macro-gate/sedlex_pinned_rss.log`).
+
+**eio exposes a latent livelock in the slice-sizing law, not in the gate.**
+Eight of eio's nine cycles were judged not worth slicing (debt 6–130 MB) and
+ran as monolithic Fulls exactly as before; the ninth (debt 341 MB) was sliced
+and never finished (`gate-decisions.eio.log`, `quantum-hints.eio.sampled.log`):
+
+- a sliced cycle ends only when the parked marking queue drains
+  (`marking_queue_drained`), and every mid-cycle minor pushes new marking
+  work for the objects it promotes (`schedule_marking_packet`);
+- each mid-cycle minor drains one quantum, whose length the binding
+  re-derives at **every** minor (the trigger stays armed until a full
+  completes) as debt ÷ pauses with pauses = (heap − mature) ÷ nursery;
+- under the dynamic heap, heap grows while the cycle is open and nothing is
+  reclaimed, so the planned pause count rose 66 → 1871 and the quantum fell
+  to its 2 ms floor while the queue kept growing;
+- eio promotes ~281 k objects per minor; at the measured ~310 ticks per
+  scanned object that is ~40 ms of new marking per minor against a 2–5 ms
+  quantum. The queue can never empty: no FinalMark, no reclamation, no new
+  cycle, heap → 30 GB.
+
+sedlex and ydump show the same overrun without the fatal form (their inflow
+is below the drain): sliced cycles ran 3–6× their planned pauses (sedlex's
+last: planned 221, ran >1136, runway 3.5 → 11 GB; ydump's last: planned 416,
+ran 631), which is ydump's +27% RSS. The old gate never sliced at a 16 MB
+nursery, so the law was unexercised.
+
+Fix direction (not yet applied): pace marking by promotion, not by runway —
+the quantum must at least cover what this minor promoted (promoted bytes ÷
+mark rate, stock OCaml's law), hinted once at cycle start rather than
+re-derived against a growing heap; plus an overrun guard that runs the next
+quantum unbudgeted when a cycle exceeds a multiple of its planned pauses or
+mature has outgrown the runway it started with. Until then the gate rework
+should not be the default on the dynamic heap.
+
 ## 6. Reproducing
 
 ```

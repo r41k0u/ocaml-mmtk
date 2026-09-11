@@ -1,0 +1,13 @@
+gate-before test_decompress: wall_med=53.55s (n=3) rss=1324MB pauses=1727 fulls=54 max_pause=33ms | [mmtk] GCs: 1727 (full: 54), GC time: 2055 ms, objects copied: 31975
+gate-before eio_conc_bench: wall_med=132.49s (n=3) rss=3262MB pauses=1859 fulls=31 max_pause=1851ms | [mmtk] GCs: 1859 (full: 31), GC time: 86309 ms, objects copied: 518224177
+gate-before liq_video_frames: wall_med=100.43s (n=3) rss=607MB pauses=2919 fulls=417 max_pause=301ms | [mmtk] GCs: 2919 (full: 417), GC time: 58027 ms, objects copied: 45118
+gate-before sedlex_bench: wall_med=281.14s (n=3) rss=8423MB pauses=3054 fulls=20 max_pause=40069ms | [mmtk] GCs: 3054 (full: 20), GC time: 227011 ms, objects copied: 382351688
+gate-before ydump_repeat: wall_med=85.64s (n=3) rss=9171MB pauses=1443 fulls=10 max_pause=13853ms | [mmtk] GCs: 1443 (full: 10), GC time: 46134 ms, objects copied: 270000174
+gate-before zarith_pi: wall_med=46.83s (n=3) rss=69MB pauses=76902 fulls=25618 max_pause=3ms | [mmtk] GCs: 76902 (full: 25618), GC time: 17810 ms, objects copied: 29517
+gate-after test_decompress: wall_med=54.99s (n=3) rss=1447MB pauses=1936 fulls=54 max_pause=8ms | [mmtk] GCs: 1936 (full: 54), GC time: 2392 ms, objects copied: 33455
+gate-after eio_conc_bench: wall_med=135.56s (n=3) rss=24125MB pauses=1837 fulls=8 max_pause=470ms | [mmtk] GCs: 1837 (full: 8), GC time: 72276 ms, objects copied: 517195567
+gate-after liq_video_frames: wall_med=96.24s (n=3) rss=607MB pauses=2919 fulls=417 max_pause=295ms | [mmtk] GCs: 2919 (full: 417), GC time: 54486 ms, objects copied: 45118
+gate-after sedlex_bench: wall_med=138.38s (n=3) rss=8698MB pauses=3059 fulls=13 max_pause=131ms | [mmtk] GCs: 3059 (full: 13), GC time: 89642 ms, objects copied: 382281107
+gate-after ydump_repeat: wall_med=67.73s (n=3) rss=11620MB pauses=1452 fulls=8 max_pause=166ms | [mmtk] GCs: 1452 (full: 8), GC time: 29732 ms, objects copied: 270001704
+gate-after zarith_pi: wall_med=46.83s (n=3) rss=63MB pauses=76901 fulls=25617 max_pause=3ms | [mmtk] GCs: 76901 (full: 25617), GC time: 17634 ms, objects copied: 29547
+MACRO-GATE-DONE

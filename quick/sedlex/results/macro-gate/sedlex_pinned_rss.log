@@ -1,0 +1,5 @@
+sedlex n=1000000 before: wall=41.51s rss=1435MB
+sedlex n=1000000 after: wall=22.40s rss=1438MB
+sedlex n=2000000 before: wall=80.77s rss=2866MB
+sedlex n=2000000 after: wall=41.77s rss=2868MB
+SEDLEX-RSS-DONE
