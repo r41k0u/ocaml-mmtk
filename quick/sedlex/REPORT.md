@@ -159,24 +159,57 @@ the structure is unchanged.
 ### 4b. Stage coloring by busy-wait injection (independent invocation counts)
 
 `MMTK_SPIN_STAGE=<stage> MMTK_SPIN_NS=<ns>` spins for `ns` at every
-invocation of one stage; the wall-time slope against the delay is the
-invocation count N, independent of any timer. 
+invocation of one stage and nothing else. If a stage runs N times, adding d
+seconds per invocation adds N·d to wall time, whatever the stage itself costs.
+So the slope of wall time against the injected delay is the invocation count
+N, obtained without any timer in the collector.
 
-Each run injects a fixed busy-wait at every invocation of one GC stage and nothing else. If a stage runs N times, adding d seconds per invocation adds exactly N·d to wall time — whatever the stage itself costs. So the chart plots the extra wall time (Δ, y-axis) against the injected delay (x-axis, log scale because stages differ by five orders of magnitude), one line per stage, left panel with the backstop on, right with it off. The slope of each line is N. That's why the per-objec
+What this can and cannot establish. Coloring measures *how often* a stage
+runs, not *how long* it runs: the shift is N·d whether the stage's own cost
+is 10 ns or 10 s. Turning N into seconds needs the per-invocation cost, and
+that is exactly the quantity §4a measures directly with `rdtsc`. (An earlier
+draft divided the pause-log totals by N to get a "cost per invocation"; that
+uses the wall-time attribution to prove itself and was dropped.) So the
+ranking of stages comes from §4a; coloring's job is to confirm, by a method
+that shares nothing with the probes, the counts that §4a's totals rest on.
 
-It reproduces the counters:
+The raw comparison, n=1M, backstop default (the backstop-off series is in
+`results/coloring2.txt` and `results/coloring_objcopy.txt`). "No injection"
+is the same binary with `MMTK_SPIN_STAGE` unset, run in the same batch;
+run-to-run noise on this workload is about ±1 s.
 
-| stage | N, backstop default | counter / log | N, backstop off | counter / log |
-|---|---:|---:|---:|---:|
-| `nursery_pause` | 485 | 490 | 391* | 490 |
-| `object_copy` | 66.2M | 63.5M | 61.5M | 63.4M |
-| `scan_object` | 60.7M | 63.5M | 63.3M | 63.4M |
-| `full_pause` | 10 | 10 | 3 | 3 |
-| `cycle_pause` | 2 | 2 | 2 | 2 |
-| `modbuf_object`, `mark_quantum`, `sweep_quantum` | ≈0 | 0 / 2 / 1 | ≈0 | 0 / 2 / 1 |
+| stage | delay per call | wall, no injection | wall, with injection | Δ | N = Δ/delay | N, slope fit | probe counter |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `nursery_pause` | 10 ms | 42.29 s | 44.82 s | +2.53 s | 253 | 485 | 490 |
+| | 20 ms | | 49.36 s | +7.07 s | 354 | | |
+| | 40 ms | | 59.32 s | +17.03 s | 426 | | |
+| `full_pause` | 0.5 s | 42.29 s | 47.42 s | +5.13 s | 10.3 | 10 | 10 |
+| | 1.0 s | | 52.51 s | +10.22 s | 10.2 | | |
+| `cycle_pause` | 0.5 s | 42.29 s | 43.45 s | +1.16 s | 2.3 | 2 | 2 |
+| `scan_object` | 100 ns | 42.29 s | 50.41 s | +8.12 s | 81 M | 60.7 M | 63.5 M |
+| | 200 ns | | 59.13 s | +16.84 s | 84 M | | |
+| | 400 ns | | 69.14 s | +26.85 s | 67 M | | |
+| `object_copy` | 100 ns | 42.87 s | 51.23 s | +8.36 s | 84 M | 66.2 M | 63.5 M |
+| | 200 ns | | 58.87 s | +16.00 s | 80 M | | |
+| | 400 ns | | 71.28 s | +28.41 s | 71 M | | |
+| `mark_quantum` | 1 ms / 4 ms | 42.29 s | 42.65 / 43.37 s | +0.36 / +1.08 s | within noise | ≈0 | 2 |
+| `sweep_quantum` | 1 ms / 4 ms | 42.29 s | 42.88 / 40.79 s | +0.59 / −1.50 s | within noise | ≈0 | 1 |
+| `modbuf_object` | 1 ms | 42.29 s | 42.84 s | +0.55 s | within noise | ≈0 | 0 |
 
-\* the 10 ms point of the backstop-off series sits inside the ~1 s
-run-to-run noise; the 40 ms point alone gives 403.
+Reading it: the per-point ratio Δ/delay is biased when Δ is close to the
+±1 s noise floor (the 10 ms nursery point) and, for the sub-microsecond
+stages, by the spin loop's own ~30–50 ns entry cost, which the slope between
+adjacent points removes: between the 20 ms and 40 ms nursery points the
+slope is 498 (probe: 490); between the two full-pause points 10.2 (probe:
+10). The fitted N agrees with the probe counters within 1% for pauses and
+within ~5–10% for the ~63 M per-object stages. The stages the counters say
+never run (`modbuf_object`, the quanta) show no slope at all.
+
+Combined with §4a this closes the loop: the counts are right by two
+independent methods, and the per-invocation costs are measured directly, so
+the stage totals (full re-marks 22.35 s, nursery pauses 15.5 s of which
+9.0 s is the per-object trace and 0.87 s the copy, everything else ≈0) are
+not inferred from wall time anywhere.
 
 ![coloring](charts/coloring.png)
 

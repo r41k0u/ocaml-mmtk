@@ -1,17 +1,35 @@
-config stage N_from_slope pool_total_s natural_cost_per_invocation
-default cycle_pause N=2 pool=22.36s cost=9,637.9 ms
-default full_pause N=10 pool=22.36s cost=2,196.5 ms
-default mark_quantum N=0 pool=22.36s cost=n/a
-default modbuf_object N=0 pool=11.55s cost=n/a
-default nursery_pause N=485 pool=11.55s cost=23.8 ms
-default object_copy N=66,150,000 pool=11.55s cost=175 ns
-default scan_object N=60,664,286 pool=11.55s cost=190 ns
-default sweep_quantum N=0 pool=22.36s cost=n/a
-off cycle_pause N=2 pool=6.85s cost=3,200.9 ms
-off full_pause N=3 pool=6.85s cost=2,253.3 ms
-off mark_quantum N=0 pool=6.85s cost=n/a
-off modbuf_object N=0 pool=11.42s cost=n/a
-off nursery_pause N=391 pool=11.42s cost=29.2 ms
-off object_copy N=61,535,714 pool=11.42s cost=186 ns
-off scan_object N=63,335,714 pool=11.42s cost=180 ns
-off sweep_quantum N=0 pool=6.85s cost=n/a
+config stage delay_per_call wall_no_injection_s wall_with_injection_s delta_s N_point N_fit n_probe
+default cycle_pause 500ms 42.29 43.45 +1.16 2 2 2
+default full_pause 500ms 42.29 47.42 +5.13 10 10 10
+default full_pause 1000ms 42.29 52.51 +10.22 10 10 10
+default mark_quantum 1ms 42.29 42.65 +0.36 360 0 2
+default mark_quantum 4ms 42.29 43.37 +1.08 270 0 2
+default modbuf_object 1ms 42.29 42.84 +0.55 550 0 ?
+default nursery_pause 10ms 42.29 44.82 +2.53 253 485 490
+default nursery_pause 20ms 42.29 49.36 +7.07 354 485 490
+default nursery_pause 40ms 42.29 59.32 +17.03 426 485 490
+default object_copy 100ns 42.87 51.23 +8.36 83,600,000 66,150,000 63468267
+default object_copy 200ns 42.87 58.87 +16.00 80,000,000 66,150,000 63468267
+default object_copy 400ns 42.87 71.28 +28.41 71,025,000 66,150,000 63468267
+default scan_object 100ns 42.29 50.41 +8.12 81,200,000 60,664,286 63456859
+default scan_object 200ns 42.29 59.13 +16.84 84,200,000 60,664,286 63456859
+default scan_object 400ns 42.29 69.14 +26.85 67,125,000 60,664,286 63456859
+default sweep_quantum 1ms 42.29 42.88 +0.59 590 0 1
+default sweep_quantum 4ms 42.29 40.79 -1.50 -375 0 1
+off cycle_pause 500ms 27.82 28.89 +1.07 2 2 2
+off full_pause 500ms 27.82 29.33 +1.51 3 3 3
+off full_pause 1000ms 27.82 30.85 +3.03 3 3 3
+off mark_quantum 1ms 27.82 27.54 -0.28 -280 0 2
+off mark_quantum 4ms 27.82 27.75 -0.07 -18 0 2
+off modbuf_object 1ms 27.82 27.65 -0.17 -170 0 ?
+off nursery_pause 10ms 27.82 32.36 +4.54 454 391 490
+off nursery_pause 20ms 27.82 35.54 +7.72 386 391 490
+off nursery_pause 40ms 27.82 43.95 +16.13 403 391 490
+off object_copy 100ns 27.15 37.00 +9.85 98,500,000 61,535,714 63444668
+off object_copy 200ns 27.15 43.65 +16.50 82,500,000 61,535,714 63444668
+off object_copy 400ns 27.15 55.56 +28.41 71,025,000 61,535,714 63444668
+off scan_object 100ns 27.82 37.30 +9.48 94,800,000 63,335,714 63437413
+off scan_object 200ns 27.82 44.73 +16.91 84,550,000 63,335,714 63437413
+off scan_object 400ns 27.82 56.52 +28.70 71,750,000 63,335,714 63437413
+off sweep_quantum 1ms 27.82 26.87 -0.95 -950 0 1
+off sweep_quantum 4ms 27.82 27.19 -0.63 -157 0 1

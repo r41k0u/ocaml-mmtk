@@ -149,15 +149,27 @@ if col:
         ax.set_xscale('log'); ax.set_xlabel('injected delay per invocation, µs',fontsize=9.5,color=TEXT1); ax.set_ylabel('Δ wall vs no injection, s',fontsize=9.5,color=TEXT1)
         ax.legend(frameon=False,fontsize=8,labelcolor=TEXT1)
     save(f,'coloring.png')
-    # natural per-invocation cost = pause-class total / N (pause_split.txt: nursery/full totals per config)
-    tot={'default':ps.get('bactrian',{}),'off':ps.get('bactrian_backstop_off',{})} if ps else {}
-    pool={'nursery_pause':'nursery','object_copy':'nursery','scan_object':'nursery','modbuf_object':'nursery','full_pause':'full','cycle_pause':'full','mark_quantum':'full','sweep_quantum':'full'}
+    # Raw comparison: wall with no injection vs wall with the injection, per stage
+    # and delay. Δ/delay is the per-point invocation estimate; N_fit is the
+    # least-squares slope over the stage's points; n_probe is the probe's own
+    # counter from stage_cycles.txt (n=1M) when present. Coloring yields counts
+    # only -- it says nothing about a stage's own cost (that is section 4a).
+    probe={}
+    sc=os.path.join(R,'..','charts','stage_cycles.txt')
+    for cand in (os.path.join(OUT,'stage_cycles.txt'), sc):
+        if os.path.exists(cand):
+            for l in open(cand):
+                m=re.match(r'(\w+) 1000000 (\w+) n=(\d+)',l)
+                if m: probe[(m.group(1),m.group(2))]=int(m.group(3))
+            break
     with open(os.path.join(OUT,'coloring_counts.txt'),'w') as fh:
-        fh.write('config stage N_from_slope pool_total_s natural_cost_per_invocation\n')
-        for (cfg,st),n in sorted(counts.items()):
-            T=tot.get(cfg,{}).get(pool.get(st,''),None)
-            cost=(f'{T/n*1e9:,.0f} ns' if n>1e5 else f'{T/n*1e3:,.1f} ms') if (T and n>0.5) else 'n/a'
-            fh.write(f'{cfg} {st} N={n:,.0f} pool={T if T is not None else "?"}s cost={cost}\n')
+        fh.write('config stage delay_per_call wall_no_injection_s wall_with_injection_s delta_s N_point N_fit n_probe\n')
+        for (cfg,st),v in sorted(pts.items()):
+            for x,w,fn in sorted(v):
+                b=base.get((fn,cfg), base.get(('coloring.txt',cfg),0)); d=w-b
+                unit=f'{x/1e6:g}ms' if x>=1e6 else (f'{x/1e3:g}us' if x>=1e3 else f'{x:g}ns')
+                Np=d/x*1e9 if x else 0
+                fh.write(f'{cfg} {st} {unit} {b:.2f} {w:.2f} {d:+.2f} {Np:,.0f} {counts[(cfg,st)]:,.0f} {probe.get((cfg,st),"?")}\n')
     print(open(os.path.join(OUT,'coloring_counts.txt')).read())
 # ---- 5. direct per-stage cycles (rdtsc inside the probes; no wall-time attribution) ----
 cyc=sorted(glob.glob(os.path.join(R,'cycles.*.*.txt')))
