@@ -1,0 +1,5 @@
+bt after golden(n20) OK
+bt after n16 walls: 0.15 0.16 0.14 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117036
+bt rule1v5 golden(n20) OK
+bt rule1v5 n16 walls: 0.14 0.13 0.14 | [mmtk] GCs: 11 (full: 0), GC time: 32 ms, objects copied: 117036
+BT-DONE

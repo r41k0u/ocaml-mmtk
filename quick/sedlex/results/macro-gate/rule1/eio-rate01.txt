@@ -1,0 +1,2 @@
+wall=117.44 rss_kb=5414880
+[mmtk] GCs: 1853 (full: 16), GC time: 69265 ms, objects copied: 517199849

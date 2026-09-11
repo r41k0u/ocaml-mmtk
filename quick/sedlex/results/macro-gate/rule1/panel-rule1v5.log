@@ -1,0 +1,5 @@
+gate-rule1v5 eio_conc_bench: wall_med=122.54s (n=3) rss=13385MB pauses=1845 fulls=12 max_pause=1181ms | [mmtk] GCs: 1845 (full: 12), GC time: 68412 ms, objects copied: 517190952
+gate-rule1v5 ydump_repeat: wall_med=66.66s (n=3) rss=11621MB pauses=1452 fulls=8 max_pause=165ms | [mmtk] GCs: 1452 (full: 8), GC time: 29478 ms, objects copied: 270001108
+gate-rule1v5 sedlex_bench: wall_med=136.46s (n=3) rss=8698MB pauses=3059 fulls=13 max_pause=124ms | [mmtk] GCs: 3059 (full: 13), GC time: 88015 ms, objects copied: 382304989
+gate-rule1v5 test_decompress: wall_med=54.46s (n=3) rss=1436MB pauses=1936 fulls=54 max_pause=8ms | [mmtk] GCs: 1936 (full: 54), GC time: 2352 ms, objects copied: 33664
+MACRO-GATE-DONE

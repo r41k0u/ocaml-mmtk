@@ -1,0 +1,57 @@
+[pace] slice gate: debt=0ms quantum=2.0ms minor_ewma=3.9ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=6ms quantum=6.0ms minor_ewma=3.8ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=10ms quantum=9.6ms minor_ewma=3.8ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=13ms quantum=12.5ms minor_ewma=4.4ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=15ms quantum=15.5ms minor_ewma=4.7ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=19ms quantum=6.3ms minor_ewma=20.2ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=48ms quantum=5.3ms minor_ewma=35.7ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=127ms quantum=5.3ms minor_ewma=39.0ms tick=false worth=false feasible=true -> Full
+[pace] slice gate: debt=322ms quantum=5.2ms minor_ewma=39.1ms tick=false worth=true feasible=true -> sliced
+[pace] quantum: budget=5.1ms quota=1346 traced=70442 packets=17 took=6.3ms drained=false
+[pace] quantum: budget=4.2ms quota=1358 traced=43765 packets=18 took=4.5ms drained=false
+[pace] quantum: budget=3.6ms quota=1358 traced=55258 packets=27 took=4.4ms drained=false
+[pace] quantum: budget=3.2ms quota=521604 traced=546546 packets=165 took=60.5ms drained=false
+[pace] quantum: budget=3.2ms quota=145656 traced=203357 packets=52 took=12.2ms drained=false
+[pace] quantum: budget=2.8ms quota=1358 traced=36864 packets=9 took=3.5ms drained=false
+[pace] quantum: budget=2.5ms quota=1358 traced=28672 packets=7 took=3.0ms drained=false
+[pace] quantum: budget=2.3ms quota=1358 traced=29743 packets=8 took=2.8ms drained=false
+[pace] quantum: budget=2.1ms quota=1346 traced=42988 packets=11 took=2.6ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=28672 packets=7 took=2.8ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=74023 packets=19 took=2.3ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=54752 packets=7 took=2.6ms drained=false
+[pace] quantum: budget=2.0ms quota=662645 traced=777344 packets=119 took=31.7ms drained=false
+[pace] quantum: budget=2.0ms quota=4462 traced=122880 packets=30 took=2.2ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=80960 packets=20 took=2.3ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=39088 packets=10 took=2.3ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=83916 packets=26 took=2.3ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=39000 packets=10 took=2.4ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=118784 packets=29 took=2.1ms drained=false
+[pace] quantum: budget=2.0ms quota=1358 traced=39049 packets=10 took=2.3ms drained=false
+[pace] quantum: budget=2.0ms quota=1358 traced=110592 packets=27 took=2.2ms drained=false
+[pace] quantum: budget=2.0ms quota=803698 traced=921385 packets=229 took=26.0ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=120207 packets=30 took=2.1ms drained=false
+[pace] quantum: budget=2.0ms quota=1346 traced=118784 packets=29 took=2.1ms drained=false
+[pace] quantum: budget=2.0ms quota=1358 traced=118784 packets=29 took=2.1ms drained=false
+[pace] quantum: budget=2.0ms quota=1358 traced=118784 packets=29 took=2.1ms drained=false
+[pace] slice gate: debt=5289ms quantum=6.5ms minor_ewma=41.2ms tick=false worth=true feasible=true -> sliced
+[pace] quantum: budget=6.5ms quota=963983 traced=1075744 packets=263 took=99.3ms drained=false
+[pace] quantum: budget=6.5ms quota=1358 traced=147030 packets=18 took=7.1ms drained=false
+[pace] quantum: budget=6.5ms quota=1358 traced=65536 packets=16 took=7.3ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=65536 packets=16 took=7.3ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=65536 packets=16 took=7.2ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=83247 packets=17 took=7.2ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=147030 packets=18 took=7.1ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=65536 packets=16 took=7.3ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=115018 packets=28 took=7.0ms drained=false
+[pace] quantum: budget=6.5ms quota=963983 traced=1106704 packets=143 took=56.6ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=348598 packets=84 took=6.8ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=146952 packets=18 took=7.0ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=380928 packets=93 took=6.7ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=120419 packets=30 took=6.8ms drained=false
+[pace] quantum: budget=6.5ms quota=1358 traced=380928 packets=93 took=6.7ms drained=false
+[pace] quantum: budget=6.5ms quota=1358 traced=112242 packets=28 took=6.9ms drained=false
+[pace] quantum: budget=6.5ms quota=1358 traced=217903 packets=159 took=6.6ms drained=false
+[pace] quantum: budget=6.5ms quota=1346 traced=109299 packets=28 took=6.9ms drained=false
+[pace] quantum: budget=6.5ms quota=963984 traced=1175955 packets=873 took=24.8ms drained=true
+[mmtk] GCs: 1840 (full: 10), GC time: 67232 ms, objects copied: 517196458
+wall=116.67 rss_kb=15252368

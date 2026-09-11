@@ -315,6 +315,69 @@ quantum unbudgeted when a cycle exceeds a multiple of its planned pauses or
 mature has outgrown the runway it started with. Until then the gate rework
 should not be the default on the dynamic heap.
 
+### Rule 1 iterations on eio (2026-09-11, evening): inflow floor, projection guards, and the baseline ratchet
+
+All raw files under `results/macro-gate/rule1/`; the code as a diff against
+mmtk-core 50f56f5987 in `rule1-v5.diff` (uncommitted; applied via
+`patch_quota{2,3,4,5}.py`). Bench config as the macro panel above.
+
+| eio, default rung | before gate | gate | v4: inflow floor | v5: + projection guards |
+|---|---:|---:|---:|---:|
+| wall (median of 3) | 132.5 s | 135.6 s | **117.7 s** | 122.5 s |
+| peak RSS | 3.3 GB | 24.1 GB | 13.8 GB | 13.4 GB |
+| major cycles | 31 Fulls | 8 Fulls + 1 sliced (never finished) | 8 + 2 sliced (finished) | 8 + 4 sliced (finished) |
+| max pause | 1.85 s | 470 ms | 542 ms | 1.18 s (one guard escalation) |
+
+ydump, sedlex and decompress are identical across gate / v4 / v5 (67 s /
+11.6 GB, 137 s / 8.7 GB, 55 s / 1.4 GB); binarytrees n16 at 192 MB pinned is
+unchanged by the guards (11 pauses, max 17 ms, golden n20 OK).
+
+What each step established:
+
+- **v1–v3 measured zero and are no-ops, not refutations.** Promotion adds no
+  marking work (promoted objects are born black under SATB), and SATB records
+  are parked as `ProcessModBufSATB` packets that only reach the enqueued
+  counter when they execute inside a quantum, after the quota is read.
+- **v4 — inflow floor.** The quantum first traces at least the SATB records
+  made since the previous quantum (`SATB_ENQ`, counted at enqueue time, plus
+  nursery seeds), then runs its time budget. Sum, not max: a max only holds
+  the queue steady. Result: every sliced cycle drains; eio RSS 24 → 13.8 GB.
+- **v5 — projection guards.** After each budgeted quantum: backlog ÷ net
+  objects per slice (EWMA) vs runway ÷ promotion per minor (EWMA); if the
+  cycle would not finish inside the runway, the next quantum runs unbudgeted
+  (a Full cannot start mid-cycle). The same on the sweep. eio: one mark
+  escalation (need 197 minors vs 178), sweep never (drains in ~17 slices, so
+  the earlier sweep-wait hypothesis was wrong).
+- **The 10× budget control** (`MMTK_MARK_RATE_MBPMS=0.1`, ~50 ms quanta, old
+  gate-after binary): all cycles drain, RSS 5.4 GB, wall 117 s — the work is
+  finite; RSS is set by how long cycles and the gaps between them run.
+
+**Why RSS stays at 13 GB after v4/v5: the baseline ratchet.** The binding
+starts a cycle at baseline × 2.5 (margin law, `MMTK_MATURE_OVERHEAD_PCT`
+150, clamped to 80 % of the heap) or after max(512 MiB, 2 × baseline) of
+nursery allocation (cadence backstop), where baseline = mature after the
+previous cycle's sweep. After a monolithic Full the baseline is the true
+live set. After a sliced cycle it also contains everything promoted while
+the cycle was open: born black, never tested, kept by the sweep. v5 eio
+timeline (trigger state at each decision):
+
+| cycle | mature at start | baseline used | fired by | minors since previous cycle | promoted in gap |
+|---|---:|---:|---|---:|---:|
+| A | 1.0 GB | 0.40 GB | margin | 31 | 0.7 GB |
+| B | 4.6 GB | 1.66 GB | cadence, 3.3 GB allocated | 208 | 2.9 GB |
+| C | 8.0 GB | 2.76 GB | cadence, 5.5 GB allocated | 345 | 4.8 GB |
+| D | 12.1 GB | 6.1 GB | cadence, 12.1 GB allocated | 759 | 10.6 GB |
+
+Black allocation per cycle: 0.44, 0.6, 2.8 GB. The gap laws multiply the
+inflated baseline, the longer gap promotes more, the next cycle runs longer
+and bakes in more — the baseline doubles per cycle.
+
+**Proposed v6 (not applied):** when the swept baseline is noted after a
+sliced cycle, subtract the pages born black during it (mature at FinalMark −
+mature at InitialMark, already tracked in core): those promotions count
+toward the next trigger instead of raising its bar. One trait accessor in
+core, one subtraction in the binding.
+
 ## 6. Reproducing
 
 ```

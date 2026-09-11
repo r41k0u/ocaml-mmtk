@@ -1,0 +1,26 @@
+pauses     0-   21:   22 x Nursery      mature      0->     7 MB
+pauses    22-   22:    1 x Full         mature      7->     7 MB
+pauses    23-   54:   32 x Nursery      mature      5->    12 MB
+pauses    55-   55:    1 x Full         mature     12->    12 MB
+pauses    56-   87:   32 x Nursery      mature      9->    14 MB
+pauses    88-   88:    1 x Full         mature     15->    15 MB
+pauses    89-  120:   32 x Nursery      mature     12->    17 MB
+pauses   121-  121:    1 x Full         mature     17->    17 MB
+pauses   122-  153:   32 x Nursery      mature     15->    20 MB
+pauses   154-  154:    1 x Full         mature     21->    21 MB
+pauses   155-  173:   19 x Nursery      mature     18->    32 MB
+pauses   174-  174:    1 x Full         mature     48->    48 MB
+pauses   175-  179:    5 x Nursery      mature     48->   111 MB
+pauses   180-  180:    1 x Full         mature    127->   127 MB
+pauses   181-  192:   12 x Nursery      mature    127->   306 MB
+pauses   193-  193:    1 x Full         mature    322->   322 MB
+pauses   194-  223:   30 x Nursery      mature    322->   792 MB
+pauses   224-  224:    1 x InitialMark  mature    809->   809 MB
+pauses   225-  480:  256 x Nursery      mature    809->  4485 MB
+pauses   481-  481:    1 x FinalMark    mature   4502->  4502 MB
+pauses   482-  886:  405 x Nursery      mature   4502-> 10443 MB
+pauses   887-  887:    1 x InitialMark  mature  10450-> 10450 MB
+pauses   888- 1070:  183 x Nursery      mature  10450-> 13059 MB
+pauses  1071- 1071:    1 x FinalMark    mature  13059-> 13059 MB
+pauses  1072- 1839:  768 x Nursery      mature  13023-> 14932 MB
+total 1840

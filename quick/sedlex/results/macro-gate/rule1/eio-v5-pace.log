@@ -1,0 +1,1091 @@
+[pace] trigger by_mature=true by_cadence=false mature=2053p baseline=0p n=22 nb=352MB
+[pace] slice gate: debt=0ms quantum=2.0ms minor_ewma=4.0ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=false by_cadence=true mature=3210p baseline=1548p n=32 nb=512MB
+[pace] slice gate: debt=6ms quantum=6.0ms minor_ewma=3.9ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=false by_cadence=true mature=3861p baseline=2448p n=32 nb=512MB
+[pace] slice gate: debt=10ms quantum=9.6ms minor_ewma=3.9ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=false by_cadence=true mature=4538p baseline=3222p n=32 nb=512MB
+[pace] slice gate: debt=13ms quantum=12.6ms minor_ewma=4.5ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=false by_cadence=true mature=5418p baseline=3964p n=32 nb=512MB
+[pace] slice gate: debt=15ms quantum=15.5ms minor_ewma=5.0ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=true by_cadence=false mature=16049p baseline=4856p n=20 nb=320MB
+[pace] slice gate: debt=19ms quantum=4.7ms minor_ewma=24.1ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=true by_cadence=false mature=40330p baseline=15813p n=6 nb=96MB
+[pace] slice gate: debt=62ms quantum=5.1ms minor_ewma=37.0ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=true by_cadence=false mature=102649p baseline=40342p n=15 nb=240MB
+[pace] slice gate: debt=158ms quantum=5.1ms minor_ewma=39.2ms tick=false worth=false feasible=true -> Full
+[pace] trigger by_mature=true by_cadence=false mature=260508p baseline=102649p n=38 nb=608MB
+[pace] slice gate: debt=401ms quantum=5.1ms minor_ewma=39.4ms tick=false worth=true feasible=true -> sliced
+[pace] trigger by_mature=true by_cadence=false mature=260516p baseline=102649p n=1 nb=16MB
+[pace] quantum: budget=5.1ms quota=1358 traced=62406 packets=25 took=5.7ms drained=false | guard: backlog=50735 net=61048/slice promo=4155p runway=1246MB need=1 avail=77 slices=1
+[pace] trigger by_mature=true by_cadence=false mature=264671p baseline=102649p n=2 nb=32MB
+[pace] quantum: budget=5.0ms quota=1346 traced=64319 packets=16 took=5.9ms drained=false | guard: backlog=49529 net=61529/slice promo=4155p runway=1266MB need=1 avail=78 slices=2
+[pace] trigger by_mature=true by_cadence=false mature=268826p baseline=102649p n=3 nb=48MB
+[pace] quantum: budget=5.0ms quota=1346 traced=63171 packets=19 took=6.1ms drained=false | guard: backlog=48341 net=61603/slice promo=4155p runway=1286MB need=1 avail=79 slices=3
+[pace] trigger by_mature=true by_cadence=false mature=272981p baseline=102649p n=4 nb=64MB
+[pace] quantum: budget=4.9ms quota=1346 traced=48341 packets=17 took=5.5ms drained=false | guard: backlog=49681 net=57951/slice promo=4155p runway=1306MB need=1 avail=81 slices=4
+[pace] trigger by_mature=true by_cadence=false mature=277136p baseline=102649p n=5 nb=80MB
+[pace] quantum: budget=4.8ms quota=1358 traced=52381 packets=21 took=5.5ms drained=false | guard: backlog=46975 net=56219/slice promo=4155p runway=1326MB need=1 avail=82 slices=5
+[pace] trigger by_mature=true by_cadence=false mature=281291p baseline=102649p n=6 nb=96MB
+[pace] quantum: budget=4.7ms quota=1346 traced=32546 packets=11 took=5.8ms drained=false | guard: backlog=69924 net=49965/slice promo=4156p runway=1346MB need=1 avail=83 slices=6
+[pace] trigger by_mature=true by_cadence=false mature=285448p baseline=102649p n=7 nb=112MB
+[pace] quantum: budget=4.7ms quota=1346 traced=26015 packets=12 took=6.3ms drained=false | guard: backlog=99320 net=43641/slice promo=4155p runway=1367MB need=2 avail=84 slices=7
+[pace] trigger by_mature=true by_cadence=false mature=289603p baseline=102649p n=8 nb=128MB
+[pace] quantum: budget=4.6ms quota=1358 traced=43909 packets=11 took=5.8ms drained=false | guard: backlog=114963 net=43368/slice promo=4155p runway=1387MB need=3 avail=85 slices=8
+[pace] trigger by_mature=true by_cadence=false mature=293758p baseline=102649p n=9 nb=144MB
+[pace] quantum: budget=4.6ms quota=1346 traced=47215 packets=16 took=5.6ms drained=false | guard: backlog=122362 net=43993/slice promo=4155p runway=1407MB need=3 avail=87 slices=9
+[pace] trigger by_mature=true by_cadence=false mature=297913p baseline=102649p n=10 nb=160MB
+[pace] quantum: budget=4.5ms quota=1346 traced=56921 packets=14 took=5.7ms drained=false | guard: backlog=122183 net=46888/slice promo=4155p runway=1427MB need=3 avail=88 slices=10
+[pace] trigger by_mature=true by_cadence=false mature=302068p baseline=102649p n=11 nb=176MB
+[pace] quantum: budget=4.4ms quota=1358 traced=64075 packets=24 took=6.1ms drained=false | guard: backlog=113663 net=50845/slice promo=4155p runway=1447MB need=2 avail=89 slices=11
+[pace] trigger by_mature=true by_cadence=false mature=306223p baseline=102649p n=12 nb=192MB
+[pace] quantum: budget=4.4ms quota=1346 traced=50417 packets=15 took=4.6ms drained=false | guard: backlog=109964 net=50401/slice promo=4155p runway=1467MB need=2 avail=90 slices=12
+[pace] trigger by_mature=true by_cadence=false mature=310378p baseline=102649p n=13 nb=208MB
+[pace] quantum: budget=4.3ms quota=1346 traced=55058 packets=26 took=5.5ms drained=false | guard: backlog=109604 net=51229/slice promo=4155p runway=1487MB need=2 avail=92 slices=13
+[pace] trigger by_mature=true by_cadence=false mature=314533p baseline=102649p n=14 nb=224MB
+[pace] quantum: budget=4.2ms quota=1358 traced=63923 packets=23 took=5.2ms drained=false | guard: backlog=93956 net=54063/slice promo=4155p runway=1508MB need=2 avail=93 slices=14
+[pace] trigger by_mature=true by_cadence=false mature=318688p baseline=102649p n=15 nb=240MB
+[pace] quantum: budget=4.2ms quota=1346 traced=66219 packets=28 took=4.6ms drained=false | guard: backlog=64608 net=56766/slice promo=4156p runway=1528MB need=1 avail=94 slices=15
+[pace] trigger by_mature=true by_cadence=false mature=322845p baseline=102649p n=16 nb=256MB
+[pace] quantum: budget=4.1ms quota=1346 traced=48276 packets=33 took=4.6ms drained=false | guard: backlog=56959 net=54307/slice promo=4155p runway=1548MB need=1 avail=95 slices=16
+[pace] trigger by_mature=true by_cadence=false mature=327000p baseline=102649p n=17 nb=272MB
+[pace] quantum: budget=4.1ms quota=1358 traced=42697 packets=31 took=4.6ms drained=false | guard: backlog=57173 net=51065/slice promo=4155p runway=1568MB need=1 avail=97 slices=17
+[pace] trigger by_mature=true by_cadence=false mature=331155p baseline=102649p n=18 nb=288MB
+[pace] quantum: budget=4.0ms quota=1346 traced=46480 packets=32 took=4.6ms drained=false | guard: backlog=51282 net=49582/slice promo=4155p runway=1588MB need=1 avail=98 slices=18
+[pace] trigger by_mature=true by_cadence=false mature=335310p baseline=102649p n=19 nb=304MB
+[pace] quantum: budget=4.0ms quota=396149 traced=436306 packets=134 took=48.7ms drained=false | guard: backlog=817332 net=47226/slice promo=3738p runway=1615MB need=17 avail=111 slices=19
+[pace] trigger by_mature=true by_cadence=false mature=337795p baseline=102649p n=20 nb=320MB
+[pace] quantum: budget=3.9ms quota=964005 traced=1009844 packets=182 took=69.5ms drained=false | guard: backlog=1627843 net=46879/slice promo=2825p runway=1636MB need=35 avail=148 slices=20
+[pace] trigger by_mature=true by_cadence=false mature=337880p baseline=102649p n=21 nb=336MB
+[pace] quantum: budget=3.9ms quota=963984 traced=1035762 packets=266 took=103.6ms drained=false | guard: backlog=3144138 net=53104/slice promo=2140p runway=1637MB need=59 avail=196 slices=21
+[pace] trigger by_mature=true by_cadence=false mature=337966p baseline=102649p n=22 nb=352MB
+[pace] quantum: budget=3.9ms quota=963984 traced=1005777 packets=202 took=74.8ms drained=false | guard: backlog=4094712 net=50276/slice promo=1626p runway=1637MB need=81 avail=258 slices=22
+[pace] trigger by_mature=true by_cadence=false mature=338052p baseline=102649p n=23 nb=368MB
+[pace] quantum: budget=3.9ms quota=963984 traced=1045697 packets=197 took=84.8ms drained=false | guard: backlog=5329847 net=58135/slice promo=1242p runway=1637MB need=92 avail=338 slices=23
+[pace] trigger by_mature=true by_cadence=false mature=338141p baseline=102649p n=24 nb=384MB
+[pace] quantum: budget=3.9ms quota=964003 traced=1040552 packets=145 took=53.7ms drained=false | guard: backlog=5767651 net=62739/slice promo=953p runway=1638MB need=92 avail=440 slices=24
+[pace] trigger by_mature=true by_cadence=false mature=338226p baseline=102649p n=25 nb=400MB
+[pace] quantum: budget=3.9ms quota=963983 traced=1006480 packets=288 took=105.3ms drained=false | guard: backlog=7611028 net=57679/slice promo=736p runway=1638MB need=132 avail=570 slices=25
+[pace] trigger by_mature=true by_cadence=false mature=338313p baseline=102649p n=26 nb=416MB
+[pace] quantum: budget=3.9ms quota=963983 traced=1026559 packets=211 took=55.7ms drained=false | guard: backlog=8017247 net=58904/slice promo=573p runway=1639MB need=136 avail=732 slices=26
+[pace] trigger by_mature=true by_cadence=false mature=338398p baseline=102649p n=27 nb=432MB
+[pace] quantum: budget=3.9ms quota=964003 traced=1050796 packets=244 took=106.2ms drained=false | guard: backlog=9808854 net=65876/slice promo=452p runway=1639MB need=149 avail=929 slices=27
+[pace] trigger by_mature=true by_cadence=false mature=338487p baseline=102649p n=28 nb=448MB
+[pace] quantum: budget=3.9ms quota=963983 traced=1033412 packets=140 took=54.8ms drained=false | guard: backlog=10218419 net=66764/slice promo=360p runway=1640MB need=153 avail=1166 slices=28
+[pace] trigger by_mature=true by_cadence=false mature=338573p baseline=102649p n=29 nb=464MB
+[pace] quantum: budget=3.9ms quota=271241 traced=315408 packets=78 took=24.4ms drained=false | guard: backlog=10453090 net=61114/slice promo=1022p runway=1629MB need=171 avail=408 slices=29
+[pace] trigger by_mature=true by_cadence=false mature=341583p baseline=102649p n=30 nb=480MB
+[pace] quantum: budget=3.9ms quota=1346 traced=45056 packets=11 took=4.6ms drained=false | guard: backlog=10496826 net=56763/slice promo=1805p runway=1639MB need=185 avail=232 slices=30
+[pace] trigger by_mature=true by_cadence=false mature=345738p baseline=102649p n=31 nb=496MB
+[pace] quantum: budget=3.9ms quota=1346 traced=45056 packets=11 took=4.4ms drained=false | guard: backlog=10540562 net=53500/slice promo=2392p runway=1659MB need=197 avail=178 slices=31 -> ESCALATE
+[pace] trigger by_mature=true by_cadence=false mature=349893p baseline=102649p n=32 nb=512MB
+[pace] trigger by_mature=true by_cadence=false mature=354048p baseline=102649p n=33 nb=528MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=302 rate=18.0/slice promo=1794p runway=1715MB need=17 avail=245 slices=1
+[pace] sweep quantum: packets=18 took=2.0ms remaining=284 rate=18.0/slice promo=2385p runway=1699MB need=16 avail=182 slices=1
+[pace] trigger by_mature=true by_cadence=false mature=358189p baseline=102649p n=34 nb=544MB
+[pace] sweep quantum: packets=19 took=2.1ms remaining=265 rate=18.2/slice promo=2827p runway=1719MB need=15 avail=156 slices=2
+[pace] trigger by_mature=true by_cadence=false mature=362344p baseline=102649p n=35 nb=560MB
+[pace] sweep quantum: packets=19 took=2.1ms remaining=246 rate=18.4/slice promo=3159p runway=1739MB need=13 avail=141 slices=3
+[pace] trigger by_mature=true by_cadence=false mature=366499p baseline=102649p n=36 nb=576MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=228 rate=18.3/slice promo=3408p runway=1759MB need=12 avail=132 slices=4
+[pace] trigger by_mature=true by_cadence=false mature=370654p baseline=102649p n=37 nb=592MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=210 rate=18.2/slice promo=3594p runway=1780MB need=12 avail=127 slices=5
+[pace] trigger by_mature=true by_cadence=false mature=374809p baseline=102649p n=38 nb=608MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=192 rate=18.2/slice promo=3734p runway=1800MB need=11 avail=123 slices=6
+[pace] trigger by_mature=true by_cadence=false mature=378964p baseline=102649p n=39 nb=624MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=174 rate=18.1/slice promo=3839p runway=1820MB need=10 avail=121 slices=7
+[pace] trigger by_mature=true by_cadence=false mature=383119p baseline=102649p n=40 nb=640MB
+[pace] sweep quantum: packets=18 took=2.1ms remaining=156 rate=18.1/slice promo=3918p runway=1840MB need=9 avail=120 slices=8
+[pace] trigger by_mature=true by_cadence=false mature=387274p baseline=102649p n=41 nb=656MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=138 rate=18.1/slice promo=3978p runway=1860MB need=8 avail=120 slices=9
+[pace] trigger by_mature=true by_cadence=false mature=391431p baseline=102649p n=42 nb=672MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=120 rate=18.1/slice promo=4022p runway=1880MB need=7 avail=120 slices=10
+[pace] trigger by_mature=true by_cadence=false mature=395586p baseline=102649p n=43 nb=688MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=102 rate=18.0/slice promo=4055p runway=1900MB need=6 avail=120 slices=11
+[pace] trigger by_mature=true by_cadence=false mature=399741p baseline=102649p n=44 nb=704MB
+[pace] sweep quantum: packets=17 took=2.1ms remaining=85 rate=17.8/slice promo=4080p runway=1921MB need=5 avail=121 slices=12
+[pace] trigger by_mature=true by_cadence=false mature=403896p baseline=102649p n=45 nb=720MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=67 rate=17.8/slice promo=4098p runway=1941MB need=4 avail=121 slices=13
+[pace] trigger by_mature=true by_cadence=false mature=408051p baseline=102649p n=46 nb=736MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=49 rate=17.9/slice promo=4112p runway=1961MB need=3 avail=122 slices=14
+[pace] trigger by_mature=true by_cadence=false mature=412206p baseline=102649p n=47 nb=752MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=31 rate=17.9/slice promo=4122p runway=1981MB need=2 avail=123 slices=15
+[pace] trigger by_mature=true by_cadence=false mature=416361p baseline=102649p n=48 nb=768MB
+[pace] sweep quantum: packets=18 took=2.0ms remaining=13 rate=17.9/slice promo=4130p runway=2001MB need=1 avail=124 slices=16
+[pace] trigger by_mature=true by_cadence=false mature=420516p baseline=102649p n=49 nb=784MB
+[pace] sweep quantum: packets=13 took=1.5ms remaining=0 rate=16.7/slice promo=4136p runway=2021MB need=0 avail=125 slices=17
+[pace] trigger by_mature=false by_cadence=true mature=1006275p baseline=424671p n=208 nb=3328MB
+[pace] slice gate: debt=1659ms quantum=5.5ms minor_ewma=20.4ms tick=false worth=true feasible=true -> sliced
+[pace] quantum: budget=5.5ms quota=951161 traced=1017991 packets=247 took=101.4ms drained=false | guard: backlog=1864770 net=66830/slice promo=3134p runway=4876MB need=28 avail=398 slices=1
+[pace] quantum: budget=5.5ms quota=1241 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1805102 net=80444/slice promo=3389p runway=4861MB need=22 avail=367 slices=2
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1745539 net=90628/slice promo=3580p runway=4881MB need=19 avail=349 slices=3
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1685976 net=98266/slice promo=3723p runway=4901MB need=17 avail=337 slices=4
+[pace] quantum: budget=5.5ms quota=1358 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1626425 net=103992/slice promo=3831p runway=4921MB need=16 avail=329 slices=5
+[pace] quantum: budget=5.5ms quota=1346 traced=122520 packets=15 took=6.3ms drained=false | guard: backlog=1566871 net=108287/slice promo=3912p runway=4941MB need=14 avail=323 slices=6
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1507308 net=111511/slice promo=3973p runway=4961MB need=14 avail=320 slices=7
+[pace] quantum: budget=5.5ms quota=1358 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1447757 net=113926/slice promo=4018p runway=4981MB need=13 avail=317 slices=8
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1388194 net=115740/slice promo=4052p runway=5002MB need=12 avail=316 slices=9
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1328631 net=117100/slice promo=4077p runway=5022MB need=11 avail=315 slices=10
+[pace] quantum: budget=5.5ms quota=1358 traced=122520 packets=15 took=6.3ms drained=false | guard: backlog=1269089 net=118115/slice promo=4096p runway=5042MB need=11 avail=315 slices=11
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1209526 net=118882/slice promo=4110p runway=5062MB need=10 avail=315 slices=12
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1149963 net=119457/slice promo=4121p runway=5082MB need=10 avail=316 slices=13
+[pace] quantum: budget=5.5ms quota=1346 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1090400 net=119888/slice promo=4129p runway=5102MB need=9 avail=316 slices=14
+[pace] quantum: budget=5.5ms quota=1358 traced=122526 packets=15 took=6.3ms drained=false | guard: backlog=1030849 net=120208/slice promo=4136p runway=5122MB need=9 avail=317 slices=15
+[pace] trigger by_mature=true by_cadence=false mature=1064579p baseline=424671p n=16 nb=256MB
+[pace] quantum: budget=5.2ms quota=1346 traced=114360 packets=14 took=5.8ms drained=false | guard: backlog=975357 net=118409/slice promo=4140p runway=5143MB need=8 avail=318 slices=16
+[pace] trigger by_mature=true by_cadence=false mature=1068734p baseline=424671p n=17 nb=272MB
+[pace] quantum: budget=5.1ms quota=1346 traced=85592 packets=25 took=5.3ms drained=false | guard: backlog=895011 net=109868/slice promo=4143p runway=5163MB need=8 avail=319 slices=17
+[pace] trigger by_mature=true by_cadence=false mature=1072889p baseline=424671p n=18 nb=288MB
+[pace] quantum: budget=5.1ms quota=1358 traced=88957 packets=23 took=5.6ms drained=false | guard: backlog=812075 net=104300/slice promo=4146p runway=5183MB need=8 avail=320 slices=18
+[pace] trigger by_mature=true by_cadence=false mature=1077044p baseline=424671p n=19 nb=304MB
+[pace] quantum: budget=5.1ms quota=1346 traced=87623 packets=22 took=5.4ms drained=false | guard: backlog=728685 net=99794/slice promo=4148p runway=5203MB need=7 avail=321 slices=19
+[pace] trigger by_mature=true by_cadence=false mature=1081199p baseline=424671p n=20 nb=320MB
+[pace] quantum: budget=5.1ms quota=1346 traced=87611 packets=22 took=5.4ms drained=false | guard: backlog=645291 net=96412/slice promo=4149p runway=5223MB need=7 avail=322 slices=20
+[pace] trigger by_mature=true by_cadence=false mature=1085354p baseline=424671p n=21 nb=336MB
+[pace] quantum: budget=5.1ms quota=1358 traced=88969 packets=23 took=5.6ms drained=false | guard: backlog=562359 net=94211/slice promo=4150p runway=5243MB need=6 avail=323 slices=21
+[pace] trigger by_mature=true by_cadence=false mature=1089509p baseline=424671p n=22 nb=352MB
+[pace] quantum: budget=5.0ms quota=1346 traced=87608 packets=22 took=5.5ms drained=false | guard: backlog=478955 net=92224/slice promo=4151p runway=5263MB need=5 avail=325 slices=22
+[pace] trigger by_mature=true by_cadence=false mature=1093664p baseline=424671p n=23 nb=368MB
+[pace] quantum: budget=5.0ms quota=1346 traced=84861 packets=22 took=5.4ms drained=false | guard: backlog=400067 net=90046/slice promo=4152p runway=5284MB need=4 avail=326 slices=23
+[pace] trigger by_mature=true by_cadence=false mature=1097819p baseline=424671p n=24 nb=384MB
+[pace] quantum: budget=5.0ms quota=1358 traced=87611 packets=22 took=5.5ms drained=false | guard: backlog=316685 net=89098/slice promo=4153p runway=5304MB need=4 avail=327 slices=24
+[pace] trigger by_mature=true by_cadence=false mature=1101976p baseline=424671p n=25 nb=400MB
+[pace] quantum: budget=5.0ms quota=1346 traced=87611 packets=22 took=5.5ms drained=false | guard: backlog=233291 net=88390/slice promo=4153p runway=5324MB need=3 avail=328 slices=25
+[pace] trigger by_mature=true by_cadence=false mature=1106131p baseline=424671p n=26 nb=416MB
+[pace] quantum: budget=5.0ms quota=1346 traced=84861 packets=22 took=5.4ms drained=false | guard: backlog=154403 net=87171/slice promo=4153p runway=5344MB need=2 avail=329 slices=26
+[pace] trigger by_mature=true by_cadence=false mature=1110286p baseline=424671p n=27 nb=432MB
+[pace] quantum: budget=4.9ms quota=1358 traced=83503 packets=21 took=5.2ms drained=false | guard: backlog=75077 net=85915/slice promo=4153p runway=5364MB need=1 avail=331 slices=27
+[pace] trigger by_mature=true by_cadence=false mature=1114441p baseline=424671p n=28 nb=448MB
+[pace] quantum: budget=4.9ms quota=1346 traced=56377 packets=168 took=5.3ms drained=false | guard: backlog=69630 net=78194/slice promo=4153p runway=5384MB need=1 avail=332 slices=28
+[pace] trigger by_mature=true by_cadence=false mature=1118596p baseline=424671p n=29 nb=464MB
+[pace] quantum: budget=4.9ms quota=1346 traced=57713 packets=212 took=5.2ms drained=false | guard: backlog=66779 net=72737/slice promo=4153p runway=5404MB need=1 avail=333 slices=29
+[pace] trigger by_mature=true by_cadence=false mature=1122751p baseline=424671p n=30 nb=480MB
+[pace] quantum: budget=4.9ms quota=1346 traced=54404 packets=200 took=5.3ms drained=false | guard: backlog=77216 net=67817/slice promo=4153p runway=5424MB need=1 avail=334 slices=30
+[pace] trigger by_mature=true by_cadence=false mature=1126906p baseline=424671p n=31 nb=496MB
+[pace] quantum: budget=4.9ms quota=1358 traced=57162 packets=216 took=5.3ms drained=false | guard: backlog=68627 net=64814/slice promo=4153p runway=5445MB need=1 avail=336 slices=31
+[pace] trigger by_mature=true by_cadence=false mature=1131061p baseline=424671p n=32 nb=512MB
+[pace] quantum: budget=4.9ms quota=1346 traced=49119 packets=200 took=5.5ms drained=false | guard: backlog=74036 net=60554/slice promo=4154p runway=5465MB need=1 avail=337 slices=32
+[pace] trigger by_mature=true by_cadence=false mature=1135218p baseline=424671p n=33 nb=528MB
+[pace] quantum: budget=4.8ms quota=1346 traced=59980 packets=201 took=5.1ms drained=false | guard: backlog=67315 net=60074/slice promo=4154p runway=5485MB need=1 avail=338 slices=33
+[pace] trigger by_mature=true by_cadence=false mature=1139373p baseline=424671p n=34 nb=544MB
+[pace] quantum: budget=4.8ms quota=1358 traced=64049 packets=252 took=5.1ms drained=false | guard: backlog=54982 net=60728/slice promo=4154p runway=5505MB need=1 avail=339 slices=34
+[pace] trigger by_mature=true by_cadence=false mature=1143528p baseline=424671p n=35 nb=560MB
+[pace] quantum: budget=4.8ms quota=1346 traced=65977 packets=326 took=5.0ms drained=false | guard: backlog=40981 net=61703/slice promo=4154p runway=5525MB need=1 avail=341 slices=35
+[pace] trigger by_mature=true by_cadence=false mature=1147683p baseline=424671p n=36 nb=576MB
+[pace] quantum: budget=4.8ms quota=1346 traced=53601 packets=140 took=5.0ms drained=false | guard: backlog=39585 net=59341/slice promo=4154p runway=5545MB need=1 avail=342 slices=36
+[pace] trigger by_mature=true by_cadence=false mature=1151838p baseline=424671p n=37 nb=592MB
+[pace] quantum: budget=4.8ms quota=1358 traced=61983 packets=32 took=7.0ms drained=false | guard: backlog=58586 net=59662/slice promo=4154p runway=5565MB need=1 avail=343 slices=37
+[pace] trigger by_mature=true by_cadence=false mature=1155993p baseline=424671p n=38 nb=608MB
+[pace] quantum: budget=4.7ms quota=1346 traced=80090 packets=36 took=5.8ms drained=false | guard: backlog=45040 net=64433/slice promo=4154p runway=5586MB need=1 avail=344 slices=38
+[pace] trigger by_mature=true by_cadence=false mature=1160148p baseline=424671p n=39 nb=624MB
+[pace] quantum: budget=4.7ms quota=1346 traced=88271 packets=43 took=5.4ms drained=false | guard: backlog=14933 net=70056/slice promo=4154p runway=5606MB need=0 avail=345 slices=39
+[pace] trigger by_mature=true by_cadence=false mature=1164303p baseline=424671p n=40 nb=640MB
+[pace] quantum: budget=4.7ms quota=1358 traced=50841 packets=52 took=5.3ms drained=false | guard: backlog=19842 net=64912/slice promo=4154p runway=5626MB need=0 avail=347 slices=40
+[pace] trigger by_mature=true by_cadence=false mature=1168458p baseline=424671p n=41 nb=656MB
+[pace] quantum: budget=4.7ms quota=1346 traced=36335 packets=25 took=5.5ms drained=false | guard: backlog=29293 net=57431/slice promo=4155p runway=5646MB need=1 avail=348 slices=41
+[pace] trigger by_mature=true by_cadence=false mature=1172615p baseline=424671p n=42 nb=672MB
+[pace] quantum: budget=4.7ms quota=1346 traced=75154 packets=43 took=5.3ms drained=false | guard: backlog=14496 net=61526/slice promo=4155p runway=5666MB need=0 avail=349 slices=42
+[pace] trigger by_mature=true by_cadence=false mature=1176770p baseline=424671p n=43 nb=688MB
+[pace] quantum: budget=4.7ms quota=1346 traced=40839 packets=8123 took=3.9ms drained=true | guard: backlog=0 net=56018/slice promo=4155p runway=5686MB need=0 avail=350 slices=43
+[pace] trigger by_mature=true by_cadence=false mature=1180925p baseline=424671p n=44 nb=704MB
+[pace] sweep quantum: packets=13 took=2.2ms remaining=1053 rate=15.8/slice promo=3117p runway=5723MB need=67 avail=470 slices=18
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1044 rate=9.0/slice promo=3320p runway=5744MB need=116 avail=443 slices=1
+[pace] trigger by_mature=true by_cadence=false mature=1165578p baseline=424671p n=45 nb=720MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1035 rate=9.0/slice promo=3528p runway=5632MB need=115 avail=409 slices=2
+[pace] trigger by_mature=true by_cadence=false mature=1159761p baseline=424671p n=46 nb=736MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1026 rate=9.0/slice promo=3684p runway=5655MB need=114 avail=393 slices=3
+[pace] trigger by_mature=true by_cadence=false mature=1153944p baseline=424671p n=47 nb=752MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1017 rate=9.0/slice promo=3801p runway=5677MB need=113 avail=382 slices=4
+[pace] trigger by_mature=true by_cadence=false mature=1148127p baseline=424671p n=48 nb=768MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1008 rate=9.0/slice promo=3889p runway=5700MB need=112 avail=375 slices=5
+[pace] trigger by_mature=true by_cadence=false mature=1142310p baseline=424671p n=49 nb=784MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=999 rate=9.0/slice promo=3955p runway=5723MB need=111 avail=370 slices=6
+[pace] trigger by_mature=true by_cadence=false mature=1136493p baseline=424671p n=50 nb=800MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=990 rate=9.0/slice promo=4005p runway=5746MB need=110 avail=367 slices=7
+[pace] trigger by_mature=true by_cadence=false mature=1130674p baseline=424671p n=51 nb=816MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=981 rate=9.0/slice promo=4043p runway=5768MB need=109 avail=365 slices=8
+[pace] trigger by_mature=true by_cadence=false mature=1124857p baseline=424671p n=52 nb=832MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=972 rate=9.0/slice promo=4071p runway=5791MB need=108 avail=364 slices=9
+[pace] trigger by_mature=true by_cadence=false mature=1119040p baseline=424671p n=53 nb=848MB
+[pace] sweep quantum: packets=9 took=2.1ms remaining=963 rate=9.0/slice promo=4092p runway=5814MB need=107 avail=364 slices=10
+[pace] trigger by_mature=true by_cadence=false mature=1113223p baseline=424671p n=54 nb=864MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=954 rate=9.0/slice promo=4107p runway=5837MB need=106 avail=364 slices=11
+[pace] trigger by_mature=true by_cadence=false mature=1107406p baseline=424671p n=55 nb=880MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=945 rate=9.0/slice promo=4119p runway=5859MB need=105 avail=364 slices=12
+[pace] trigger by_mature=true by_cadence=false mature=1101589p baseline=424671p n=56 nb=896MB
+[pace] sweep quantum: packets=9 took=2.1ms remaining=936 rate=9.0/slice promo=4128p runway=5882MB need=104 avail=365 slices=13
+[pace] trigger by_mature=true by_cadence=false mature=1095770p baseline=424671p n=57 nb=912MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=927 rate=9.0/slice promo=4135p runway=5905MB need=103 avail=366 slices=14
+[pace] trigger by_mature=true by_cadence=false mature=1089953p baseline=424671p n=58 nb=928MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=918 rate=9.0/slice promo=4140p runway=5927MB need=102 avail=367 slices=15
+[pace] trigger by_mature=true by_cadence=false mature=1084136p baseline=424671p n=59 nb=944MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=909 rate=9.0/slice promo=4143p runway=5950MB need=101 avail=368 slices=16
+[pace] trigger by_mature=true by_cadence=false mature=1078319p baseline=424671p n=60 nb=960MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=900 rate=9.0/slice promo=4146p runway=5973MB need=100 avail=369 slices=17
+[pace] trigger by_mature=true by_cadence=false mature=1072502p baseline=424671p n=61 nb=976MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=891 rate=9.0/slice promo=4148p runway=5996MB need=99 avail=370 slices=18
+[pace] trigger by_mature=true by_cadence=false mature=1066685p baseline=424671p n=62 nb=992MB
+[pace] sweep quantum: packets=9 took=2.0ms remaining=882 rate=9.0/slice promo=4149p runway=6018MB need=98 avail=371 slices=19
+[pace] sweep quantum: packets=9 took=2.0ms remaining=873 rate=9.0/slice promo=4151p runway=6041MB need=97 avail=373 slices=20
+[pace] sweep quantum: packets=9 took=2.0ms remaining=864 rate=9.0/slice promo=4152p runway=6064MB need=96 avail=374 slices=21
+[pace] sweep quantum: packets=9 took=2.0ms remaining=855 rate=9.0/slice promo=4152p runway=6087MB need=95 avail=375 slices=22
+[pace] sweep quantum: packets=9 took=2.0ms remaining=846 rate=9.0/slice promo=4152p runway=6109MB need=94 avail=377 slices=23
+[pace] sweep quantum: packets=9 took=2.0ms remaining=837 rate=9.0/slice promo=4152p runway=6132MB need=93 avail=378 slices=24
+[pace] sweep quantum: packets=9 took=2.0ms remaining=828 rate=9.0/slice promo=4152p runway=6155MB need=92 avail=380 slices=25
+[pace] sweep quantum: packets=9 took=2.0ms remaining=819 rate=9.0/slice promo=4153p runway=6177MB need=91 avail=381 slices=26
+[pace] sweep quantum: packets=9 took=2.1ms remaining=810 rate=9.0/slice promo=4153p runway=6200MB need=90 avail=382 slices=27
+[pace] sweep quantum: packets=9 took=2.1ms remaining=801 rate=9.0/slice promo=4153p runway=6223MB need=89 avail=384 slices=28
+[pace] sweep quantum: packets=9 took=2.0ms remaining=792 rate=9.0/slice promo=4153p runway=6246MB need=88 avail=385 slices=29
+[pace] sweep quantum: packets=9 took=2.0ms remaining=783 rate=9.0/slice promo=4153p runway=6268MB need=87 avail=386 slices=30
+[pace] sweep quantum: packets=9 took=2.0ms remaining=774 rate=9.0/slice promo=4153p runway=6291MB need=86 avail=388 slices=31
+[pace] sweep quantum: packets=9 took=2.1ms remaining=765 rate=9.0/slice promo=4154p runway=6314MB need=85 avail=389 slices=32
+[pace] sweep quantum: packets=9 took=2.0ms remaining=756 rate=9.0/slice promo=4154p runway=6336MB need=84 avail=391 slices=33
+[pace] sweep quantum: packets=9 took=2.1ms remaining=747 rate=9.0/slice promo=4154p runway=6359MB need=83 avail=392 slices=34
+[pace] sweep quantum: packets=7 took=2.0ms remaining=740 rate=8.5/slice promo=4154p runway=6382MB need=87 avail=393 slices=35
+[pace] sweep quantum: packets=7 took=2.1ms remaining=733 rate=8.1/slice promo=4154p runway=6396MB need=90 avail=394 slices=36
+[pace] sweep quantum: packets=7 took=2.1ms remaining=726 rate=7.8/slice promo=4154p runway=6410MB need=93 avail=395 slices=37
+[pace] sweep quantum: packets=7 took=2.1ms remaining=719 rate=7.6/slice promo=4154p runway=6424MB need=94 avail=396 slices=38
+[pace] sweep quantum: packets=6 took=2.1ms remaining=713 rate=7.2/slice promo=3286p runway=6452MB need=99 avail=503 slices=39
+[pace] sweep quantum: packets=6 took=2.1ms remaining=707 rate=6.9/slice promo=2487p runway=6477MB need=102 avail=667 slices=40
+[pace] sweep quantum: packets=4 took=2.0ms remaining=703 rate=6.2/slice promo=1887p runway=6503MB need=114 avail=882 slices=41
+[pace] sweep quantum: packets=4 took=2.2ms remaining=699 rate=5.6/slice promo=1437p runway=6520MB need=124 avail=1162 slices=42
+[pace] sweep quantum: packets=5 took=2.3ms remaining=694 rate=5.5/slice promo=1099p runway=6537MB need=127 avail=1523 slices=43
+[pace] sweep quantum: packets=6 took=2.3ms remaining=688 rate=5.6/slice promo=847p runway=6558MB need=123 avail=1982 slices=44
+[pace] sweep quantum: packets=7 took=2.3ms remaining=681 rate=6.0/slice promo=657p runway=6584MB need=114 avail=2566 slices=45
+[pace] sweep quantum: packets=6 took=2.3ms remaining=675 rate=6.0/slice promo=514p runway=6614MB need=113 avail=3294 slices=46
+[pace] sweep quantum: packets=5 took=2.3ms remaining=670 rate=5.7/slice promo=407p runway=6640MB need=117 avail=4177 slices=47
+[pace] sweep quantum: packets=7 took=2.1ms remaining=663 rate=6.1/slice promo=488p runway=6658MB need=110 avail=3493 slices=48
+[pace] sweep quantum: packets=8 took=2.3ms remaining=655 rate=6.5/slice promo=1404p runway=6672MB need=100 avail=1217 slices=49
+[pace] sweep quantum: packets=7 took=2.0ms remaining=648 rate=6.7/slice promo=2091p runway=6691MB need=97 avail=819 slices=50
+[pace] sweep quantum: packets=7 took=2.0ms remaining=641 rate=6.7/slice promo=2607p runway=6705MB need=95 avail=658 slices=51
+[pace] sweep quantum: packets=7 took=2.0ms remaining=634 rate=6.8/slice promo=2994p runway=6719MB need=93 avail=575 slices=52
+[pace] sweep quantum: packets=7 took=2.1ms remaining=627 rate=6.9/slice promo=3285p runway=6733MB need=91 avail=525 slices=53
+[pace] sweep quantum: packets=7 took=2.1ms remaining=620 rate=6.9/slice promo=3502p runway=6747MB need=90 avail=493 slices=54
+[pace] sweep quantum: packets=7 took=2.1ms remaining=613 rate=6.9/slice promo=3665p runway=6761MB need=89 avail=472 slices=55
+[pace] sweep quantum: packets=7 took=2.2ms remaining=606 rate=6.9/slice promo=3787p runway=6775MB need=87 avail=458 slices=56
+[pace] sweep quantum: packets=7 took=2.1ms remaining=599 rate=7.0/slice promo=3879p runway=6789MB need=86 avail=448 slices=57
+[pace] sweep quantum: packets=7 took=2.1ms remaining=592 rate=7.0/slice promo=3948p runway=6803MB need=85 avail=441 slices=58
+[pace] sweep quantum: packets=7 took=2.1ms remaining=585 rate=7.0/slice promo=3999p runway=6817MB need=84 avail=436 slices=59
+[pace] sweep quantum: packets=7 took=2.1ms remaining=578 rate=7.0/slice promo=4038p runway=6831MB need=83 avail=433 slices=60
+[pace] sweep quantum: packets=7 took=2.1ms remaining=571 rate=7.0/slice promo=4067p runway=6846MB need=82 avail=431 slices=61
+[pace] sweep quantum: packets=7 took=2.1ms remaining=564 rate=7.0/slice promo=4089p runway=6860MB need=81 avail=429 slices=62
+[pace] sweep quantum: packets=7 took=2.1ms remaining=557 rate=7.0/slice promo=4106p runway=6874MB need=80 avail=429 slices=63
+[pace] sweep quantum: packets=7 took=2.2ms remaining=550 rate=7.0/slice promo=4118p runway=6888MB need=79 avail=428 slices=64
+[pace] sweep quantum: packets=7 took=2.1ms remaining=543 rate=7.0/slice promo=4127p runway=6902MB need=78 avail=428 slices=65
+[pace] sweep quantum: packets=7 took=2.1ms remaining=536 rate=7.0/slice promo=4134p runway=6916MB need=77 avail=428 slices=66
+[pace] sweep quantum: packets=7 took=2.1ms remaining=529 rate=7.0/slice promo=4139p runway=6930MB need=76 avail=429 slices=67
+[pace] sweep quantum: packets=7 took=2.1ms remaining=522 rate=7.0/slice promo=4143p runway=6944MB need=75 avail=429 slices=68
+[pace] sweep quantum: packets=7 took=2.1ms remaining=515 rate=7.0/slice promo=4146p runway=6958MB need=74 avail=430 slices=69
+[pace] sweep quantum: packets=7 took=2.1ms remaining=508 rate=7.0/slice promo=4148p runway=6972MB need=73 avail=430 slices=70
+[pace] sweep quantum: packets=7 took=2.2ms remaining=501 rate=7.0/slice promo=4149p runway=6986MB need=72 avail=431 slices=71
+[pace] sweep quantum: packets=7 took=2.1ms remaining=494 rate=7.0/slice promo=4151p runway=7000MB need=71 avail=432 slices=72
+[pace] sweep quantum: packets=7 took=2.1ms remaining=487 rate=7.0/slice promo=4153p runway=7014MB need=70 avail=432 slices=73
+[pace] sweep quantum: packets=7 took=2.1ms remaining=480 rate=7.0/slice promo=4153p runway=7028MB need=69 avail=433 slices=74
+[pace] sweep quantum: packets=7 took=2.1ms remaining=473 rate=7.0/slice promo=4153p runway=7042MB need=68 avail=434 slices=75
+[pace] sweep quantum: packets=7 took=2.1ms remaining=466 rate=7.0/slice promo=4153p runway=7057MB need=67 avail=435 slices=76
+[pace] sweep quantum: packets=7 took=2.1ms remaining=459 rate=7.0/slice promo=4153p runway=7071MB need=66 avail=436 slices=77
+[pace] sweep quantum: packets=7 took=2.1ms remaining=452 rate=7.0/slice promo=4153p runway=7084MB need=65 avail=437 slices=78
+[pace] sweep quantum: packets=7 took=2.1ms remaining=445 rate=7.0/slice promo=4053p runway=7098MB need=64 avail=448 slices=79
+[pace] sweep quantum: packets=7 took=2.1ms remaining=438 rate=7.0/slice promo=4078p runway=7110MB need=63 avail=446 slices=80
+[pace] sweep quantum: packets=7 took=2.1ms remaining=431 rate=7.0/slice promo=4097p runway=7122MB need=62 avail=445 slices=81
+[pace] sweep quantum: packets=7 took=2.1ms remaining=424 rate=7.0/slice promo=4111p runway=7134MB need=61 avail=444 slices=82
+[pace] sweep quantum: packets=7 took=2.1ms remaining=417 rate=7.0/slice promo=3633p runway=7154MB need=60 avail=504 slices=83
+[pace] sweep quantum: packets=7 took=2.1ms remaining=410 rate=7.0/slice promo=3763p runway=7166MB need=59 avail=488 slices=84
+[pace] sweep quantum: packets=7 took=2.1ms remaining=403 rate=7.0/slice promo=3861p runway=7178MB need=58 avail=476 slices=85
+[pace] sweep quantum: packets=7 took=2.1ms remaining=396 rate=7.0/slice promo=3934p runway=7190MB need=57 avail=468 slices=86
+[pace] sweep quantum: packets=7 took=2.1ms remaining=389 rate=7.0/slice promo=3500p runway=7210MB need=56 avail=527 slices=87
+[pace] sweep quantum: packets=7 took=2.1ms remaining=382 rate=7.0/slice promo=3663p runway=7222MB need=55 avail=505 slices=88
+[pace] sweep quantum: packets=7 took=2.1ms remaining=375 rate=7.0/slice promo=3786p runway=7234MB need=54 avail=489 slices=89
+[pace] sweep quantum: packets=7 took=2.2ms remaining=368 rate=7.0/slice promo=3878p runway=7246MB need=53 avail=478 slices=90
+[pace] sweep quantum: packets=7 took=2.1ms remaining=361 rate=7.0/slice promo=3947p runway=7258MB need=52 avail=471 slices=91
+[pace] sweep quantum: packets=7 took=2.3ms remaining=354 rate=7.0/slice promo=3511p runway=7278MB need=51 avail=531 slices=92
+[pace] sweep quantum: packets=6 took=2.0ms remaining=348 rate=6.8/slice promo=3673p runway=7290MB need=52 avail=508 slices=93
+[pace] sweep quantum: packets=7 took=2.1ms remaining=341 rate=6.8/slice promo=3793p runway=7298MB need=50 avail=493 slices=94
+[pace] sweep quantum: packets=7 took=2.2ms remaining=334 rate=6.9/slice promo=3883p runway=7310MB need=49 avail=482 slices=95
+[pace] sweep quantum: packets=6 took=2.0ms remaining=328 rate=6.6/slice promo=3462p runway=7330MB need=49 avail=542 slices=96
+[pace] sweep quantum: packets=7 took=2.2ms remaining=321 rate=6.7/slice promo=3635p runway=7338MB need=48 avail=517 slices=97
+[pace] sweep quantum: packets=7 took=2.3ms remaining=314 rate=6.8/slice promo=3765p runway=7350MB need=46 avail=500 slices=98
+[pace] sweep quantum: packets=7 took=2.2ms remaining=307 rate=6.9/slice promo=3862p runway=7362MB need=45 avail=488 slices=99
+[pace] sweep quantum: packets=7 took=2.1ms remaining=300 rate=6.9/slice promo=3935p runway=7374MB need=44 avail=480 slices=100
+[pace] sweep quantum: packets=7 took=2.1ms remaining=293 rate=6.9/slice promo=3504p runway=7394MB need=42 avail=540 slices=101
+[pace] sweep quantum: packets=7 took=2.1ms remaining=286 rate=6.9/slice promo=3666p runway=7406MB need=41 avail=517 slices=102
+[pace] sweep quantum: packets=7 took=2.1ms remaining=279 rate=7.0/slice promo=3789p runway=7418MB need=40 avail=501 slices=103
+[pace] sweep quantum: packets=7 took=2.1ms remaining=272 rate=7.0/slice promo=3881p runway=7430MB need=39 avail=490 slices=104
+[pace] sweep quantum: packets=7 took=2.2ms remaining=265 rate=7.0/slice promo=3461p runway=7450MB need=38 avail=551 slices=105
+[pace] sweep quantum: packets=7 took=2.1ms remaining=258 rate=7.0/slice promo=3634p runway=7462MB need=37 avail=526 slices=106
+[pace] sweep quantum: packets=7 took=2.1ms remaining=251 rate=7.0/slice promo=3764p runway=7474MB need=36 avail=508 slices=107
+[pace] sweep quantum: packets=7 took=2.1ms remaining=244 rate=7.0/slice promo=3861p runway=7486MB need=35 avail=496 slices=108
+[pace] sweep quantum: packets=7 took=2.1ms remaining=237 rate=7.0/slice promo=3448p runway=7505MB need=34 avail=557 slices=109
+[pace] sweep quantum: packets=7 took=2.1ms remaining=230 rate=7.0/slice promo=3624p runway=7518MB need=33 avail=531 slices=110
+[pace] sweep quantum: packets=7 took=2.2ms remaining=223 rate=7.0/slice promo=3756p runway=7530MB need=32 avail=513 slices=111
+[pace] sweep quantum: packets=7 took=2.1ms remaining=216 rate=7.0/slice promo=3855p runway=7542MB need=31 avail=501 slices=112
+[pace] sweep quantum: packets=7 took=2.1ms remaining=209 rate=7.0/slice promo=3931p runway=7554MB need=30 avail=492 slices=113
+[pace] sweep quantum: packets=7 took=2.1ms remaining=202 rate=7.0/slice promo=3499p runway=7573MB need=29 avail=554 slices=114
+[pace] sweep quantum: packets=7 took=2.1ms remaining=195 rate=7.0/slice promo=3663p runway=7586MB need=28 avail=530 slices=115
+[pace] sweep quantum: packets=9 took=2.1ms remaining=186 rate=7.5/slice promo=3786p runway=7598MB need=25 avail=514 slices=116
+[pace] sweep quantum: packets=17 took=2.0ms remaining=169 rate=9.9/slice promo=3878p runway=7605MB need=17 avail=502 slices=117
+[pace] sweep quantum: packets=18 took=2.0ms remaining=151 rate=11.9/slice promo=3947p runway=7588MB need=13 avail=492 slices=118
+[pace] sweep quantum: packets=18 took=2.0ms remaining=133 rate=13.4/slice promo=3999p runway=7572MB need=10 avail=485 slices=119
+[pace] sweep quantum: packets=18 took=2.1ms remaining=115 rate=14.6/slice promo=4039p runway=7556MB need=8 avail=479 slices=120
+[pace] sweep quantum: packets=19 took=2.1ms remaining=96 rate=15.7/slice promo=4068p runway=7540MB need=6 avail=475 slices=121
+[pace] sweep quantum: packets=18 took=2.0ms remaining=78 rate=16.3/slice promo=4089p runway=7524MB need=5 avail=471 slices=122
+[pace] sweep quantum: packets=18 took=2.0ms remaining=60 rate=16.7/slice promo=4105p runway=7507MB need=4 avail=468 slices=123
+[pace] sweep quantum: packets=17 took=2.0ms remaining=43 rate=16.8/slice promo=4117p runway=7491MB need=3 avail=466 slices=124
+[pace] sweep quantum: packets=19 took=2.1ms remaining=24 rate=17.3/slice promo=4126p runway=7475MB need=1 avail=464 slices=125
+[pace] sweep quantum: packets=18 took=2.0ms remaining=6 rate=17.5/slice promo=4133p runway=7459MB need=0 avail=462 slices=126
+[pace] sweep quantum: packets=6 took=0.7ms remaining=0 rate=14.6/slice promo=4138p runway=7442MB need=0 avail=460 slices=127
+[pace] trigger by_mature=false by_cadence=true mature=1348667p baseline=706274p n=345 nb=5520MB
+[pace] slice gate: debt=2759ms quantum=6.8ms minor_ewma=39.8ms tick=false worth=true feasible=true -> sliced
+[pace] quantum: budget=6.8ms quota=1346 traced=87390 packets=33 took=7.6ms drained=false | guard: backlog=52856 net=86044/slice promo=4142p runway=6519MB need=1 avail=403 slices=1
+[pace] quantum: budget=6.8ms quota=1346 traced=82846 packets=20 took=7.5ms drained=false | guard: backlog=53530 net=84908/slice promo=4145p runway=6540MB need=1 avail=404 slices=2
+[pace] quantum: budget=6.8ms quota=1358 traced=68983 packets=27 took=7.1ms drained=false | guard: backlog=53684 net=80587/slice promo=4147p runway=6560MB need=1 avail=405 slices=3
+[pace] quantum: budget=6.8ms quota=1346 traced=76810 packets=24 took=8.0ms drained=false | guard: backlog=48927 net=79307/slice promo=4149p runway=6580MB need=1 avail=406 slices=4
+[pace] quantum: budget=6.8ms quota=1346 traced=42100 packets=19 took=8.0ms drained=false | guard: backlog=81076 net=69669/slice promo=4150p runway=6600MB need=1 avail=407 slices=5
+[pace] quantum: budget=6.8ms quota=1346 traced=54501 packets=18 took=9.2ms drained=false | guard: backlog=115518 net=65540/slice promo=4151p runway=6620MB need=2 avail=408 slices=6
+[pace] quantum: budget=6.8ms quota=281586 traced=353086 packets=90 took=36.6ms drained=false | guard: backlog=631578 net=67030/slice promo=3856p runway=6645MB need=9 avail=441 slices=7
+[pace] quantum: budget=6.8ms quota=963983 traced=1037082 packets=208 took=80.4ms drained=false | guard: backlog=1782919 net=68547/slice promo=2914p runway=6670MB need=26 avail=586 slices=8
+[pace] quantum: budget=6.8ms quota=963983 traced=1099367 packets=259 took=90.5ms drained=false | guard: backlog=2932152 net=85257/slice promo=2207p runway=6671MB need=34 avail=774 slices=9
+[pace] quantum: budget=6.8ms quota=964003 traced=1035808 packets=171 took=71.2ms drained=false | guard: backlog=3894077 net=81894/slice promo=1677p runway=6671MB need=48 avail=1018 slices=10
+[pace] quantum: budget=6.8ms quota=963983 traced=1102317 packets=211 took=87.3ms drained=false | guard: backlog=5201798 net=96004/slice promo=1279p runway=6672MB need=54 avail=1335 slices=11
+[pace] quantum: budget=6.8ms quota=963983 traced=1035691 packets=257 took=68.4ms drained=false | guard: backlog=5949933 net=89930/slice promo=982p runway=6672MB need=66 avail=1740 slices=12
+[pace] quantum: budget=6.8ms quota=964003 traced=1081181 packets=264 took=100.7ms drained=false | guard: backlog=7260334 net=96742/slice promo=758p runway=6673MB need=75 avail=2254 slices=13
+[pace] quantum: budget=6.8ms quota=963983 traced=1031240 packets=171 took=72.3ms drained=false | guard: backlog=8230452 net=89371/slice promo=590p runway=6673MB need=92 avail=2896 slices=14
+[pace] quantum: budget=6.8ms quota=963983 traced=1105735 packets=211 took=92.2ms drained=false | guard: backlog=9530349 net=102467/slice promo=464p runway=6673MB need=93 avail=3682 slices=15
+[pace] quantum: budget=6.8ms quota=964003 traced=1033967 packets=170 took=60.1ms drained=false | guard: backlog=9983014 net=94342/slice promo=370p runway=6674MB need=106 avail=4618 slices=16
+[pace] quantum: budget=6.8ms quota=385934 traced=454656 packets=111 took=47.1ms drained=false | guard: backlog=10806084 net=87937/slice promo=909p runway=6665MB need=123 avail=1877 slices=17
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=10874394 net=83021/slice promo=1721p runway=6671MB need=131 avail=992 slices=18
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=10942692 net=79337/slice promo=2329p runway=6691MB need=138 avail=735 slices=19
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11010990 net=76574/slice promo=2785p runway=6711MB need=144 avail=617 slices=20
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11079300 net=74499/slice promo=3127p runway=6731MB need=149 avail=551 slices=21
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=11147598 net=72946/slice promo=3384p runway=6751MB need=153 avail=511 slices=22
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=11215896 net=71781/slice promo=3576p runway=6771MB need=156 avail=485 slices=23
+[pace] quantum: budget=6.8ms quota=1358 traced=114400 packets=29 took=7.2ms drained=false | guard: backlog=11114508 net=82096/slice promo=3720p runway=6791MB need=135 avail=467 slices=24
+[pace] quantum: budget=6.8ms quota=1346 traced=116960 packets=29 took=7.2ms drained=false | guard: backlog=10999806 net=90475/slice promo=3828p runway=6812MB need=122 avail=456 slices=25
+[pace] quantum: budget=6.8ms quota=1346 traced=102784 packets=46 took=7.2ms drained=false | guard: backlog=10912895 net=93216/slice promo=3909p runway=6832MB need=117 avail=447 slices=26
+[pace] quantum: budget=6.8ms quota=1346 traced=129658 packets=107 took=7.6ms drained=false | guard: backlog=10857162 net=101990/slice promo=3971p runway=6852MB need=106 avail=442 slices=27
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=10786425 net=112307/slice promo=4017p runway=6872MB need=96 avail=438 slices=28
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=10715676 net=120048/slice promo=4051p runway=6892MB need=89 avail=436 slices=29
+[pace] quantum: budget=6.8ms quota=1346 traced=109192 packets=18 took=7.4ms drained=false | guard: backlog=10716246 net=116997/slice promo=4077p runway=6912MB need=92 avail=434 slices=30
+[pace] quantum: budget=6.8ms quota=1358 traced=77824 packets=19 took=7.6ms drained=false | guard: backlog=10792053 net=106864/slice promo=4096p runway=6932MB need=101 avail=433 slices=31
+[pace] quantum: budget=6.8ms quota=1346 traced=73728 packets=18 took=7.6ms drained=false | guard: backlog=10863932 net=98243/slice promo=4110p runway=6953MB need=111 avail=433 slices=32
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=10931895 net=90754/slice promo=4121p runway=6973MB need=120 avail=433 slices=33
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=10999870 net=85134/slice promo=4129p runway=6993MB need=129 avail=434 slices=34
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=11067833 net=80922/slice promo=4136p runway=7013MB need=137 avail=434 slices=35
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=11135796 net=77763/slice promo=4140p runway=7033MB need=143 avail=435 slices=36
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.4ms drained=false | guard: backlog=11203726 net=75391/slice promo=4143p runway=7053MB need=149 avail=436 slices=37
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11271689 net=73615/slice promo=4146p runway=7073MB need=153 avail=437 slices=38
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11339652 net=72283/slice promo=4148p runway=7094MB need=157 avail=438 slices=39
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11407627 net=71281/slice promo=4149p runway=7114MB need=160 avail=439 slices=40
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11475590 net=70532/slice promo=4150p runway=7134MB need=163 avail=440 slices=41
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11543553 net=69970/slice promo=4151p runway=7154MB need=165 avail=441 slices=42
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11611516 net=69549/slice promo=4152p runway=7174MB need=167 avail=442 slices=43
+[pace] quantum: budget=6.8ms quota=1358 traced=130123 packets=18 took=7.5ms drained=false | guard: backlog=11562040 net=84353/slice promo=4153p runway=7194MB need=137 avail=443 slices=44
+[pace] quantum: budget=6.8ms quota=1346 traced=144608 packets=18 took=7.3ms drained=false | guard: backlog=11491295 net=99080/slice promo=4153p runway=7214MB need=116 avail=445 slices=45
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11420546 net=110127/slice promo=4153p runway=7234MB need=104 avail=446 slices=46
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11349809 net=118410/slice promo=4153p runway=7255MB need=96 avail=447 slices=47
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11279060 net=124625/slice promo=4153p runway=7275MB need=91 avail=448 slices=48
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11208311 net=129286/slice promo=4153p runway=7295MB need=87 avail=450 slices=49
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11137574 net=132779/slice promo=4153p runway=7315MB need=84 avail=451 slices=50
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11066825 net=135402/slice promo=4153p runway=7335MB need=82 avail=452 slices=51
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.6ms drained=false | guard: backlog=10996076 net=137369/slice promo=4154p runway=7355MB need=80 avail=453 slices=52
+[pace] quantum: budget=6.8ms quota=1358 traced=142054 packets=101 took=7.2ms drained=false | guard: backlog=10926283 net=138201/slice promo=4154p runway=7375MB need=79 avail=455 slices=53
+[pace] quantum: budget=6.8ms quota=1346 traced=73653 packets=20 took=7.0ms drained=false | guard: backlog=10982295 net=121727/slice promo=4154p runway=7396MB need=90 avail=456 slices=54
+[pace] quantum: budget=6.8ms quota=1346 traced=73728 packets=18 took=7.3ms drained=false | guard: backlog=11054174 net=109391/slice promo=4154p runway=7416MB need=101 avail=457 slices=55
+[pace] quantum: budget=6.8ms quota=1358 traced=73728 packets=18 took=7.3ms drained=false | guard: backlog=11126055 net=100136/slice promo=4154p runway=7436MB need=111 avail=458 slices=56
+[pace] quantum: budget=6.8ms quota=1346 traced=73728 packets=18 took=7.3ms drained=false | guard: backlog=11197899 net=93197/slice promo=4154p runway=7456MB need=120 avail=460 slices=57
+[pace] quantum: budget=6.8ms quota=1346 traced=73728 packets=18 took=7.5ms drained=false | guard: backlog=11269778 net=87993/slice promo=4154p runway=7476MB need=128 avail=461 slices=58
+[pace] quantum: budget=6.8ms quota=1346 traced=65536 packets=16 took=7.3ms drained=false | guard: backlog=11333825 net=82042/slice promo=4154p runway=7496MB need=138 avail=462 slices=59
+[pace] quantum: budget=6.8ms quota=1358 traced=65536 packets=16 took=7.3ms drained=false | guard: backlog=11397884 net=77576/slice promo=4154p runway=7516MB need=147 avail=463 slices=60
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11465847 net=75253/slice promo=4155p runway=7537MB need=152 avail=464 slices=61
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11533810 net=73511/slice promo=4155p runway=7557MB need=157 avail=466 slices=62
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11601785 net=72202/slice promo=4155p runway=7577MB need=161 avail=467 slices=63
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.7ms drained=false | guard: backlog=11669748 net=71223/slice promo=4155p runway=7597MB need=164 avail=468 slices=64
+[pace] quantum: budget=6.8ms quota=1346 traced=65536 packets=16 took=7.3ms drained=false | guard: backlog=11733795 net=69465/slice promo=4155p runway=7617MB need=169 avail=469 slices=65
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11801770 net=69167/slice promo=4155p runway=7637MB need=171 avail=471 slices=66
+[pace] quantum: budget=6.8ms quota=1346 traced=74896 packets=19 took=7.4ms drained=false | guard: backlog=11843309 net=70263/slice promo=4155p runway=7657MB need=169 avail=472 slices=67
+[pace] quantum: budget=6.8ms quota=1346 traced=116829 packets=29 took=7.1ms drained=false | guard: backlog=11728746 net=81568/slice promo=4155p runway=7678MB need=144 avail=473 slices=68
+[pace] quantum: budget=6.8ms quota=1358 traced=116846 packets=29 took=7.1ms drained=false | guard: backlog=11614170 net=90048/slice promo=4156p runway=7698MB need=129 avail=474 slices=69
+[pace] quantum: budget=6.8ms quota=1346 traced=120755 packets=26 took=7.1ms drained=false | guard: backlog=11511566 net=97388/slice promo=4155p runway=7718MB need=118 avail=476 slices=70
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11440817 net=108858/slice promo=4155p runway=7738MB need=105 avail=477 slices=71
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11370068 net=117461/slice promo=4155p runway=7758MB need=97 avail=478 slices=72
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11299331 net=123910/slice promo=4155p runway=7778MB need=91 avail=479 slices=73
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11228582 net=128750/slice promo=4155p runway=7798MB need=87 avail=481 slices=74
+[pace] quantum: budget=6.8ms quota=1346 traced=117024 packets=18 took=7.3ms drained=false | guard: backlog=11213290 net=125482/slice promo=4155p runway=7818MB need=89 avail=482 slices=75
+[pace] quantum: budget=6.8ms quota=1358 traced=73728 packets=18 took=7.3ms drained=false | guard: backlog=11285181 net=112204/slice promo=4155p runway=7839MB need=101 avail=483 slices=76
+[pace] quantum: budget=6.8ms quota=1346 traced=73728 packets=18 took=7.4ms drained=false | guard: backlog=11357060 net=102248/slice promo=4155p runway=7859MB need=111 avail=484 slices=77
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11425023 net=93757/slice promo=4156p runway=7879MB need=122 avail=485 slices=78
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11492998 net=87386/slice promo=4155p runway=7899MB need=132 avail=487 slices=79
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.6ms drained=false | guard: backlog=11560961 net=82611/slice promo=4155p runway=7919MB need=140 avail=488 slices=80
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.7ms drained=false | guard: backlog=11628924 net=79030/slice promo=4155p runway=7939MB need=147 avail=489 slices=81
+[pace] quantum: budget=6.8ms quota=1358 traced=65536 packets=16 took=7.2ms drained=false | guard: backlog=11692983 net=75317/slice promo=4155p runway=7959MB need=155 avail=490 slices=82
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11760946 net=73559/slice promo=4155p runway=7980MB need=160 avail=492 slices=83
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11828909 net=72241/slice promo=4155p runway=8000MB need=164 avail=493 slices=84
+[pace] quantum: budget=6.8ms quota=1358 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11896884 net=71249/slice promo=4155p runway=8020MB need=167 avail=494 slices=85
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=11964847 net=70508/slice promo=4156p runway=8040MB need=170 avail=495 slices=86
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=12032765 net=69952/slice promo=4155p runway=8060MB need=172 avail=497 slices=87
+[pace] quantum: budget=6.8ms quota=1346 traced=69632 packets=17 took=7.5ms drained=false | guard: backlog=12100728 net=69535/slice promo=4155p runway=8080MB need=174 avail=498 slices=88
+[pace] quantum: budget=6.8ms quota=1358 traced=114391 packets=18 took=7.3ms drained=false | guard: backlog=12082893 net=80410/slice promo=4155p runway=8100MB need=150 avail=499 slices=89
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=12012144 net=96125/slice promo=4155p runway=8121MB need=125 avail=500 slices=90
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11941395 net=107911/slice promo=4155p runway=8141MB need=111 avail=502 slices=91
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.5ms drained=false | guard: backlog=11870658 net=116748/slice promo=4155p runway=8161MB need=102 avail=503 slices=92
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11799909 net=123378/slice promo=4155p runway=8181MB need=96 avail=504 slices=93
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11729160 net=128351/slice promo=4155p runway=8201MB need=91 avail=505 slices=94
+[pace] quantum: budget=6.8ms quota=1358 traced=144616 packets=18 took=7.3ms drained=false | guard: backlog=11658423 net=132078/slice promo=4156p runway=8221MB need=88 avail=506 slices=95
+[pace] quantum: budget=6.8ms quota=1346 traced=144616 packets=18 took=7.4ms drained=false | guard: backlog=11587674 net=134876/slice promo=4155p runway=8241MB need=86 avail=508 slices=96
+[pace] quantum: budget=6.8ms quota=422623 traced=492497 packets=111 took=34.8ms drained=false | guard: backlog=11862002 net=118625/slice promo=3709p runway=8268MB need=100 avail=571 slices=97
+[pace] quantum: budget=6.8ms quota=963983 traced=1078367 packets=265 took=71.1ms drained=false | guard: backlog=12565764 net=117565/slice promo=2804p runway=8289MB need=107 avail=757 slices=98
+[pace] quantum: budget=6.8ms quota=963983 traced=1100591 packets=256 took=44.1ms drained=false | guard: backlog=12744805 net=122326/slice promo=2124p runway=8289MB need=104 avail=999 slices=99
+[pace] quantum: budget=6.8ms quota=964003 traced=1107458 packets=142 took=57.9ms drained=false | guard: backlog=13153322 net=127608/slice promo=1614p runway=8290MB need=103 avail=1315 slices=100
+[pace] quantum: budget=6.8ms quota=963983 traced=1108380 packets=358 took=60.0ms drained=false | guard: backlog=13436242 net=131805/slice promo=1232p runway=8290MB need=102 avail=1723 slices=101
+[pace] quantum: budget=6.8ms quota=963983 traced=1108751 packets=145 took=57.2ms drained=false | guard: backlog=13841265 net=135046/slice promo=946p runway=8291MB need=102 avail=2244 slices=102
+[pace] quantum: budget=6.8ms quota=963989 traced=1107268 packets=324 took=63.9ms drained=false | guard: backlog=13894275 net=137104/slice promo=731p runway=8291MB need=101 avail=2904 slices=103
+[pace] quantum: budget=6.8ms quota=963995 traced=1108808 packets=145 took=57.6ms drained=false | guard: backlog=14299274 net=139031/slice promo=570p runway=8291MB need=103 avail=3724 slices=104
+[pace] quantum: budget=6.8ms quota=963983 traced=1102762 packets=276 took=61.3ms drained=false | guard: backlog=14530815 net=138968/slice promo=449p runway=8292MB need=105 avail=4728 slices=105
+[pace] quantum: budget=6.8ms quota=963983 traced=1108796 packets=145 took=58.4ms drained=false | guard: backlog=14935814 net=140429/slice promo=359p runway=8292MB need=106 avail=5913 slices=106
+[pace] quantum: budget=6.8ms quota=244764 traced=388716 packets=51 took=19.4ms drained=false | guard: backlog=14984480 net=141310/slice promo=1051p runway=8281MB need=106 avail=2017 slices=107
+[pace] quantum: budget=6.8ms quota=1346 traced=145607 packets=19 took=7.3ms drained=false | guard: backlog=14912456 net=142048/slice promo=1827p runway=8292MB need=105 avail=1162 slices=108
+[pace] quantum: budget=6.8ms quota=1346 traced=134066 packets=27 took=7.5ms drained=false | guard: backlog=14813738 net=139716/slice promo=2409p runway=8312MB need=106 avail=883 slices=109
+[pace] quantum: budget=6.8ms quota=1358 traced=118192 packets=30 took=7.2ms drained=false | guard: backlog=14697816 net=133995/slice promo=2845p runway=8332MB need=110 avail=750 slices=110
+[pace] quantum: budget=6.8ms quota=1346 traced=119533 packets=31 took=7.2ms drained=false | guard: backlog=14580549 net=130043/slice promo=3172p runway=8352MB need=112 avail=674 slices=111
+[pace] quantum: budget=6.8ms quota=1346 traced=119550 packets=31 took=7.2ms drained=false | guard: backlog=14463257 net=127084/slice promo=3417p runway=8372MB need=114 avail=627 slices=112
+[pace] quantum: budget=6.8ms quota=1358 traced=118192 packets=30 took=7.2ms drained=false | guard: backlog=14347335 net=124521/slice promo=3602p runway=8393MB need=115 avail=597 slices=113
+[pace] quantum: budget=6.8ms quota=1346 traced=356012 packets=87 took=7.0ms drained=false | guard: backlog=13992829 net=182057/slice promo=3740p runway=8413MB need=77 avail=576 slices=114
+[pace] quantum: budget=6.8ms quota=1346 traced=182536 packets=102 took=6.8ms drained=false | guard: backlog=13836824 net=181840/slice promo=3843p runway=8433MB need=76 avail=562 slices=115
+[pace] quantum: budget=6.8ms quota=1358 traced=144261 packets=18 took=7.3ms drained=false | guard: backlog=13766158 net=172105/slice promo=3921p runway=8453MB need=80 avail=552 slices=116
+[pace] quantum: budget=6.8ms quota=1346 traced=218844 packets=41 took=7.2ms drained=false | guard: backlog=13600816 net=183453/slice promo=3979p runway=8473MB need=74 avail=545 slices=117
+[pace] quantum: budget=6.8ms quota=1346 traced=397312 packets=97 took=6.8ms drained=false | guard: backlog=13204850 net=236581/slice promo=4023p runway=8493MB need=56 avail=540 slices=118
+[pace] quantum: budget=6.8ms quota=1358 traced=397312 packets=97 took=6.8ms drained=false | guard: backlog=12808896 net=276424/slice promo=4056p runway=8513MB need=46 avail=537 slices=119
+[pace] quantum: budget=6.8ms quota=1346 traced=174896 packets=29 took=7.0ms drained=false | guard: backlog=12695547 net=250705/slice promo=4080p runway=8534MB need=51 avail=535 slices=120
+[pace] trigger by_mature=true by_cadence=false mature=1768441p baseline=706274p n=121 nb=1936MB
+[pace] quantum: budget=5.2ms quota=1346 traced=112213 packets=14 took=5.7ms drained=false | guard: backlog=12640869 net=215745/slice promo=4098p runway=8554MB need=59 avail=534 slices=121
+[pace] trigger by_mature=true by_cadence=false mature=1772596p baseline=706274p n=122 nb=1952MB
+[pace] quantum: budget=5.1ms quota=1358 traced=112213 packets=14 took=5.7ms drained=false | guard: backlog=12586203 net=189522/slice promo=4113p runway=8574MB need=66 avail=534 slices=122
+[pace] trigger by_mature=true by_cadence=false mature=1776753p baseline=706274p n=123 nb=1968MB
+[pace] quantum: budget=5.1ms quota=1346 traced=112168 packets=14 took=5.7ms drained=false | guard: backlog=12531549 net=169847/slice promo=4123p runway=8594MB need=74 avail=534 slices=123
+[pace] trigger by_mature=true by_cadence=false mature=1780908p baseline=706274p n=124 nb=1984MB
+[pace] quantum: budget=5.1ms quota=1346 traced=112213 packets=14 took=5.7ms drained=false | guard: backlog=12476871 net=155102/slice promo=4131p runway=8614MB need=80 avail=534 slices=124
+[pace] trigger by_mature=true by_cadence=false mature=1785063p baseline=706274p n=125 nb=2000MB
+[pace] quantum: budget=5.1ms quota=1346 traced=112213 packets=14 took=5.7ms drained=false | guard: backlog=12422193 net=144043/slice promo=4137p runway=8634MB need=86 avail=534 slices=125
+[pace] trigger by_mature=true by_cadence=false mature=1789218p baseline=706274p n=126 nb=2016MB
+[pace] quantum: budget=5.1ms quota=1358 traced=112199 packets=14 took=5.7ms drained=false | guard: backlog=12367531 net=135743/slice promo=4141p runway=8654MB need=91 avail=535 slices=126
+[pace] trigger by_mature=true by_cadence=false mature=1793373p baseline=706274p n=127 nb=2032MB
+[pace] quantum: budget=5.1ms quota=1346 traced=131198 packets=95 took=5.6ms drained=false | guard: backlog=12249770 net=134271/slice promo=4144p runway=8675MB need=91 avail=536 slices=127
+[pace] trigger by_mature=true by_cadence=false mature=1797528p baseline=706274p n=128 nb=2048MB
+[pace] quantum: budget=5.1ms quota=1346 traced=299008 packets=73 took=5.2ms drained=false | guard: backlog=11952108 net=175119/slice promo=4146p runway=8695MB need=68 avail=537 slices=128
+[pace] trigger by_mature=true by_cadence=false mature=1801683p baseline=706274p n=129 nb=2064MB
+[pace] quantum: budget=5.1ms quota=1358 traced=299008 packets=73 took=5.2ms drained=false | guard: backlog=11654458 net=205752/slice promo=4148p runway=8715MB need=57 avail=538 slices=129
+[pace] trigger by_mature=true by_cadence=false mature=1805838p baseline=706274p n=130 nb=2080MB
+[pace] quantum: budget=5.1ms quota=1346 traced=272952 packets=150 took=5.3ms drained=false | guard: backlog=11383683 net=222215/slice promo=4150p runway=8735MB need=51 avail=539 slices=130
+[pace] trigger by_mature=true by_cadence=false mature=1809995p baseline=706274p n=131 nb=2096MB
+[pace] quantum: budget=5.0ms quota=1346 traced=88633 packets=22 took=5.4ms drained=false | guard: backlog=11297092 net=188483/slice promo=4151p runway=8755MB need=60 avail=540 slices=131
+[pace] trigger by_mature=true by_cadence=false mature=1814150p baseline=706274p n=132 nb=2112MB
+[pace] quantum: budget=5.0ms quota=1358 traced=88650 packets=22 took=5.4ms drained=false | guard: backlog=11210488 net=163186/slice promo=4152p runway=8775MB need=69 avail=541 slices=132
+[pace] trigger by_mature=true by_cadence=false mature=1818305p baseline=706274p n=133 nb=2128MB
+[pace] quantum: budget=5.0ms quota=1346 traced=88633 packets=22 took=5.4ms drained=false | guard: backlog=11123897 net=144211/slice promo=4152p runway=8795MB need=77 avail=542 slices=133
+[pace] trigger by_mature=true by_cadence=false mature=1822460p baseline=706274p n=134 nb=2144MB
+[pace] quantum: budget=5.0ms quota=1346 traced=212380 packets=52 took=5.3ms drained=false | guard: backlog=10913151 net=160917/slice promo=4152p runway=8816MB need=68 avail=544 slices=134
+[pace] trigger by_mature=true by_cadence=false mature=1826615p baseline=706274p n=135 nb=2160MB
+[pace] quantum: budget=5.0ms quota=1358 traced=294912 packets=72 took=5.1ms drained=false | guard: backlog=10619597 net=194076/slice promo=4152p runway=8836MB need=55 avail=545 slices=135
+[pace] trigger by_mature=true by_cadence=false mature=1830770p baseline=706274p n=136 nb=2176MB
+[pace] quantum: budget=5.0ms quota=1346 traced=294912 packets=72 took=5.1ms drained=false | guard: backlog=10326031 net=218948/slice promo=4152p runway=8856MB need=47 avail=546 slices=136
+[pace] trigger by_mature=true by_cadence=false mature=1834925p baseline=706274p n=137 nb=2192MB
+[pace] quantum: budget=5.0ms quota=1346 traced=226264 packets=56 took=5.2ms drained=false | guard: backlog=10101329 net=220440/slice promo=4152p runway=8876MB need=46 avail=547 slices=137
+[pace] trigger by_mature=true by_cadence=false mature=1839080p baseline=706274p n=138 nb=2208MB
+[pace] quantum: budget=5.0ms quota=1346 traced=88633 packets=22 took=5.4ms drained=false | guard: backlog=10014738 net=187151/slice promo=4152p runway=8896MB need=54 avail=549 slices=138
+[pace] trigger by_mature=true by_cadence=false mature=1843235p baseline=706274p n=139 nb=2224MB
+[pace] quantum: budget=4.9ms quota=1358 traced=88633 packets=22 took=5.4ms drained=false | guard: backlog=9928159 net=162182/slice promo=4153p runway=8916MB need=61 avail=550 slices=139
+[pace] trigger by_mature=true by_cadence=false mature=1847392p baseline=706274p n=140 nb=2240MB
+[pace] quantum: budget=4.9ms quota=1346 traced=88633 packets=22 took=5.4ms drained=false | guard: backlog=9841568 net=143458/slice promo=4153p runway=8936MB need=69 avail=551 slices=140
+[pace] trigger by_mature=true by_cadence=false mature=1851547p baseline=706274p n=141 nb=2256MB
+[pace] quantum: budget=4.9ms quota=1346 traced=84605 packets=21 took=5.2ms drained=false | guard: backlog=9758973 net=128408/slice promo=4153p runway=8956MB need=76 avail=552 slices=141
+[pace] trigger by_mature=true by_cadence=false mature=1855702p baseline=706274p n=142 nb=2272MB
+[pace] quantum: budget=4.9ms quota=1358 traced=84622 packets=21 took=5.2ms drained=false | guard: backlog=9676365 net=117122/slice promo=4153p runway=8977MB need=83 avail=553 slices=142
+[pace] trigger by_mature=true by_cadence=false mature=1859857p baseline=706274p n=143 nb=2288MB
+[pace] quantum: budget=4.9ms quota=1346 traced=84605 packets=21 took=5.2ms drained=false | guard: backlog=9593770 net=108656/slice promo=4153p runway=8997MB need=88 avail=555 slices=143
+[pace] trigger by_mature=true by_cadence=false mature=1864012p baseline=706274p n=144 nb=2304MB
+[pace] quantum: budget=4.9ms quota=1346 traced=290748 packets=71 took=5.2ms drained=false | guard: backlog=9304400 net=153842/slice promo=4153p runway=9017MB need=60 avail=556 slices=144
+[pace] trigger by_mature=true by_cadence=false mature=1868167p baseline=706274p n=145 nb=2320MB
+[pace] quantum: budget=4.9ms quota=1358 traced=290816 packets=71 took=5.0ms drained=false | guard: backlog=9014942 net=187746/slice promo=4153p runway=9037MB need=48 avail=557 slices=145
+[pace] trigger by_mature=true by_cadence=false mature=1872322p baseline=706274p n=146 nb=2336MB
+[pace] quantum: budget=4.9ms quota=1346 traced=290816 packets=71 took=5.0ms drained=false | guard: backlog=8725472 net=213177/slice promo=4153p runway=9057MB need=41 avail=558 slices=146
+[pace] trigger by_mature=true by_cadence=false mature=1876477p baseline=706274p n=147 nb=2352MB
+[pace] quantum: budget=4.9ms quota=1346 traced=152023 packets=38 took=5.1ms drained=false | guard: backlog=8575243 net=197552/slice promo=4154p runway=9077MB need=43 avail=559 slices=147
+[pace] trigger by_mature=true by_cadence=false mature=1880634p baseline=706274p n=148 nb=2368MB
+[pace] quantum: budget=4.8ms quota=1358 traced=69941 packets=189 took=5.2ms drained=false | guard: backlog=8521551 net=165309/slice promo=4154p runway=9097MB need=52 avail=561 slices=148
+[pace] trigger by_mature=true by_cadence=false mature=1884789p baseline=706274p n=149 nb=2384MB
+[pace] quantum: budget=4.8ms quota=1346 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=8438956 net=144713/slice promo=4154p runway=9118MB need=58 avail=562 slices=149
+[pace] trigger by_mature=true by_cadence=false mature=1888944p baseline=706274p n=150 nb=2400MB
+[pace] quantum: budget=4.8ms quota=1346 traced=84273 packets=21 took=5.2ms drained=false | guard: backlog=8356361 net=129266/slice promo=4154p runway=9138MB need=65 avail=563 slices=150
+[pace] trigger by_mature=true by_cadence=false mature=1893099p baseline=706274p n=151 nb=2416MB
+[pace] quantum: budget=4.8ms quota=1358 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=8273778 net=117678/slice promo=4154p runway=9158MB need=70 avail=564 slices=151
+[pace] trigger by_mature=true by_cadence=false mature=1897254p baseline=706274p n=152 nb=2432MB
+[pace] quantum: budget=4.8ms quota=1346 traced=171045 packets=42 took=5.1ms drained=false | guard: backlog=8104267 net=130683/slice promo=4154p runway=9178MB need=62 avail=566 slices=152
+[pace] trigger by_mature=true by_cadence=false mature=1901409p baseline=706274p n=153 nb=2448MB
+[pace] quantum: budget=4.8ms quota=1346 traced=282624 packets=69 took=4.9ms drained=false | guard: backlog=7822989 net=168332/slice promo=4154p runway=9198MB need=46 avail=567 slices=153
+[pace] trigger by_mature=true by_cadence=false mature=1905564p baseline=706274p n=154 nb=2464MB
+[pace] quantum: budget=4.8ms quota=1346 traced=282624 packets=69 took=4.9ms drained=false | guard: backlog=7541711 net=196568/slice promo=4154p runway=9218MB need=38 avail=568 slices=154
+[pace] trigger by_mature=true by_cadence=false mature=1909719p baseline=706274p n=155 nb=2480MB
+[pace] quantum: budget=4.8ms quota=1358 traced=279867 packets=69 took=5.0ms drained=false | guard: backlog=7263218 net=217053/slice promo=4154p runway=9238MB need=33 avail=569 slices=155
+[pace] trigger by_mature=true by_cadence=false mature=1913874p baseline=706274p n=156 nb=2496MB
+[pace] quantum: budget=4.8ms quota=1346 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=7180623 net=183521/slice promo=4155p runway=9259MB need=39 avail=570 slices=156
+[pace] trigger by_mature=true by_cadence=false mature=1918031p baseline=706274p n=157 nb=2512MB
+[pace] quantum: budget=4.8ms quota=1346 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=7098028 net=158372/slice promo=4155p runway=9279MB need=45 avail=572 slices=157
+[pace] trigger by_mature=true by_cadence=false mature=1922186p baseline=706274p n=158 nb=2528MB
+[pace] quantum: budget=4.7ms quota=1358 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=7015445 net=139507/slice promo=4155p runway=9299MB need=50 avail=573 slices=158
+[pace] trigger by_mature=true by_cadence=false mature=1926341p baseline=706274p n=159 nb=2544MB
+[pace] quantum: budget=4.7ms quota=1346 traced=84273 packets=21 took=5.2ms drained=false | guard: backlog=6932850 net=125362/slice promo=4155p runway=9319MB need=55 avail=574 slices=159
+[pace] trigger by_mature=true by_cadence=false mature=1930496p baseline=706274p n=160 nb=2560MB
+[pace] quantum: budget=4.7ms quota=1346 traced=84294 packets=21 took=5.1ms drained=false | guard: backlog=6850230 net=114759/slice promo=4155p runway=9339MB need=60 avail=575 slices=160
+[pace] trigger by_mature=true by_cadence=false mature=1934651p baseline=706274p n=161 nb=2576MB
+[pace] quantum: budget=4.7ms quota=1358 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=6767647 net=106798/slice promo=4155p runway=9359MB need=63 avail=577 slices=161
+[pace] trigger by_mature=true by_cadence=false mature=1938806p baseline=706274p n=162 nb=2592MB
+[pace] quantum: budget=4.7ms quota=1346 traced=187576 packets=46 took=5.0ms drained=false | guard: backlog=6581577 net=126656/slice promo=4155p runway=9379MB need=52 avail=578 slices=162
+[pace] trigger by_mature=true by_cadence=false mature=1942961p baseline=706274p n=163 nb=2608MB
+[pace] quantum: budget=4.7ms quota=1346 traced=278528 packets=68 took=4.8ms drained=false | guard: backlog=6304395 net=164287/slice promo=4155p runway=9400MB need=38 avail=579 slices=163
+[pace] trigger by_mature=true by_cadence=false mature=1947116p baseline=706274p n=164 nb=2624MB
+[pace] quantum: budget=4.7ms quota=1358 traced=274432 packets=67 took=4.8ms drained=false | guard: backlog=6031321 net=191484/slice promo=4156p runway=9420MB need=31 avail=580 slices=164
+[pace] trigger by_mature=true by_cadence=false mature=1951273p baseline=706274p n=165 nb=2640MB
+[pace] quantum: budget=4.7ms quota=1346 traced=267585 packets=66 took=4.8ms drained=false | guard: backlog=5765098 net=210172/slice promo=4155p runway=9440MB need=27 avail=582 slices=165
+[pace] trigger by_mature=true by_cadence=false mature=1955428p baseline=706274p n=166 nb=2656MB
+[pace] quantum: budget=4.7ms quota=1346 traced=83932 packets=284 took=5.1ms drained=false | guard: backlog=5684920 net=178275/slice promo=4155p runway=9460MB need=32 avail=583 slices=166
+[pace] trigger by_mature=true by_cadence=false mature=1959583p baseline=706274p n=167 nb=2672MB
+[pace] quantum: budget=4.7ms quota=1346 traced=84273 packets=21 took=5.1ms drained=false | guard: backlog=5602325 net=154438/slice promo=4155p runway=9480MB need=36 avail=584 slices=167
+[pace] trigger by_mature=true by_cadence=false mature=1963738p baseline=706274p n=168 nb=2688MB
+[pace] quantum: budget=4.6ms quota=1357 traced=224776 packets=55 took=4.9ms drained=false | guard: backlog=5379002 net=171683/slice promo=4155p runway=9500MB need=31 avail=585 slices=168
+[pace] trigger by_mature=true by_cadence=false mature=1967893p baseline=706274p n=169 nb=2704MB
+[pace] quantum: budget=4.6ms quota=1346 traced=274432 packets=67 took=4.7ms drained=false | guard: backlog=5105916 net=197034/slice promo=4155p runway=9520MB need=26 avail=587 slices=169
+[pace] trigger by_mature=true by_cadence=false mature=1972048p baseline=706274p n=170 nb=2720MB
+[pace] quantum: budget=4.6ms quota=1346 traced=274432 packets=67 took=4.7ms drained=false | guard: backlog=4832830 net=216047/slice promo=4155p runway=9540MB need=22 avail=588 slices=170
+[pace] trigger by_mature=true by_cadence=false mature=1976203p baseline=706274p n=171 nb=2736MB
+[pace] quantum: budget=4.6ms quota=1358 traced=234508 packets=58 took=4.9ms drained=false | guard: backlog=4599756 net=220323/slice promo=4155p runway=9561MB need=21 avail=589 slices=171
+[pace] trigger by_mature=true by_cadence=false mature=1980358p baseline=706274p n=172 nb=2752MB
+[pace] quantum: budget=4.6ms quota=1346 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4521157 net=184971/slice promo=4155p runway=9581MB need=24 avail=590 slices=172
+[pace] trigger by_mature=true by_cadence=false mature=1984513p baseline=706274p n=173 nb=2768MB
+[pace] quantum: budget=4.6ms quota=1346 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4442558 net=158457/slice promo=4156p runway=9601MB need=28 avail=591 slices=173
+[pace] trigger by_mature=true by_cadence=false mature=1988670p baseline=706274p n=174 nb=2784MB
+[pace] quantum: budget=4.6ms quota=1358 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4363971 net=138568/slice promo=4155p runway=9621MB need=31 avail=593 slices=174
+[pace] trigger by_mature=true by_cadence=false mature=1992825p baseline=706274p n=175 nb=2800MB
+[pace] quantum: budget=4.6ms quota=1346 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4285372 net=123654/slice promo=4155p runway=9641MB need=35 avail=594 slices=175
+[pace] trigger by_mature=true by_cadence=false mature=1996980p baseline=706274p n=176 nb=2816MB
+[pace] quantum: budget=4.6ms quota=1346 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4206773 net=112469/slice promo=4155p runway=9661MB need=37 avail=595 slices=176
+[pace] trigger by_mature=true by_cadence=false mature=2001135p baseline=706274p n=177 nb=2832MB
+[pace] quantum: budget=4.6ms quota=1358 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=4128186 net=104077/slice promo=4155p runway=9681MB need=40 avail=597 slices=177
+[pace] trigger by_mature=true by_cadence=false mature=2005290p baseline=706274p n=178 nb=2848MB
+[pace] quantum: budget=4.5ms quota=1346 traced=158757 packets=39 took=4.9ms drained=false | guard: backlog=3970963 net=117410/slice promo=4155p runway=9702MB need=34 avail=598 slices=178
+[pace] trigger by_mature=true by_cadence=false mature=2009445p baseline=706274p n=179 nb=2864MB
+[pace] quantum: budget=4.5ms quota=1346 traced=270336 packets=66 took=4.7ms drained=false | guard: backlog=3701973 net=155305/slice promo=4155p runway=9722MB need=24 avail=599 slices=179
+[pace] trigger by_mature=true by_cadence=false mature=2013600p baseline=706274p n=180 nb=2880MB
+[pace] quantum: budget=4.5ms quota=1358 traced=270336 packets=66 took=4.7ms drained=false | guard: backlog=3432995 net=183723/slice promo=4155p runway=9742MB need=19 avail=600 slices=180
+[pace] trigger by_mature=true by_cadence=false mature=2017755p baseline=706274p n=181 nb=2896MB
+[pace] quantum: budget=4.5ms quota=1346 traced=270336 packets=66 took=4.6ms drained=false | guard: backlog=3164005 net=205040/slice promo=4156p runway=9762MB need=15 avail=601 slices=181
+[pace] trigger by_mature=true by_cadence=false mature=2021912p baseline=706274p n=182 nb=2912MB
+[pace] quantum: budget=4.5ms quota=1346 traced=106596 packets=27 took=4.7ms drained=false | guard: backlog=3059007 net=180092/slice promo=4155p runway=9782MB need=17 avail=603 slices=182
+[pace] trigger by_mature=true by_cadence=false mature=2026067p baseline=706274p n=183 nb=2928MB
+[pace] quantum: budget=4.5ms quota=1346 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=2980408 net=154797/slice promo=4155p runway=9802MB need=19 avail=604 slices=183
+[pace] trigger by_mature=true by_cadence=false mature=2030222p baseline=706274p n=184 nb=2944MB
+[pace] quantum: budget=4.5ms quota=1358 traced=80261 packets=20 took=4.9ms drained=false | guard: backlog=2901821 net=135823/slice promo=4155p runway=9822MB need=21 avail=605 slices=184
+[pace] trigger by_mature=true by_cadence=false mature=2034377p baseline=706274p n=185 nb=2960MB
+[pace] quantum: budget=4.5ms quota=1346 traced=77360 packets=190 took=4.7ms drained=false | guard: backlog=2827793 net=120871/slice promo=4155p runway=9843MB need=23 avail=606 slices=185
+[pace] trigger by_mature=true by_cadence=false mature=2038532p baseline=706274p n=186 nb=2976MB
+[pace] quantum: budget=4.5ms quota=1346 traced=100993 packets=25 took=4.7ms drained=false | guard: backlog=2728414 net=115565/slice promo=4155p runway=9863MB need=24 avail=608 slices=186
+[pace] trigger by_mature=true by_cadence=false mature=2042687p baseline=706274p n=187 nb=2992MB
+[pace] quantum: budget=4.5ms quota=563651 traced=827392 packets=202 took=14.2ms drained=false | guard: backlog=2464673 net=152609/slice promo=3560p runway=9892MB need=16 avail=711 slices=187
+[pace] trigger by_mature=true by_cadence=false mature=2044460p baseline=706274p n=188 nb=3008MB
+[pace] quantum: budget=4.5ms quota=964005 traced=1042873 packets=259 took=48.8ms drained=false | guard: backlog=2388533 net=134174/slice promo=2692p runway=9907MB need=18 avail=942 slices=188
+[pace] trigger by_mature=true by_cadence=false mature=2044549p baseline=706274p n=189 nb=3024MB
+[pace] quantum: budget=4.5ms quota=963984 traced=1210405 packets=1933 took=54.6ms drained=false | guard: backlog=2163093 net=162236/slice promo=2040p runway=9908MB need=13 avail=1243 slices=189
+[pace] trigger by_mature=true by_cadence=false mature=2044634p baseline=706274p n=190 nb=3040MB
+[pace] quantum: budget=4.5ms quota=963984 traced=1206800 packets=468 took=22.9ms drained=false | guard: backlog=1920277 net=182381/slice promo=1551p runway=9908MB need=11 avail=1635 slices=190
+[pace] trigger by_mature=true by_cadence=false mature=2044721p baseline=706274p n=191 nb=3056MB
+[pace] quantum: budget=4.5ms quota=964005 traced=1222533 packets=1340 took=27.7ms drained=false | guard: backlog=1671425 net=201418/slice promo=1185p runway=9909MB need=8 avail=2141 slices=191
+[pace] trigger by_mature=true by_cadence=false mature=2044806p baseline=706274p n=192 nb=3072MB
+[pace] quantum: budget=4.5ms quota=963984 traced=1217936 packets=298 took=24.9ms drained=false | guard: backlog=1417473 net=214552/slice promo=911p runway=9909MB need=7 avail=2785 slices=192
+[pace] trigger by_mature=true by_cadence=false mature=2044895p baseline=706274p n=193 nb=3088MB
+[pace] quantum: budget=4.5ms quota=963984 traced=1227633 packets=696 took=23.1ms drained=false | guard: backlog=1153830 net=226826/slice promo=705p runway=9909MB need=5 avail=3598 slices=193
+[pace] trigger by_mature=true by_cadence=false mature=2044981p baseline=706274p n=194 nb=3104MB
+[pace] quantum: budget=4.5ms quota=964005 traced=1231654 packets=304 took=22.9ms drained=false | guard: backlog=886187 net=237032/slice promo=550p runway=9910MB need=4 avail=4613 slices=194
+[pace] trigger by_mature=true by_cadence=false mature=2045067p baseline=706274p n=195 nb=3120MB
+[pace] quantum: budget=4.5ms quota=963983 traced=1209771 packets=298 took=24.2ms drained=false | guard: backlog=640405 net=239221/slice promo=434p runway=9910MB need=3 avail=5846 slices=195
+[pace] trigger by_mature=true by_cadence=false mature=2045152p baseline=706274p n=196 nb=3136MB
+[pace] quantum: budget=4.5ms quota=963983 traced=1226133 packets=302 took=24.8ms drained=false | guard: backlog=378261 net=244953/slice promo=348p runway=9911MB need=2 avail=7291 slices=196
+[pace] trigger by_mature=true by_cadence=false mature=2045242p baseline=706274p n=197 nb=3152MB
+[pace] quantum: budget=4.5ms quota=103553 traced=233472 packets=57 took=7.5ms drained=false | guard: backlog=248342 net=216194/slice promo=1190p runway=9897MB need=1 avail=2129 slices=197
+[pace] trigger by_mature=true by_cadence=false mature=2048961p baseline=706274p n=198 nb=3168MB
+[pace] quantum: budget=4.4ms quota=1358 traced=251242 packets=407 took=4.5ms drained=false | guard: backlog=5 net=224617/slice promo=1931p runway=9913MB need=0 avail=1314 slices=198
+[pace] trigger by_mature=true by_cadence=false mature=2053116p baseline=706274p n=199 nb=3184MB
+[pace] quantum: budget=4.4ms quota=1346 traced=37971 packets=7326 took=4.5ms drained=false | guard: backlog=5 net=177619/slice promo=2488p runway=9933MB need=0 avail=1022 slices=199
+[pace] trigger by_mature=true by_cadence=false mature=2057273p baseline=706274p n=200 nb=3200MB
+[pace] quantum: budget=4.4ms quota=1346 traced=4340 packets=601 took=0.4ms drained=true | guard: backlog=0 net=133963/slice promo=2904p runway=9953MB need=0 avail=877 slices=200
+[pace] trigger by_mature=true by_cadence=false mature=2061428p baseline=706274p n=201 nb=3216MB
+[pace] sweep quantum: packets=21 took=2.1ms remaining=1840 rate=16.2/slice promo=2178p runway=9990MB need=113 avail=1174 slices=128
+[pace] sweep quantum: packets=22 took=2.0ms remaining=1818 rate=22.0/slice promo=2616p runway=10009MB need=83 avail=980 slices=1
+[pace] trigger by_mature=true by_cadence=false mature=2047629p baseline=706274p n=202 nb=3232MB
+[pace] sweep quantum: packets=21 took=2.0ms remaining=1797 rate=21.8/slice promo=3000p runway=9907MB need=83 avail=845 slices=2
+[pace] trigger by_mature=true by_cadence=false mature=2042920p baseline=706274p n=203 nb=3248MB
+[pace] sweep quantum: packets=19 took=2.1ms remaining=1778 rate=21.1/slice promo=3200p runway=9927MB need=84 avail=794 slices=3
+[pace] trigger by_mature=true by_cadence=false mature=2037416p baseline=706274p n=204 nb=3264MB
+[pace] sweep quantum: packets=19 took=2.1ms remaining=1759 rate=20.5/slice promo=3438p runway=9947MB need=86 avail=741 slices=4
+[pace] trigger by_mature=true by_cadence=false mature=2031599p baseline=706274p n=205 nb=3280MB
+[pace] sweep quantum: packets=19 took=2.0ms remaining=1740 rate=20.2/slice promo=3617p runway=9969MB need=86 avail=706 slices=5
+[pace] trigger by_mature=true by_cadence=false mature=2026222p baseline=706274p n=206 nb=3296MB
+[pace] sweep quantum: packets=24 took=2.2ms remaining=1716 rate=21.1/slice promo=3751p runway=9990MB need=81 avail=682 slices=6
+[pace] trigger by_mature=true by_cadence=false mature=2021071p baseline=706274p n=207 nb=3312MB
+[pace] sweep quantum: packets=19 took=2.1ms remaining=1697 rate=20.6/slice promo=3853p runway=10010MB need=82 avail=665 slices=7
+[pace] trigger by_mature=true by_cadence=false mature=2015254p baseline=706274p n=208 nb=3328MB
+[pace] sweep quantum: packets=19 took=2.0ms remaining=1678 rate=20.2/slice promo=3928p runway=10033MB need=83 avail=654 slices=8
+[pace] trigger by_mature=true by_cadence=false mature=2009877p baseline=706274p n=209 nb=3344MB
+[pace] sweep quantum: packets=22 took=2.0ms remaining=1656 rate=20.6/slice promo=3984p runway=10054MB need=80 avail=646 slices=9
+[pace] trigger by_mature=true by_cadence=false mature=2005168p baseline=706274p n=210 nb=3360MB
+[pace] sweep quantum: packets=18 took=2.1ms remaining=1638 rate=20.0/slice promo=4026p runway=10073MB need=82 avail=641 slices=10
+[pace] trigger by_mature=true by_cadence=false mature=1999196p baseline=706274p n=211 nb=3376MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1627 rate=17.7/slice promo=4058p runway=10096MB need=92 avail=637 slices=11
+[pace] trigger by_mature=true by_cadence=false mature=1991587p baseline=706274p n=212 nb=3392MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1616 rate=16.1/slice promo=4082p runway=10126MB need=101 avail=635 slices=12
+[pace] trigger by_mature=true by_cadence=false mature=1983975p baseline=706274p n=213 nb=3408MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1605 rate=14.8/slice promo=4101p runway=10155MB need=108 avail=634 slices=13
+[pace] trigger by_mature=true by_cadence=false mature=1976322p baseline=706274p n=214 nb=3424MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1594 rate=13.8/slice promo=4114p runway=10185MB need=115 avail=634 slices=14
+[pace] trigger by_mature=true by_cadence=false mature=1968635p baseline=706274p n=215 nb=3440MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1583 rate=13.1/slice promo=3692p runway=10222MB need=121 avail=709 slices=15
+[pace] trigger by_mature=true by_cadence=false mature=1958871p baseline=706274p n=216 nb=3456MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1572 rate=12.6/slice promo=3807p runway=10253MB need=125 avail=690 slices=16
+[pace] trigger by_mature=true by_cadence=false mature=1950838p baseline=706274p n=217 nb=3472MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1561 rate=12.2/slice promo=3894p runway=10285MB need=128 avail=676 slices=17
+[pace] trigger by_mature=true by_cadence=false mature=1942803p baseline=706274p n=218 nb=3488MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1550 rate=11.9/slice promo=3959p runway=10316MB need=130 avail=667 slices=18
+[pace] trigger by_mature=true by_cadence=false mature=1934770p baseline=706274p n=219 nb=3504MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1539 rate=11.7/slice promo=4008p runway=10348MB need=132 avail=661 slices=19
+[pace] trigger by_mature=true by_cadence=false mature=1926737p baseline=706274p n=220 nb=3520MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1528 rate=11.5/slice promo=4044p runway=10379MB need=133 avail=657 slices=20
+[pace] trigger by_mature=true by_cadence=false mature=1918704p baseline=706274p n=221 nb=3536MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1517 rate=11.4/slice promo=4071p runway=10410MB need=133 avail=655 slices=21
+[pace] trigger by_mature=true by_cadence=false mature=1910669p baseline=706274p n=222 nb=3552MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1506 rate=11.3/slice promo=4093p runway=10442MB need=133 avail=653 slices=22
+[pace] trigger by_mature=true by_cadence=false mature=1902636p baseline=706274p n=223 nb=3568MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1495 rate=11.2/slice promo=4108p runway=10473MB need=133 avail=653 slices=23
+[pace] trigger by_mature=true by_cadence=false mature=1894603p baseline=706274p n=224 nb=3584MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1484 rate=11.2/slice promo=4119p runway=10505MB need=133 avail=653 slices=24
+[pace] trigger by_mature=true by_cadence=false mature=1886570p baseline=706274p n=225 nb=3600MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1473 rate=11.1/slice promo=4128p runway=10536MB need=132 avail=653 slices=25
+[pace] trigger by_mature=true by_cadence=false mature=1878535p baseline=706274p n=226 nb=3616MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1462 rate=11.1/slice promo=4135p runway=10567MB need=132 avail=654 slices=26
+[pace] trigger by_mature=true by_cadence=false mature=1870502p baseline=706274p n=227 nb=3632MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1451 rate=11.1/slice promo=4140p runway=10599MB need=131 avail=655 slices=27
+[pace] trigger by_mature=true by_cadence=false mature=1862469p baseline=706274p n=228 nb=3648MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1440 rate=11.1/slice promo=4143p runway=10630MB need=130 avail=657 slices=28
+[pace] trigger by_mature=true by_cadence=false mature=1854436p baseline=706274p n=229 nb=3664MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1429 rate=11.0/slice promo=4146p runway=10661MB need=129 avail=658 slices=29
+[pace] trigger by_mature=true by_cadence=false mature=1846403p baseline=706274p n=230 nb=3680MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1418 rate=11.0/slice promo=4148p runway=10693MB need=128 avail=660 slices=30
+[pace] trigger by_mature=true by_cadence=false mature=1838368p baseline=706274p n=231 nb=3696MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1407 rate=11.0/slice promo=4149p runway=10724MB need=128 avail=662 slices=31
+[pace] trigger by_mature=true by_cadence=false mature=1830335p baseline=706274p n=232 nb=3712MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1396 rate=11.0/slice promo=4150p runway=10756MB need=127 avail=664 slices=32
+[pace] trigger by_mature=true by_cadence=false mature=1822302p baseline=706274p n=233 nb=3728MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1385 rate=11.0/slice promo=4151p runway=10787MB need=126 avail=665 slices=33
+[pace] trigger by_mature=true by_cadence=false mature=1814269p baseline=706274p n=234 nb=3744MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1374 rate=11.0/slice promo=4152p runway=10818MB need=125 avail=667 slices=34
+[pace] trigger by_mature=true by_cadence=false mature=1806234p baseline=706274p n=235 nb=3760MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1363 rate=11.0/slice promo=4153p runway=10850MB need=124 avail=669 slices=35
+[pace] trigger by_mature=true by_cadence=false mature=1798201p baseline=706274p n=236 nb=3776MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1352 rate=11.0/slice promo=4153p runway=10881MB need=123 avail=671 slices=36
+[pace] trigger by_mature=true by_cadence=false mature=1790168p baseline=706274p n=237 nb=3792MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1341 rate=11.0/slice promo=4153p runway=10912MB need=122 avail=673 slices=37
+[pace] trigger by_mature=true by_cadence=false mature=1782135p baseline=706274p n=238 nb=3808MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1330 rate=11.0/slice promo=4153p runway=10944MB need=121 avail=675 slices=38
+[pace] trigger by_mature=true by_cadence=false mature=1774102p baseline=706274p n=239 nb=3824MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1319 rate=11.0/slice promo=4153p runway=10975MB need=120 avail=677 slices=39
+[pace] trigger by_mature=true by_cadence=false mature=1766067p baseline=706274p n=240 nb=3840MB
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1308 rate=11.0/slice promo=4153p runway=11007MB need=119 avail=679 slices=40
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1297 rate=11.0/slice promo=4153p runway=11038MB need=118 avail=680 slices=41
+[pace] sweep quantum: packets=11 took=2.2ms remaining=1286 rate=11.0/slice promo=4153p runway=11069MB need=117 avail=682 slices=42
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1275 rate=11.0/slice promo=4153p runway=11101MB need=116 avail=684 slices=43
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1264 rate=11.0/slice promo=4154p runway=11132MB need=115 avail=686 slices=44
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1253 rate=11.0/slice promo=4154p runway=11164MB need=114 avail=688 slices=45
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1242 rate=11.0/slice promo=4154p runway=11195MB need=113 avail=690 slices=46
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1231 rate=11.0/slice promo=4154p runway=11226MB need=112 avail=692 slices=47
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1220 rate=11.0/slice promo=4155p runway=11258MB need=111 avail=694 slices=48
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1209 rate=11.0/slice promo=4155p runway=11289MB need=110 avail=696 slices=49
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1198 rate=11.0/slice promo=4155p runway=11320MB need=109 avail=698 slices=50
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1187 rate=11.0/slice promo=4155p runway=11352MB need=108 avail=699 slices=51
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1176 rate=11.0/slice promo=4155p runway=11383MB need=107 avail=701 slices=52
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1165 rate=11.0/slice promo=4155p runway=11415MB need=106 avail=703 slices=53
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1154 rate=11.0/slice promo=4155p runway=11446MB need=105 avail=705 slices=54
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1143 rate=11.0/slice promo=4155p runway=11477MB need=104 avail=707 slices=55
+[pace] sweep quantum: packets=11 took=2.2ms remaining=1132 rate=11.0/slice promo=4155p runway=11509MB need=103 avail=709 slices=56
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1121 rate=11.0/slice promo=4156p runway=11540MB need=102 avail=711 slices=57
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1110 rate=11.0/slice promo=4155p runway=11571MB need=101 avail=713 slices=58
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1099 rate=11.0/slice promo=4155p runway=11603MB need=100 avail=715 slices=59
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1088 rate=11.0/slice promo=4155p runway=11634MB need=99 avail=717 slices=60
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1077 rate=11.0/slice promo=4155p runway=11666MB need=98 avail=719 slices=61
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1066 rate=11.0/slice promo=4155p runway=11697MB need=97 avail=721 slices=62
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1055 rate=11.0/slice promo=4155p runway=11728MB need=96 avail=723 slices=63
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1044 rate=11.0/slice promo=4155p runway=11760MB need=95 avail=725 slices=64
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1033 rate=11.0/slice promo=4155p runway=11791MB need=94 avail=727 slices=65
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1022 rate=11.0/slice promo=4156p runway=11823MB need=93 avail=728 slices=66
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1011 rate=11.0/slice promo=4155p runway=11854MB need=92 avail=730 slices=67
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1000 rate=11.0/slice promo=4155p runway=11885MB need=91 avail=732 slices=68
+[pace] sweep quantum: packets=11 took=2.1ms remaining=989 rate=11.0/slice promo=4155p runway=11917MB need=90 avail=734 slices=69
+[pace] sweep quantum: packets=10 took=2.1ms remaining=979 rate=10.8/slice promo=4155p runway=11948MB need=91 avail=736 slices=70
+[pace] sweep quantum: packets=9 took=2.0ms remaining=970 rate=10.3/slice promo=4155p runway=11975MB need=94 avail=738 slices=71
+[pace] sweep quantum: packets=9 took=2.0ms remaining=961 rate=10.0/slice promo=4155p runway=11998MB need=96 avail=739 slices=72
+[pace] sweep quantum: packets=9 took=2.0ms remaining=952 rate=9.8/slice promo=4155p runway=12021MB need=98 avail=741 slices=73
+[pace] sweep quantum: packets=9 took=2.1ms remaining=943 rate=9.6/slice promo=4155p runway=12043MB need=99 avail=742 slices=74
+[pace] sweep quantum: packets=9 took=2.0ms remaining=934 rate=9.4/slice promo=4155p runway=12066MB need=99 avail=743 slices=75
+[pace] sweep quantum: packets=9 took=2.1ms remaining=925 rate=9.3/slice promo=4156p runway=12089MB need=99 avail=745 slices=76
+[pace] sweep quantum: packets=9 took=2.1ms remaining=916 rate=9.2/slice promo=3411p runway=12123MB need=99 avail=910 slices=77
+[pace] sweep quantum: packets=6 took=2.1ms remaining=910 rate=8.4/slice promo=2581p runway=12162MB need=108 avail=1206 slices=78
+[pace] sweep quantum: packets=5 took=2.2ms remaining=905 rate=7.6/slice promo=1957p runway=12187MB need=119 avail=1594 slices=79
+[pace] sweep quantum: packets=6 took=2.1ms remaining=899 rate=7.2/slice promo=1489p runway=12209MB need=125 avail=2099 slices=80
+[pace] sweep quantum: packets=7 took=2.1ms remaining=892 rate=7.1/slice promo=1138p runway=12234MB need=125 avail=2752 slices=81
+[pace] sweep quantum: packets=6 took=2.2ms remaining=886 rate=6.9/slice promo=876p runway=12264MB need=129 avail=3584 slices=82
+[pace] sweep quantum: packets=7 took=2.0ms remaining=879 rate=6.9/slice promo=678p runway=12290MB need=127 avail=4641 slices=83
+[pace] sweep quantum: packets=6 took=2.1ms remaining=873 rate=6.7/slice promo=530p runway=12320MB need=131 avail=5951 slices=84
+[pace] sweep quantum: packets=8 took=2.1ms remaining=865 rate=7.0/slice promo=419p runway=12345MB need=124 avail=7543 slices=85
+[pace] sweep quantum: packets=7 took=2.2ms remaining=858 rate=7.0/slice promo=376p runway=12379MB need=123 avail=8429 slices=86
+[pace] sweep quantum: packets=10 took=2.2ms remaining=848 rate=7.8/slice promo=1320p runway=12393MB need=109 avail=2404 slices=87
+[pace] sweep quantum: packets=9 took=2.0ms remaining=839 rate=8.1/slice promo=2028p runway=12420MB need=104 avail=1568 slices=88
+[pace] sweep quantum: packets=9 took=2.0ms remaining=830 rate=8.3/slice promo=2559p runway=12443MB need=100 avail=1245 slices=89
+[pace] sweep quantum: packets=9 took=2.0ms remaining=821 rate=8.5/slice promo=2958p runway=12466MB need=97 avail=1079 slices=90
+[pace] sweep quantum: packets=9 took=2.0ms remaining=812 rate=8.6/slice promo=3257p runway=12488MB need=94 avail=982 slices=91
+[pace] sweep quantum: packets=9 took=2.0ms remaining=803 rate=8.7/slice promo=3482p runway=12511MB need=92 avail=920 slices=92
+[pace] sweep quantum: packets=10 took=2.0ms remaining=793 rate=9.0/slice promo=3650p runway=12534MB need=88 avail=879 slices=93
+[pace] sweep quantum: packets=19 took=2.1ms remaining=774 rate=11.5/slice promo=3776p runway=12552MB need=67 avail=851 slices=94
+[pace] sweep quantum: packets=19 took=2.1ms remaining=755 rate=13.4/slice promo=3870p runway=12536MB need=56 avail=829 slices=95
+[pace] sweep quantum: packets=18 took=2.0ms remaining=737 rate=14.5/slice promo=3941p runway=12520MB need=51 avail=813 slices=96
+[pace] sweep quantum: packets=18 took=2.0ms remaining=719 rate=15.4/slice promo=3995p runway=12504MB need=47 avail=801 slices=97
+[pace] sweep quantum: packets=18 took=2.0ms remaining=701 rate=16.1/slice promo=4035p runway=12487MB need=44 avail=792 slices=98
+[pace] sweep quantum: packets=18 took=2.0ms remaining=683 rate=16.5/slice promo=4065p runway=12471MB need=41 avail=785 slices=99
+[pace] sweep quantum: packets=18 took=2.0ms remaining=665 rate=16.9/slice promo=4087p runway=12455MB need=39 avail=780 slices=100
+[pace] sweep quantum: packets=18 took=2.0ms remaining=647 rate=17.2/slice promo=4104p runway=12439MB need=38 avail=776 slices=101
+[pace] sweep quantum: packets=18 took=2.0ms remaining=629 rate=17.4/slice promo=4116p runway=12422MB need=36 avail=773 slices=102
+[pace] sweep quantum: packets=18 took=2.0ms remaining=611 rate=17.5/slice promo=4125p runway=12406MB need=35 avail=770 slices=103
+[pace] sweep quantum: packets=18 took=2.0ms remaining=593 rate=17.7/slice promo=4132p runway=12390MB need=34 avail=768 slices=104
+[pace] sweep quantum: packets=18 took=2.0ms remaining=575 rate=17.7/slice promo=4138p runway=12374MB need=32 avail=766 slices=105
+[pace] sweep quantum: packets=18 took=2.0ms remaining=557 rate=17.8/slice promo=4142p runway=12357MB need=31 avail=764 slices=106
+[pace] sweep quantum: packets=19 took=2.1ms remaining=538 rate=18.1/slice promo=4145p runway=12341MB need=30 avail=762 slices=107
+[pace] sweep quantum: packets=18 took=2.0ms remaining=520 rate=18.1/slice promo=4147p runway=12325MB need=29 avail=761 slices=108
+[pace] sweep quantum: packets=18 took=2.0ms remaining=502 rate=18.1/slice promo=4149p runway=12309MB need=28 avail=760 slices=109
+[pace] sweep quantum: packets=18 took=2.0ms remaining=484 rate=18.0/slice promo=4150p runway=12293MB need=27 avail=758 slices=110
+[pace] sweep quantum: packets=18 took=2.1ms remaining=466 rate=18.0/slice promo=4151p runway=12276MB need=26 avail=757 slices=111
+[pace] sweep quantum: packets=18 took=2.0ms remaining=448 rate=18.0/slice promo=4152p runway=12260MB need=25 avail=756 slices=112
+[pace] sweep quantum: packets=19 took=2.1ms remaining=429 rate=18.3/slice promo=4152p runway=12244MB need=23 avail=755 slices=113
+[pace] sweep quantum: packets=18 took=2.1ms remaining=411 rate=18.2/slice promo=4153p runway=12228MB need=23 avail=754 slices=114
+[pace] sweep quantum: packets=18 took=2.0ms remaining=393 rate=18.2/slice promo=4153p runway=12211MB need=22 avail=753 slices=115
+[pace] sweep quantum: packets=18 took=2.0ms remaining=375 rate=18.1/slice promo=4153p runway=12195MB need=21 avail=752 slices=116
+[pace] sweep quantum: packets=17 took=2.0ms remaining=358 rate=17.8/slice promo=4153p runway=12179MB need=20 avail=751 slices=117
+[pace] sweep quantum: packets=19 took=2.1ms remaining=339 rate=18.1/slice promo=4153p runway=12163MB need=19 avail=750 slices=118
+[pace] sweep quantum: packets=18 took=2.0ms remaining=321 rate=18.1/slice promo=4153p runway=12146MB need=18 avail=749 slices=119
+[pace] sweep quantum: packets=18 took=2.0ms remaining=303 rate=18.1/slice promo=4153p runway=12130MB need=17 avail=748 slices=120
+[pace] sweep quantum: packets=18 took=2.1ms remaining=285 rate=18.1/slice promo=4153p runway=12114MB need=16 avail=747 slices=121
+[pace] sweep quantum: packets=19 took=2.1ms remaining=266 rate=18.3/slice promo=4154p runway=12098MB need=15 avail=746 slices=122
+[pace] sweep quantum: packets=18 took=2.0ms remaining=248 rate=18.2/slice promo=4154p runway=12082MB need=14 avail=745 slices=123
+[pace] sweep quantum: packets=17 took=2.0ms remaining=231 rate=17.9/slice promo=4154p runway=12065MB need=13 avail=744 slices=124
+[pace] sweep quantum: packets=19 took=2.1ms remaining=212 rate=18.2/slice promo=4154p runway=12049MB need=12 avail=743 slices=125
+[pace] sweep quantum: packets=18 took=2.0ms remaining=194 rate=18.1/slice promo=4154p runway=12033MB need=11 avail=742 slices=126
+[pace] sweep quantum: packets=19 took=2.1ms remaining=175 rate=18.4/slice promo=4154p runway=12017MB need=10 avail=741 slices=127
+[pace] sweep quantum: packets=17 took=2.1ms remaining=158 rate=18.0/slice promo=4154p runway=12000MB need=9 avail=740 slices=128
+[pace] sweep quantum: packets=19 took=2.1ms remaining=139 rate=18.3/slice promo=4154p runway=11984MB need=8 avail=739 slices=129
+[pace] sweep quantum: packets=18 took=2.0ms remaining=121 rate=18.2/slice promo=4154p runway=11968MB need=7 avail=738 slices=130
+[pace] sweep quantum: packets=17 took=2.0ms remaining=104 rate=17.9/slice promo=4155p runway=11952MB need=6 avail=736 slices=131
+[pace] sweep quantum: packets=19 took=2.1ms remaining=85 rate=18.2/slice promo=4155p runway=11935MB need=5 avail=735 slices=132
+[pace] sweep quantum: packets=18 took=2.0ms remaining=67 rate=18.1/slice promo=4155p runway=11919MB need=4 avail=734 slices=133
+[pace] sweep quantum: packets=18 took=2.0ms remaining=49 rate=18.1/slice promo=4155p runway=11903MB need=3 avail=733 slices=134
+[pace] sweep quantum: packets=18 took=2.1ms remaining=31 rate=18.1/slice promo=4155p runway=11887MB need=2 avail=732 slices=135
+[pace] sweep quantum: packets=19 took=2.1ms remaining=12 rate=18.3/slice promo=4155p runway=11871MB need=1 avail=731 slices=136
+[pace] sweep quantum: packets=12 took=1.3ms remaining=0 rate=16.7/slice promo=4155p runway=11854MB need=0 avail=730 slices=137
+[pace] trigger by_mature=false by_cadence=true mature=3105291p baseline=1553216p n=759 nb=12144MB
+[pace] slice gate: debt=6067ms quantum=6.5ms minor_ewma=40.3ms tick=false worth=true feasible=true -> sliced
+[pace] quantum: budget=6.5ms quota=1346 traced=87434 packets=31 took=6.7ms drained=false | guard: backlog=40191 net=86088/slice promo=4155p runway=15033MB need=0 avail=926 slices=1
+[pace] quantum: budget=6.5ms quota=1346 traced=104871 packets=36 took=7.0ms drained=false | guard: backlog=29561 net=90447/slice promo=4155p runway=15053MB need=0 avail=927 slices=2
+[pace] quantum: budget=6.5ms quota=1358 traced=40688 packets=19 took=7.8ms drained=false | guard: backlog=71714 net=77668/slice promo=4155p runway=15073MB need=1 avail=929 slices=3
+[pace] quantum: budget=6.5ms quota=1346 traced=52414 packets=17 took=7.3ms drained=false | guard: backlog=101009 net=71018/slice promo=4156p runway=15093MB need=1 avail=930 slices=4
+[pace] quantum: budget=6.5ms quota=1346 traced=73655 packets=18 took=7.3ms drained=false | guard: backlog=107290 net=71341/slice promo=4155p runway=15113MB need=2 avail=931 slices=5
+[pace] quantum: budget=6.5ms quota=1358 traced=87589 packets=28 took=7.1ms drained=false | guard: backlog=94092 net=75063/slice promo=4155p runway=15133MB need=1 avail=932 slices=6
+[pace] quantum: budget=6.5ms quota=1346 traced=85886 packets=29 took=7.1ms drained=false | guard: backlog=93167 net=77433/slice promo=4155p runway=15153MB need=1 avail=934 slices=7
+[pace] quantum: budget=6.5ms quota=1346 traced=113836 packets=48 took=7.6ms drained=false | guard: backlog=38331 net=86197/slice promo=4155p runway=15174MB need=0 avail=935 slices=8
+[pace] quantum: budget=6.5ms quota=1358 traced=56744 packets=47 took=6.8ms drained=false | guard: backlog=44223 net=78494/slice promo=4155p runway=15194MB need=1 avail=936 slices=9
+[pace] quantum: budget=6.5ms quota=1346 traced=63244 packets=50 took=6.7ms drained=false | guard: backlog=47579 net=74345/slice promo=4155p runway=15214MB need=1 avail=937 slices=10
+[pace] quantum: budget=6.5ms quota=1346 traced=53356 packets=37 took=7.4ms drained=false | guard: backlog=63142 net=68761/slice promo=4155p runway=15234MB need=1 avail=939 slices=11
+[pace] quantum: budget=6.5ms quota=1356 traced=45251 packets=20 took=7.0ms drained=false | guard: backlog=76462 net=62544/slice promo=4155p runway=15254MB need=1 avail=940 slices=12
+[pace] quantum: budget=6.5ms quota=1347 traced=76462 packets=31 took=6.6ms drained=false | guard: backlog=64144 net=65686/slice promo=4156p runway=15274MB need=1 avail=941 slices=13
+[pace] quantum: budget=6.5ms quota=1346 traced=86809 packets=49 took=6.5ms drained=false | guard: backlog=42117 net=70630/slice promo=4155p runway=15294MB need=1 avail=942 slices=14
+[pace] quantum: budget=6.5ms quota=1346 traced=106377 packets=135 took=6.7ms drained=false | guard: backlog=7680 net=79230/slice promo=4155p runway=15315MB need=0 avail=944 slices=15
+[pace] quantum: budget=6.5ms quota=1358 traced=84110 packets=165 took=6.8ms drained=false | guard: backlog=7680 net=80111/slice promo=4155p runway=15335MB need=0 avail=945 slices=16
+[pace] quantum: budget=6.5ms quota=1346 traced=78740 packets=154 took=6.7ms drained=false | guard: backlog=7680 net=79432/slice promo=4155p runway=15355MB need=0 avail=946 slices=17
+[pace] quantum: budget=6.5ms quota=1346 traced=84086 packets=163 took=6.7ms drained=false | guard: backlog=7680 net=80259/slice promo=4155p runway=15375MB need=0 avail=947 slices=18
+[pace] quantum: budget=6.5ms quota=1358 traced=84313 packets=160 took=6.8ms drained=false | guard: backlog=7679 net=80933/slice promo=4155p runway=15395MB need=0 avail=949 slices=19
+[pace] quantum: budget=6.5ms quota=1346 traced=82023 packets=148 took=6.7ms drained=false | guard: backlog=7679 net=80869/slice promo=4155p runway=15415MB need=0 avail=950 slices=20
+[pace] quantum: budget=6.5ms quota=1346 traced=80485 packets=145 took=6.7ms drained=false | guard: backlog=7679 net=80436/slice promo=4156p runway=15435MB need=0 avail=951 slices=21
+[pace] quantum: budget=6.5ms quota=1358 traced=80800 packets=150 took=6.7ms drained=false | guard: backlog=7679 net=80187/slice promo=4155p runway=15455MB need=0 avail=952 slices=22
+[pace] quantum: budget=6.5ms quota=1346 traced=78148 packets=141 took=6.7ms drained=false | guard: backlog=7679 net=79341/slice promo=4155p runway=15476MB need=0 avail=954 slices=23
+[pace] quantum: budget=6.5ms quota=1346 traced=84069 packets=150 took=6.7ms drained=false | guard: backlog=7679 net=80186/slice promo=4155p runway=15496MB need=0 avail=955 slices=24
+[pace] quantum: budget=6.5ms quota=1358 traced=84090 packets=154 took=6.7ms drained=false | guard: backlog=7679 net=80823/slice promo=4155p runway=15516MB need=0 avail=956 slices=25
+[pace] quantum: budget=6.5ms quota=1346 traced=84364 packets=154 took=6.7ms drained=false | guard: backlog=7679 net=81372/slice promo=4155p runway=15536MB need=0 avail=957 slices=26
+[pace] quantum: budget=6.5ms quota=1346 traced=84291 packets=153 took=6.7ms drained=false | guard: backlog=7679 net=81765/slice promo=4155p runway=15556MB need=0 avail=958 slices=27
+[pace] quantum: budget=6.5ms quota=1346 traced=84342 packets=151 took=6.7ms drained=false | guard: backlog=7679 net=82073/slice promo=4155p runway=15576MB need=0 avail=960 slices=28
+[pace] quantum: budget=6.5ms quota=1358 traced=82060 packets=151 took=6.7ms drained=false | guard: backlog=7679 net=81730/slice promo=4155p runway=15596MB need=0 avail=961 slices=29
+[pace] quantum: budget=6.5ms quota=1346 traced=82237 packets=147 took=6.7ms drained=false | guard: backlog=7676 net=81520/slice promo=4156p runway=15617MB need=0 avail=962 slices=30
+[pace] quantum: budget=6.5ms quota=1346 traced=84042 packets=154 took=6.7ms drained=false | guard: backlog=7676 net=81814/slice promo=4155p runway=15637MB need=0 avail=963 slices=31
+[pace] quantum: budget=6.5ms quota=1358 traced=82522 packets=151 took=6.8ms drained=false | guard: backlog=7676 net=81652/slice promo=4155p runway=15657MB need=0 avail=965 slices=32
+[pace] quantum: budget=6.5ms quota=1346 traced=84033 packets=150 took=6.8ms drained=false | guard: backlog=7676 net=81910/slice promo=4155p runway=15677MB need=0 avail=966 slices=33
+[pace] quantum: budget=6.5ms quota=1346 traced=86085 packets=156 took=6.8ms drained=false | guard: backlog=7676 net=82617/slice promo=4155p runway=15697MB need=0 avail=967 slices=34
+[pace] quantum: budget=6.5ms quota=1358 traced=84057 packets=154 took=6.8ms drained=false | guard: backlog=7676 net=82637/slice promo=4155p runway=15717MB need=0 avail=968 slices=35
+[pace] quantum: budget=6.5ms quota=1346 traced=82798 packets=152 took=6.7ms drained=false | guard: backlog=7676 net=82341/slice promo=4155p runway=15737MB need=0 avail=970 slices=36
+[pace] quantum: budget=6.5ms quota=1346 traced=79948 packets=145 took=6.7ms drained=false | guard: backlog=7676 net=81406/slice promo=4155p runway=15758MB need=0 avail=971 slices=37
+[pace] quantum: budget=6.5ms quota=1358 traced=80178 packets=145 took=6.7ms drained=false | guard: backlog=7676 net=80760/slice promo=4156p runway=15778MB need=0 avail=972 slices=38
+[pace] quantum: budget=6.5ms quota=1346 traced=80455 packets=145 took=6.8ms drained=false | guard: backlog=7676 net=80347/slice promo=4155p runway=15798MB need=0 avail=973 slices=39
+[pace] quantum: budget=6.5ms quota=1346 traced=82291 packets=152 took=6.8ms drained=false | guard: backlog=7676 net=80497/slice promo=4155p runway=15818MB need=0 avail=975 slices=40
+[pace] quantum: budget=6.5ms quota=1358 traced=84273 packets=153 took=6.8ms drained=false | guard: backlog=7676 net=81101/slice promo=4155p runway=15838MB need=0 avail=976 slices=41
+[pace] quantum: budget=6.5ms quota=1346 traced=84033 packets=150 took=6.7ms drained=false | guard: backlog=7676 net=81497/slice promo=4155p runway=15858MB need=0 avail=977 slices=42
+[pace] quantum: budget=6.5ms quota=1346 traced=84330 packets=155 took=6.7ms drained=false | guard: backlog=7676 net=81869/slice promo=4155p runway=15878MB need=0 avail=978 slices=43
+[pace] quantum: budget=6.5ms quota=1346 traced=84046 packets=153 took=6.7ms drained=false | guard: backlog=7676 net=82077/slice promo=4155p runway=15899MB need=0 avail=980 slices=44
+[pace] quantum: budget=6.5ms quota=1358 traced=84273 packets=153 took=6.8ms drained=false | guard: backlog=7676 net=82286/slice promo=4155p runway=15919MB need=0 avail=981 slices=45
+[pace] quantum: budget=6.5ms quota=1346 traced=84033 packets=150 took=6.8ms drained=false | guard: backlog=7676 net=82386/slice promo=4155p runway=15939MB need=0 avail=982 slices=46
+[pace] quantum: budget=6.5ms quota=1346 traced=80464 packets=149 took=6.7ms drained=false | guard: backlog=7676 net=81569/slice promo=4156p runway=15959MB need=0 avail=983 slices=47
+[pace] quantum: budget=6.5ms quota=1358 traced=82005 packets=148 took=6.7ms drained=false | guard: backlog=7676 net=81338/slice promo=4155p runway=15979MB need=0 avail=985 slices=48
+[pace] quantum: budget=6.5ms quota=1346 traced=82798 packets=152 took=6.7ms drained=false | guard: backlog=7676 net=81367/slice promo=4155p runway=15999MB need=0 avail=986 slices=49
+[pace] quantum: budget=6.5ms quota=1346 traced=83742 packets=149 took=6.7ms drained=false | guard: backlog=7676 net=81625/slice promo=4155p runway=16019MB need=0 avail=987 slices=50
+[pace] quantum: budget=6.5ms quota=1358 traced=82306 packets=152 took=6.8ms drained=false | guard: backlog=7676 net=81456/slice promo=4155p runway=16039MB need=0 avail=988 slices=51
+[pace] quantum: budget=6.5ms quota=1346 traced=80451 packets=146 took=6.7ms drained=false | guard: backlog=7676 net=80868/slice promo=4155p runway=16060MB need=0 avail=990 slices=52
+[pace] quantum: budget=6.5ms quota=1346 traced=84046 packets=153 took=6.8ms drained=false | guard: backlog=7676 net=81326/slice promo=4155p runway=16080MB need=0 avail=991 slices=53
+[pace] quantum: budget=6.5ms quota=1358 traced=84273 packets=153 took=6.8ms drained=false | guard: backlog=7676 net=81723/slice promo=4155p runway=16100MB need=0 avail=992 slices=54
+[pace] quantum: budget=6.5ms quota=1346 traced=80239 packets=146 took=6.7ms drained=false | guard: backlog=7676 net=81016/slice promo=4156p runway=16120MB need=0 avail=993 slices=55
+[pace] quantum: budget=6.5ms quota=1346 traced=80163 packets=145 took=6.8ms drained=false | guard: backlog=7676 net=80466/slice promo=4155p runway=16140MB need=0 avail=994 slices=56
+[pace] quantum: budget=6.5ms quota=1346 traced=80731 packets=146 took=6.7ms drained=false | guard: backlog=7676 net=80196/slice promo=4155p runway=16160MB need=0 avail=996 slices=57
+[pace] quantum: budget=6.5ms quota=590041 traced=696312 packets=194 took=43.2ms drained=false | guard: backlog=590558 net=86714/slice promo=3532p runway=16190MB need=7 avail=1174 slices=58
+[pace] quantum: budget=6.5ms quota=963984 traced=1073886 packets=277 took=60.0ms drained=false | guard: backlog=1270297 net=92511/slice promo=2671p runway=16204MB need=14 avail=1553 slices=59
+[pace] quantum: budget=6.5ms quota=964003 traced=1095865 packets=333 took=64.0ms drained=false | guard: backlog=1823962 net=102349/slice promo=2025p runway=16205MB need=18 avail=2049 slices=60
+[pace] quantum: budget=6.5ms quota=963983 traced=1063264 packets=257 took=67.3ms drained=false | guard: backlog=2756951 net=101582/slice promo=1540p runway=16205MB need=27 avail=2694 slices=61
+[pace] quantum: budget=6.5ms quota=963983 traced=1342330 packets=371 took=58.8ms drained=false | guard: backlog=2859468 net=170773/slice promo=1176p runway=16206MB need=17 avail=3528 slices=62
+[pace] quantum: budget=6.5ms quota=964003 traced=1096639 packets=278 took=44.1ms drained=false | guard: backlog=3040368 net=161239/slice promo=904p runway=16206MB need=19 avail=4589 slices=63
+[pace] quantum: budget=6.5ms quota=963983 traced=1304015 packets=314 took=34.9ms drained=false | guard: backlog=2870352 net=205938/slice promo=699p runway=16207MB need=14 avail=5936 slices=64
+[pace] quantum: budget=6.5ms quota=963983 traced=1347646 packets=387 took=43.0ms drained=false | guard: backlog=2587710 net=250369/slice promo=546p runway=16207MB need=10 avail=7599 slices=65
+[pace] quantum: budget=6.5ms quota=963983 traced=1347171 packets=397 took=37.1ms drained=false | guard: backlog=2204522 net=283574/slice promo=431p runway=16207MB need=8 avail=9627 slices=66
+[pace] quantum: budget=6.5ms quota=964003 traced=1194806 packets=344 took=31.9ms drained=false | guard: backlog=1973724 net=270381/slice promo=346p runway=16208MB need=7 avail=11992 slices=67
+[pace] quantum: budget=6.5ms quota=77144 traced=455333 packets=121 took=9.9ms drained=false | guard: backlog=1595535 net=297333/slice promo=1218p runway=16194MB need=5 avail=3404 slices=68
+[pace] quantum: budget=6.5ms quota=1358 traced=380928 packets=93 took=6.6ms drained=false | guard: backlog=1215965 net=317892/slice promo=1952p runway=16211MB need=4 avail=2126 slices=69
+[pace] quantum: budget=6.5ms quota=1346 traced=382351 packets=94 took=6.6ms drained=false | guard: backlog=834960 net=333670/slice promo=2502p runway=16231MB need=3 avail=1661 slices=70
+[pace] quantum: budget=6.5ms quota=1346 traced=380928 packets=93 took=6.6ms drained=false | guard: backlog=455378 net=345148/slice promo=2915p runway=16251MB need=1 avail=1427 slices=71
+[pace] quantum: budget=6.5ms quota=1358 traced=249856 packets=61 took=6.6ms drained=false | guard: backlog=206880 net=320985/slice promo=3225p runway=16271MB need=1 avail=1292 slices=72
+[pace] quantum: budget=6.5ms quota=1346 traced=218610 packets=2134 took=6.3ms drained=true | guard: backlog=0 net=295055/slice promo=3458p runway=16291MB need=0 avail=1206 slices=73
+[pace] sweep quantum: packets=14 took=2.1ms remaining=3027 rate=16.1/slice promo=2594p runway=16328MB need=189 avail=1611 slices=138
+[pace] sweep quantum: packets=11 took=2.1ms remaining=3016 rate=11.0/slice promo=2927p runway=16353MB need=274 avail=1430 slices=1
+[pace] sweep quantum: packets=11 took=2.1ms remaining=3005 rate=11.0/slice promo=3234p runway=16221MB need=273 avail=1284 slices=2
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2994 rate=11.0/slice promo=3464p runway=16252MB need=272 avail=1201 slices=3
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2983 rate=11.0/slice promo=3636p runway=16284MB need=271 avail=1147 slices=4
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2972 rate=11.0/slice promo=3765p runway=16315MB need=270 avail=1109 slices=5
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2961 rate=11.0/slice promo=3862p runway=16347MB need=269 avail=1084 slices=6
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2950 rate=11.0/slice promo=3935p runway=16378MB need=268 avail=1066 slices=7
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2939 rate=11.0/slice promo=3990p runway=16409MB need=267 avail=1053 slices=8
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2928 rate=11.0/slice promo=4032p runway=16441MB need=266 avail=1044 slices=9
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2917 rate=11.0/slice promo=4062p runway=16472MB need=265 avail=1038 slices=10
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2906 rate=11.0/slice promo=4085p runway=16503MB need=264 avail=1034 slices=11
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2895 rate=11.0/slice promo=4102p runway=16535MB need=263 avail=1032 slices=12
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2884 rate=11.0/slice promo=4116p runway=16566MB need=262 avail=1030 slices=13
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2873 rate=11.0/slice promo=4125p runway=16598MB need=261 avail=1030 slices=14
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2862 rate=11.0/slice promo=4132p runway=16629MB need=260 avail=1030 slices=15
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2851 rate=11.0/slice promo=4137p runway=16660MB need=259 avail=1031 slices=16
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2840 rate=11.0/slice promo=4141p runway=16692MB need=258 avail=1032 slices=17
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2829 rate=11.0/slice promo=4144p runway=16723MB need=257 avail=1033 slices=18
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2818 rate=11.0/slice promo=4146p runway=16755MB need=256 avail=1035 slices=19
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2807 rate=11.0/slice promo=4148p runway=16786MB need=255 avail=1036 slices=20
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2796 rate=11.0/slice promo=4149p runway=16817MB need=254 avail=1038 slices=21
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2785 rate=11.0/slice promo=4151p runway=16849MB need=253 avail=1039 slices=22
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2774 rate=11.0/slice promo=4152p runway=16880MB need=252 avail=1041 slices=23
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2763 rate=11.0/slice promo=4152p runway=16911MB need=251 avail=1043 slices=24
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2752 rate=11.0/slice promo=4152p runway=16943MB need=250 avail=1045 slices=25
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2741 rate=11.0/slice promo=4152p runway=16974MB need=249 avail=1047 slices=26
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2730 rate=11.0/slice promo=4152p runway=17006MB need=248 avail=1049 slices=27
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2719 rate=11.0/slice promo=4152p runway=17037MB need=247 avail=1050 slices=28
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2708 rate=11.0/slice promo=4152p runway=17068MB need=246 avail=1052 slices=29
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2697 rate=11.0/slice promo=4152p runway=17100MB need=245 avail=1054 slices=30
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2686 rate=11.0/slice promo=4153p runway=17131MB need=244 avail=1056 slices=31
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2675 rate=11.0/slice promo=4153p runway=17162MB need=243 avail=1058 slices=32
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2664 rate=11.0/slice promo=4153p runway=17194MB need=242 avail=1060 slices=33
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2653 rate=11.0/slice promo=4153p runway=17225MB need=241 avail=1062 slices=34
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2642 rate=11.0/slice promo=4153p runway=17257MB need=240 avail=1064 slices=35
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2631 rate=11.0/slice promo=4153p runway=17288MB need=239 avail=1066 slices=36
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2620 rate=11.0/slice promo=4153p runway=17319MB need=238 avail=1068 slices=37
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2609 rate=11.0/slice promo=4153p runway=17351MB need=237 avail=1070 slices=38
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2598 rate=11.0/slice promo=4153p runway=17382MB need=236 avail=1072 slices=39
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2587 rate=11.0/slice promo=4153p runway=17414MB need=235 avail=1073 slices=40
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2576 rate=11.0/slice promo=4153p runway=17445MB need=234 avail=1075 slices=41
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2565 rate=11.0/slice promo=4153p runway=17476MB need=233 avail=1077 slices=42
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2554 rate=11.0/slice promo=4153p runway=17508MB need=232 avail=1079 slices=43
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2543 rate=11.0/slice promo=4154p runway=17539MB need=231 avail=1081 slices=44
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2532 rate=11.0/slice promo=4154p runway=17570MB need=230 avail=1083 slices=45
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2521 rate=11.0/slice promo=4154p runway=17602MB need=229 avail=1085 slices=46
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2510 rate=11.0/slice promo=4154p runway=17633MB need=228 avail=1087 slices=47
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2499 rate=11.0/slice promo=4154p runway=17665MB need=227 avail=1089 slices=48
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2488 rate=11.0/slice promo=4154p runway=17696MB need=226 avail=1091 slices=49
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2477 rate=11.0/slice promo=4154p runway=17727MB need=225 avail=1093 slices=50
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2466 rate=11.0/slice promo=4154p runway=17759MB need=224 avail=1094 slices=51
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2455 rate=11.0/slice promo=4154p runway=17790MB need=223 avail=1096 slices=52
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2444 rate=11.0/slice promo=4155p runway=17821MB need=222 avail=1098 slices=53
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2433 rate=11.0/slice promo=4155p runway=17853MB need=221 avail=1100 slices=54
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2422 rate=11.0/slice promo=4155p runway=17884MB need=220 avail=1102 slices=55
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2411 rate=11.0/slice promo=4155p runway=17916MB need=219 avail=1104 slices=56
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2400 rate=11.0/slice promo=4155p runway=17947MB need=218 avail=1106 slices=57
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2389 rate=11.0/slice promo=4155p runway=17978MB need=217 avail=1108 slices=58
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2378 rate=11.0/slice promo=4155p runway=18010MB need=216 avail=1110 slices=59
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2367 rate=11.0/slice promo=4155p runway=18041MB need=215 avail=1112 slices=60
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2356 rate=11.0/slice promo=4155p runway=18072MB need=214 avail=1114 slices=61
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2345 rate=11.0/slice promo=4156p runway=18104MB need=213 avail=1115 slices=62
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2334 rate=11.0/slice promo=4155p runway=18135MB need=212 avail=1117 slices=63
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2323 rate=11.0/slice promo=4155p runway=18167MB need=211 avail=1119 slices=64
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2312 rate=11.0/slice promo=4155p runway=18198MB need=210 avail=1121 slices=65
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2301 rate=11.0/slice promo=4156p runway=18229MB need=209 avail=1123 slices=66
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2290 rate=11.0/slice promo=4155p runway=18261MB need=208 avail=1125 slices=67
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2279 rate=11.0/slice promo=4155p runway=18292MB need=207 avail=1127 slices=68
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2268 rate=11.0/slice promo=4155p runway=18324MB need=206 avail=1129 slices=69
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2257 rate=11.0/slice promo=4155p runway=18355MB need=205 avail=1131 slices=70
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2246 rate=11.0/slice promo=4155p runway=18386MB need=204 avail=1133 slices=71
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2235 rate=11.0/slice promo=4155p runway=18418MB need=203 avail=1135 slices=72
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2224 rate=11.0/slice promo=4155p runway=18449MB need=202 avail=1137 slices=73
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2213 rate=11.0/slice promo=4155p runway=18480MB need=201 avail=1139 slices=74
+[pace] sweep quantum: packets=11 took=2.2ms remaining=2202 rate=11.0/slice promo=3383p runway=18524MB need=200 avail=1402 slices=75
+[pace] sweep quantum: packets=8 took=2.2ms remaining=2194 rate=10.2/slice promo=2559p runway=18571MB need=214 avail=1858 slices=76
+[pace] sweep quantum: packets=7 took=2.3ms remaining=2187 rate=9.4/slice promo=1941p runway=18605MB need=232 avail=2454 slices=77
+[pace] sweep quantum: packets=7 took=2.0ms remaining=2180 rate=8.8/slice promo=1478p runway=18635MB need=247 avail=3228 slices=78
+[pace] sweep quantum: packets=8 took=2.1ms remaining=2172 rate=8.6/slice promo=1130p runway=18665MB need=252 avail=4229 slices=79
+[pace] sweep quantum: packets=7 took=2.2ms remaining=2165 rate=8.2/slice promo=869p runway=18700MB need=263 avail=5509 slices=80
+[pace] sweep quantum: packets=7 took=2.1ms remaining=2158 rate=7.9/slice promo=673p runway=18730MB need=273 avail=7125 slices=81
+[pace] sweep quantum: packets=6 took=2.1ms remaining=2152 rate=7.4/slice promo=527p runway=18760MB need=289 avail=9113 slices=82
+[pace] sweep quantum: packets=7 took=2.2ms remaining=2145 rate=7.3/slice promo=417p runway=18785MB need=293 avail=11533 slices=83
+[pace] sweep quantum: packets=10 took=2.2ms remaining=2135 rate=8.0/slice promo=401p runway=18814MB need=267 avail=12011 slices=84
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2124 rate=8.8/slice promo=1339p runway=18841MB need=243 avail=3602 slices=85
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2113 rate=9.3/slice promo=2043p runway=18873MB need=227 avail=2365 slices=86
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2102 rate=9.7/slice promo=2571p runway=18904MB need=216 avail=1882 slices=87
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2091 rate=10.1/slice promo=2968p runway=18935MB need=208 avail=1633 slices=88
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2080 rate=10.3/slice promo=3264p runway=18967MB need=202 avail=1488 slices=89
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2069 rate=10.5/slice promo=3486p runway=18998MB need=198 avail=1395 slices=90
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2058 rate=10.6/slice promo=3653p runway=19029MB need=194 avail=1334 slices=91
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2047 rate=10.7/slice promo=3779p runway=19061MB need=191 avail=1291 slices=92
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2036 rate=10.8/slice promo=3873p runway=19092MB need=189 avail=1262 slices=93
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2025 rate=10.8/slice promo=3943p runway=19124MB need=187 avail=1242 slices=94
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2014 rate=10.9/slice promo=3996p runway=19155MB need=185 avail=1227 slices=95
+[pace] sweep quantum: packets=11 took=2.1ms remaining=2003 rate=10.9/slice promo=4035p runway=19186MB need=184 avail=1217 slices=96
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1992 rate=10.9/slice promo=4065p runway=19218MB need=182 avail=1210 slices=97
+[pace] sweep quantum: packets=11 took=2.1ms remaining=1981 rate=11.0/slice promo=4087p runway=19249MB need=181 avail=1206 slices=98
+[pace] sweep quantum: packets=10 took=2.1ms remaining=1971 rate=10.7/slice promo=4104p runway=19281MB need=184 avail=1203 slices=99
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1962 rate=10.3/slice promo=4116p runway=19308MB need=191 avail=1201 slices=100
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1953 rate=10.0/slice promo=4125p runway=19330MB need=196 avail=1200 slices=101
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1944 rate=9.7/slice promo=4132p runway=19353MB need=200 avail=1199 slices=102
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1935 rate=9.5/slice promo=4137p runway=19376MB need=203 avail=1199 slices=103
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1926 rate=9.4/slice promo=4141p runway=19398MB need=205 avail=1199 slices=104
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1917 rate=9.3/slice promo=4144p runway=19421MB need=206 avail=1200 slices=105
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1908 rate=9.2/slice promo=4146p runway=19444MB need=207 avail=1201 slices=106
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1899 rate=9.2/slice promo=4148p runway=19467MB need=207 avail=1201 slices=107
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1890 rate=9.1/slice promo=4150p runway=19489MB need=207 avail=1202 slices=108
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1881 rate=9.1/slice promo=4151p runway=19512MB need=207 avail=1203 slices=109
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1872 rate=9.1/slice promo=4152p runway=19535MB need=206 avail=1204 slices=110
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1863 rate=9.1/slice promo=4152p runway=19558MB need=206 avail=1206 slices=111
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1854 rate=9.0/slice promo=4152p runway=19580MB need=205 avail=1207 slices=112
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1845 rate=9.0/slice promo=4152p runway=19603MB need=204 avail=1209 slices=113
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1836 rate=9.0/slice promo=4153p runway=19626MB need=203 avail=1210 slices=114
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1827 rate=9.0/slice promo=4153p runway=19648MB need=202 avail=1211 slices=115
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1818 rate=9.0/slice promo=4153p runway=19671MB need=202 avail=1213 slices=116
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1809 rate=9.0/slice promo=4153p runway=19694MB need=201 avail=1214 slices=117
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1800 rate=9.0/slice promo=4153p runway=19717MB need=200 avail=1215 slices=118
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1791 rate=9.0/slice promo=4153p runway=19739MB need=199 avail=1217 slices=119
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1782 rate=9.0/slice promo=4154p runway=19762MB need=198 avail=1218 slices=120
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1773 rate=9.0/slice promo=4154p runway=19785MB need=197 avail=1219 slices=121
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1764 rate=9.0/slice promo=4154p runway=19807MB need=196 avail=1221 slices=122
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1755 rate=9.0/slice promo=4154p runway=19830MB need=195 avail=1222 slices=123
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1746 rate=9.0/slice promo=4154p runway=19853MB need=194 avail=1224 slices=124
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1737 rate=9.0/slice promo=4154p runway=19876MB need=193 avail=1225 slices=125
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1728 rate=9.0/slice promo=4155p runway=19898MB need=192 avail=1226 slices=126
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1719 rate=9.0/slice promo=4155p runway=19921MB need=191 avail=1227 slices=127
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1710 rate=9.0/slice promo=4155p runway=19944MB need=190 avail=1229 slices=128
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1701 rate=9.0/slice promo=4155p runway=19967MB need=189 avail=1230 slices=129
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1692 rate=9.0/slice promo=4155p runway=19989MB need=188 avail=1232 slices=130
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1683 rate=9.0/slice promo=4155p runway=20012MB need=187 avail=1233 slices=131
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1674 rate=9.0/slice promo=4156p runway=20035MB need=186 avail=1234 slices=132
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1665 rate=9.0/slice promo=4155p runway=20057MB need=185 avail=1236 slices=133
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1656 rate=9.0/slice promo=4155p runway=20080MB need=184 avail=1237 slices=134
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1647 rate=9.0/slice promo=4155p runway=20103MB need=183 avail=1239 slices=135
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1638 rate=9.0/slice promo=4155p runway=20126MB need=182 avail=1240 slices=136
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1629 rate=9.0/slice promo=4155p runway=20148MB need=181 avail=1241 slices=137
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1620 rate=9.0/slice promo=4156p runway=20171MB need=180 avail=1243 slices=138
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1611 rate=9.0/slice promo=4155p runway=20194MB need=179 avail=1244 slices=139
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1602 rate=9.0/slice promo=4155p runway=20217MB need=178 avail=1246 slices=140
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1593 rate=9.0/slice promo=4155p runway=20239MB need=177 avail=1247 slices=141
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1584 rate=9.0/slice promo=4155p runway=20262MB need=176 avail=1248 slices=142
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1575 rate=9.0/slice promo=4155p runway=20285MB need=175 avail=1250 slices=143
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1566 rate=9.0/slice promo=4156p runway=20307MB need=174 avail=1251 slices=144
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1557 rate=9.0/slice promo=4155p runway=20330MB need=173 avail=1253 slices=145
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1548 rate=9.0/slice promo=4155p runway=20353MB need=172 avail=1254 slices=146
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1539 rate=9.0/slice promo=4155p runway=20376MB need=171 avail=1255 slices=147
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1530 rate=9.0/slice promo=4155p runway=20398MB need=170 avail=1257 slices=148
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1521 rate=9.0/slice promo=4155p runway=20421MB need=169 avail=1258 slices=149
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1512 rate=9.0/slice promo=4155p runway=20444MB need=168 avail=1260 slices=150
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1503 rate=9.0/slice promo=4155p runway=20466MB need=167 avail=1261 slices=151
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1494 rate=9.0/slice promo=4155p runway=20489MB need=166 avail=1262 slices=152
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1485 rate=9.0/slice promo=4155p runway=20512MB need=165 avail=1264 slices=153
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1476 rate=9.0/slice promo=4155p runway=20535MB need=164 avail=1265 slices=154
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1467 rate=9.0/slice promo=4155p runway=20557MB need=163 avail=1267 slices=155
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1458 rate=9.0/slice promo=4155p runway=20580MB need=162 avail=1268 slices=156
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1449 rate=9.0/slice promo=4155p runway=20603MB need=161 avail=1269 slices=157
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1440 rate=9.0/slice promo=4155p runway=20626MB need=160 avail=1271 slices=158
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1431 rate=9.0/slice promo=4155p runway=20648MB need=159 avail=1272 slices=159
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1422 rate=9.0/slice promo=4155p runway=20671MB need=158 avail=1274 slices=160
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1413 rate=9.0/slice promo=4155p runway=20694MB need=157 avail=1275 slices=161
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1404 rate=9.0/slice promo=4155p runway=20716MB need=156 avail=1276 slices=162
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1395 rate=9.0/slice promo=4155p runway=20739MB need=155 avail=1278 slices=163
+[pace] sweep quantum: packets=9 took=2.1ms remaining=1386 rate=9.0/slice promo=4155p runway=20762MB need=154 avail=1279 slices=164
+[pace] sweep quantum: packets=8 took=2.0ms remaining=1378 rate=8.8/slice promo=3234p runway=20799MB need=157 avail=1646 slices=165
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1371 rate=8.3/slice promo=2447p runway=20833MB need=165 avail=2180 slices=166
+[pace] sweep quantum: packets=5 took=2.0ms remaining=1366 rate=7.5/slice promo=1857p runway=20863MB need=182 avail=2876 slices=167
+[pace] sweep quantum: packets=6 took=2.2ms remaining=1360 rate=7.1/slice promo=1414p runway=20885MB need=191 avail=3781 slices=168
+[pace] sweep quantum: packets=5 took=2.0ms remaining=1355 rate=6.6/slice promo=1083p runway=20910MB need=205 avail=4943 slices=169
+[pace] sweep quantum: packets=6 took=2.1ms remaining=1349 rate=6.4/slice promo=834p runway=20932MB need=209 avail=6425 slices=170
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1342 rate=6.6/slice promo=647p runway=20957MB need=204 avail=8292 slices=171
+[pace] sweep quantum: packets=5 took=2.0ms remaining=1337 rate=6.2/slice promo=507p runway=20987MB need=216 avail=10597 slices=172
+[pace] sweep quantum: packets=6 took=2.1ms remaining=1331 rate=6.1/slice promo=403p runway=21008MB need=217 avail=13346 slices=173
+[pace] sweep quantum: packets=9 took=2.2ms remaining=1322 rate=6.9/slice promo=540p runway=21031MB need=193 avail=9970 slices=174
+[pace] sweep quantum: packets=10 took=2.2ms remaining=1312 rate=7.6/slice promo=1446p runway=21053MB need=172 avail=3727 slices=175
+[pace] sweep quantum: packets=10 took=2.2ms remaining=1302 rate=8.2/slice promo=2125p runway=21080MB need=158 avail=2540 slices=176
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1293 rate=8.4/slice promo=2634p runway=21107MB need=153 avail=2051 slices=177
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1284 rate=8.6/slice promo=3016p runway=21130MB need=150 avail=1794 slices=178
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1275 rate=8.7/slice promo=3303p runway=21153MB need=147 avail=1639 slices=179
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1266 rate=8.8/slice promo=3518p runway=21175MB need=144 avail=1541 slices=180
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1257 rate=8.8/slice promo=3679p runway=21198MB need=142 avail=1475 slices=181
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1248 rate=8.9/slice promo=3800p runway=21221MB need=141 avail=1430 slices=182
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1239 rate=8.9/slice promo=3891p runway=21244MB need=139 avail=1398 slices=183
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1230 rate=8.9/slice promo=3959p runway=21266MB need=138 avail=1375 slices=184
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1221 rate=8.9/slice promo=4011p runway=21289MB need=136 avail=1359 slices=185
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1212 rate=9.0/slice promo=4049p runway=21312MB need=135 avail=1347 slices=186
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1203 rate=9.0/slice promo=4078p runway=21334MB need=134 avail=1339 slices=187
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1194 rate=9.0/slice promo=4099p runway=21357MB need=133 avail=1334 slices=188
+[pace] sweep quantum: packets=9 took=2.0ms remaining=1185 rate=9.0/slice promo=4115p runway=21380MB need=132 avail=1330 slices=189
+[pace] sweep quantum: packets=8 took=2.0ms remaining=1177 rate=8.7/slice promo=4127p runway=21402MB need=135 avail=1328 slices=190
+[pace] sweep quantum: packets=7 took=2.4ms remaining=1170 rate=8.3/slice promo=4138p runway=21421MB need=141 avail=1325 slices=191
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1163 rate=8.0/slice promo=4144p runway=21435MB need=146 avail=1324 slices=192
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1156 rate=7.7/slice promo=4148p runway=21449MB need=149 avail=1324 slices=193
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1149 rate=7.6/slice promo=4151p runway=21463MB need=152 avail=1324 slices=194
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1142 rate=7.4/slice promo=4155p runway=21477MB need=154 avail=1323 slices=195
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1135 rate=7.3/slice promo=4157p runway=21491MB need=155 avail=1324 slices=196
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1128 rate=7.2/slice promo=4158p runway=21505MB need=156 avail=1324 slices=197
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1121 rate=7.2/slice promo=4159p runway=21519MB need=156 avail=1325 slices=198
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1114 rate=7.1/slice promo=4162p runway=21533MB need=156 avail=1325 slices=199
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1107 rate=7.1/slice promo=4162p runway=21547MB need=156 avail=1325 slices=200
+[pace] sweep quantum: packets=7 took=2.2ms remaining=1100 rate=7.1/slice promo=4163p runway=21561MB need=155 avail=1326 slices=201
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1093 rate=7.1/slice promo=4163p runway=21575MB need=155 avail=1327 slices=202
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1086 rate=7.0/slice promo=4164p runway=21589MB need=154 avail=1327 slices=203
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1079 rate=7.0/slice promo=4163p runway=21603MB need=153 avail=1328 slices=204
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1072 rate=7.0/slice promo=4163p runway=21617MB need=153 avail=1329 slices=205
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1065 rate=7.0/slice promo=4163p runway=21631MB need=152 avail=1330 slices=206
+[pace] sweep quantum: packets=7 took=2.2ms remaining=1058 rate=7.0/slice promo=4164p runway=21645MB need=151 avail=1331 slices=207
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1051 rate=7.0/slice promo=4163p runway=21659MB need=150 avail=1332 slices=208
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1044 rate=7.0/slice promo=4163p runway=21673MB need=149 avail=1333 slices=209
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1037 rate=7.0/slice promo=4163p runway=21687MB need=148 avail=1334 slices=210
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1030 rate=7.0/slice promo=4164p runway=21701MB need=147 avail=1334 slices=211
+[pace] sweep quantum: packets=7 took=2.1ms remaining=1023 rate=7.0/slice promo=4163p runway=21715MB need=146 avail=1335 slices=212
+[pace] sweep quantum: packets=7 took=2.2ms remaining=1016 rate=7.0/slice promo=4163p runway=21729MB need=145 avail=1336 slices=213
+[pace] sweep quantum: packets=7 took=2.2ms remaining=1009 rate=7.0/slice promo=3443p runway=21755MB need=144 avail=1618 slices=214
+[pace] sweep quantum: packets=5 took=2.3ms remaining=1004 rate=6.5/slice promo=2583p runway=21785MB need=154 avail=2159 slices=215
+[pace] sweep quantum: packets=4 took=2.0ms remaining=1000 rate=5.9/slice promo=1938p runway=21807MB need=170 avail=2881 slices=216
+[pace] sweep quantum: packets=4 took=2.2ms remaining=996 rate=5.4/slice promo=1454p runway=21824MB need=184 avail=3843 slices=217
+[mmtk] GCs: 1844 (full: 12), GC time: 68665 ms, objects copied: 517196973
+wall=118.59 rss_kb=13378584
