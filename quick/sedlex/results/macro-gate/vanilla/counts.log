@@ -1,0 +1,7 @@
+counts test_decompress: minor_words: 3097804453 promoted_words: 1491270 minor_collections: 11867 major_collections: 57 major_collections: 0 
+counts eio_conc_bench: minor_words: 3445111898 promoted_words: 2930345463 minor_collections: 13194 major_collections: 103 major_collections: 0 
+counts liq_video_frames: minor_words: 150764 promoted_words: 586 minor_collections: 8826 major_collections: 4413 major_collections: 0 
+counts sedlex_bench: minor_words: 5961116403 promoted_words: 1034512305 minor_collections: 22744 major_collections: 9 major_collections: 0 
+counts ydump_repeat: minor_words: 2811567672 promoted_words: 738308602 minor_collections: 10729 major_collections: 8 major_collections: 0 
+counts zarith_pi: minor_words: 7683379 promoted_words: 753176 minor_collections: 618846 major_collections: 309418 major_collections: 0 
+COUNTS-DONE

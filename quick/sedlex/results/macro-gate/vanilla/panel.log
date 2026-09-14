@@ -1,0 +1,8 @@
+# vanilla, same rungs/pinning as macro_gate.sh. wall/rss: 2026-08-30 panel on an idle church (identical binaries, results/vanilla.*.r1-3);
+# minors/majors/promoted: 2026-09-14 OCAMLRUNPARAM=v=0x400 (load-insensitive). gc_time/max_pause: pending an idle machine (external job since 2026-09-12).
+vanilla test_decompress: wall_med=47.79s (n=3) rss=1406MB minors=11867 majors=57 promoted_words=1491270 gc_time=?s max_pause=?ms
+vanilla eio_conc_bench: wall_med=45.31s (n=3) rss=2124MB minors=13194 majors=103 promoted_words=2930345463 gc_time=?s max_pause=?ms
+vanilla liq_video_frames: wall_med=105.84s (n=3) rss=174MB minors=8826 majors=4413 promoted_words=586 gc_time=?s max_pause=?ms
+vanilla sedlex_bench: wall_med=44.07s (n=3) rss=8276MB minors=22744 majors=9 promoted_words=1034512305 gc_time=?s max_pause=?ms
+vanilla ydump_repeat: wall_med=49.43s (n=3) rss=9823MB minors=10729 majors=8 promoted_words=738308602 gc_time=?s max_pause=?ms
+vanilla zarith_pi: wall_med=49.79s (n=3) rss=9MB minors=618846 majors=309418 promoted_words=753176 gc_time=?s max_pause=?ms

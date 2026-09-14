@@ -378,6 +378,118 @@ mature at InitialMark, already tracked in core): those promotions count
 toward the next trigger instead of raising its bar. One trait accessor in
 core, one subtraction in the binding.
 
+### Macro benches: Bactrian vs vanilla (2026-09-14)
+
+Six macro benches at their default rungs, church node 0, `setarch -R`,
+single GC worker, default dynamic heap and 16 MB nursery for Bactrian;
+stock defaults for vanilla. Bactrian columns: the tree before the slicing
+gate, the gate as committed (mmtk-core 50f56f5987), and the v5 candidate
+(inflow floor + projection guards, `results/macro-gate/rule1/rule1-v5.diff`).
+Vanilla wall and RSS are the 2026-08-30 panel on an idle machine (same
+binaries; per-run files in `~/shape/macro/results/vanilla.*`), vanilla
+minor/major counts are `OCAMLRUNPARAM=v=0x400` on 2026-09-14
+(load-insensitive). Vanilla GC time and max pause need `olly gc-stats` on an
+idle machine: another user's 17-core job has held church since 2026-09-12,
+so a watcher runs that panel when the load clears (`vanilla_panel.sh`;
+results will land in `results/macro-gate/vanilla/idle/`). Table generator:
+`macro_compare.py`.
+
+![macro vs vanilla](charts/macro_vs_vanilla.png)
+
+**Wall time (median of 3)**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | 47.8 s | 53.5 s | 55.0 s | 54.5 s | 1.14× |
+| eio | 45.3 s | 132.5 s | 135.6 s | 122.5 s | 2.70× |
+| liq video frames | 105.8 s | 100.4 s | 96.2 s | 96.2 s† | 0.91× |
+| sedlex 6M | 44.1 s | 281.1 s | 138.4 s | 136.5 s | 3.10× |
+| ydump 6M | 49.4 s | 85.6 s | 67.7 s | 66.7 s | 1.35× |
+| zarith | 49.8 s | 46.8 s | 46.8 s | 46.8 s† | 0.94× |
+
+**Peak RSS (max over the 3 timed runs)**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | 1.4 GB | 1.3 GB | 1.4 GB | 1.4 GB | 1.02× |
+| eio | 2.1 GB | 3.2 GB | 23.6 GB | 13.1 GB | 6.30× |
+| liq video frames | 174 MB | 607 MB | 607 MB | 607 MB† | 3.49× |
+| sedlex 6M | 8.1 GB | 8.2 GB | 8.5 GB | 8.5 GB | 1.05× |
+| ydump 6M | 9.6 GB | 9.0 GB | 11.3 GB | 11.3 GB | 1.18× |
+| zarith | 9 MB | 69 MB | 63 MB | 63 MB† | 7.00× |
+
+**Max pause**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | ? | 33 ms | 8 ms | 8 ms | ? |
+| eio | ? | 1.9 s | 470 ms | 1.2 s | ? |
+| liq video frames | ? | 301 ms | 295 ms | 295 ms† | ? |
+| sedlex 6M | ? | 40.1 s | 131 ms | 124 ms | ? |
+| ydump 6M | ? | 13.9 s | 166 ms | 165 ms | ? |
+| zarith | ? | 3 ms | 3 ms | 3 ms† | ? |
+
+Bactrian: longest STW window in the pause log (nursery, Full, sliced-cycle pause). Vanilla: `olly gc-stats` latency profile max (a minor plus its attached major slice).
+
+**Major collections**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | 57 | 54 | 54 | 54 | 0.95× |
+| eio | 103 | 31 | 8 | 12 | 0.12× |
+| liq video frames | 4,413 | 417 | 417 | 417† | 0.09× |
+| sedlex 6M | 9 | 20 | 13 | 13 | 1.44× |
+| ydump 6M | 8 | 10 | 8 | 8 | 1.00× |
+| zarith | 309,418 | 25,618 | 25,617 | 25,617† | 0.08× |
+
+Bactrian: Fulls plus completed sliced cycles. Vanilla: `major_collections` from `OCAMLRUNPARAM=v=0x400`.
+
+**Minor collections**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | 11,867 | 1,673 | 1,882 | 1,882 | 0.16× |
+| eio | 13,194 | 1,828 | 1,829 | 1,833 | 0.14× |
+| liq video frames | 8,826 | 2,502 | 2,502 | 2,502† | 0.28× |
+| sedlex 6M | 22,744 | 3,034 | 3,046 | 3,046 | 0.13× |
+| ydump 6M | 10,729 | 1,433 | 1,444 | 1,444 | 0.13× |
+| zarith | 618,846 | 51,284 | 51,284 | 51,284† | 0.08× |
+
+**GC time**
+
+| bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|---:|
+| decompress | ? | 2.1 s | 2.4 s | 2.4 s | ? |
+| eio | ? | 86.3 s | 72.3 s | 68.4 s | ? |
+| liq video frames | ? | 58.0 s | 54.5 s | 54.5 s† | ? |
+| sedlex 6M | ? | 227.0 s | 89.6 s | 88.0 s | ? |
+| ydump 6M | ? | 46.1 s | 29.7 s | 29.5 s | ? |
+| zarith | ? | 17.8 s | 17.6 s | 17.6 s† | ? |
+
+Bactrian: sum of STW time (`MMTK_VERBOSE`). Vanilla: `olly gc-stats` GC time (minor + major, incl. slices).
+
+† not rerun under v5: no sliced cycle occurs on this bench, so it is identical to the gate binary by construction.
+
+Reading it:
+
+- **Throughput.** Bactrian is within 0.9–1.15× of vanilla on decompress, liq
+  and zarith, 1.35× on ydump, and 2.7–3.1× on eio and sedlex. The two slow
+  ones are the promotion-bound workloads (§4a: 310 ticks per promoted
+  object vs vanilla's ~72), not pacing any more: the gate removed the
+  multi-second Fulls and halved sedlex's wall.
+- **Peak RSS.** Within 1.2× of vanilla on decompress, sedlex and ydump. eio
+  is the open problem (6.3× under v5, from the baseline ratchet described
+  above; vanilla holds 2.1 GB with 103 majors). liq (3.5×) and zarith (7×)
+  are small absolute numbers (607 MB / 63 MB) from MMTk's block/chunk
+  granularity and LOS accounting.
+- **Major collections.** Vanilla runs far more majors on liq (4413) and
+  zarith (309k, one per two minors) because its major work is paced by
+  allocation of large values; Bactrian's 417 / 25.6k Fulls are the
+  LOS-pressure ticks. On sedlex/ydump the counts match (8–13 vs 8–9). On eio
+  vanilla's 103 cycles vs Bactrian's 12 is the RSS story again.
+- **Minors.** Vanilla's 2 MB minor heap vs Bactrian's 16 MB nursery gives
+  ~6–8× the minor count on the allocation-heavy benches.
+
 ## 6. Reproducing
 
 ```
