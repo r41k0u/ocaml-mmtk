@@ -384,15 +384,15 @@ Six macro benches at their default rungs, church node 0, `setarch -R`,
 single GC worker, default dynamic heap and 16 MB nursery for Bactrian;
 stock defaults for vanilla. Bactrian columns: the tree before the slicing
 gate, the gate as committed (mmtk-core 50f56f5987), and the v5 candidate
-(inflow floor + projection guards, `results/macro-gate/rule1/rule1-v5.diff`).
-Vanilla wall and RSS are the 2026-08-30 panel on an idle machine (same
-binaries; per-run files in `~/shape/macro/results/vanilla.*`), vanilla
-minor/major counts are `OCAMLRUNPARAM=v=0x400` on 2026-09-14
-(load-insensitive). Vanilla GC time and max pause need `olly gc-stats` on an
-idle machine: another user's 17-core job has held church since 2026-09-12,
-so a watcher runs that panel when the load clears (`vanilla_panel.sh`;
-results will land in `results/macro-gate/vanilla/idle/`). Table generator:
-`macro_compare.py`.
+(inflow floor + projection guards, `results/macro-gate/rule1/rule1-v5.diff`),
+all measured 2026-09-11 on an idle machine. Vanilla: one panel on the idle
+machine on 2026-09-14 (`vanilla_panel.sh`, `results/macro-gate/vanilla/`):
+wall ×3 and RSS, minor/major counts from `OCAMLRUNPARAM=v=0x400`, GC time
+and max pause from `olly gc-stats` (its latency profile; a vanilla "pause"
+is a minor plus the major slice attached to it). Its walls reproduce the
+2026-08-30 idle panel within 1 %. (Another user's 17-core job held church
+from 2026-09-12 19:27 to 2026-09-14 17:38; runs taken under it were
+discarded.) Table generator: `macro_compare.py`.
 
 ![macro vs vanilla](charts/macro_vs_vanilla.png)
 
@@ -400,12 +400,12 @@ results will land in `results/macro-gate/vanilla/idle/`). Table generator:
 
 | bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
 |---|---:|---:|---:|---:|---:|
-| decompress | 47.8 s | 53.5 s | 55.0 s | 54.5 s | 1.14× |
-| eio | 45.3 s | 132.5 s | 135.6 s | 122.5 s | 2.70× |
-| liq video frames | 105.8 s | 100.4 s | 96.2 s | 96.2 s† | 0.91× |
-| sedlex 6M | 44.1 s | 281.1 s | 138.4 s | 136.5 s | 3.10× |
-| ydump 6M | 49.4 s | 85.6 s | 67.7 s | 66.7 s | 1.35× |
-| zarith | 49.8 s | 46.8 s | 46.8 s | 46.8 s† | 0.94× |
+| decompress | 48.2 s | 53.5 s | 55.0 s | 54.5 s | 1.13× |
+| eio | 45.8 s | 132.5 s | 135.6 s | 122.5 s | 2.68× |
+| liq video frames | 106.0 s | 100.4 s | 96.2 s | 96.2 s† | 0.91× |
+| sedlex 6M | 44.5 s | 281.1 s | 138.4 s | 136.5 s | 3.06× |
+| ydump 6M | 49.6 s | 85.6 s | 67.7 s | 66.7 s | 1.34× |
+| zarith | 50.4 s | 46.8 s | 46.8 s | 46.8 s† | 0.93× |
 
 **Peak RSS (max over the 3 timed runs)**
 
@@ -422,12 +422,12 @@ results will land in `results/macro-gate/vanilla/idle/`). Table generator:
 
 | bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
 |---|---:|---:|---:|---:|---:|
-| decompress | ? | 33 ms | 8 ms | 8 ms | ? |
-| eio | ? | 1.9 s | 470 ms | 1.2 s | ? |
-| liq video frames | ? | 301 ms | 295 ms | 295 ms† | ? |
-| sedlex 6M | ? | 40.1 s | 131 ms | 124 ms | ? |
-| ydump 6M | ? | 13.9 s | 166 ms | 165 ms | ? |
-| zarith | ? | 3 ms | 3 ms | 3 ms† | ? |
+| decompress | 12 ms | 33 ms | 8 ms | 8 ms | 0.65× |
+| eio | 72 ms | 1.9 s | 470 ms | 1.2 s | 16.29× |
+| liq video frames | 15 ms | 301 ms | 295 ms | 295 ms† | 19.55× |
+| sedlex 6M | 35 ms | 40.1 s | 131 ms | 124 ms | 3.59× |
+| ydump 6M | 657 ms | 13.9 s | 166 ms | 165 ms | 0.25× |
+| zarith | 71 ms | 3 ms | 3 ms | 3 ms† | 0.04× |
 
 Bactrian: longest STW window in the pause log (nursery, Full, sliced-cycle pause). Vanilla: `olly gc-stats` latency profile max (a minor plus its attached major slice).
 
@@ -459,12 +459,12 @@ Bactrian: Fulls plus completed sliced cycles. Vanilla: `major_collections` from 
 
 | bench | vanilla | Bactrian pre-gate | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
 |---|---:|---:|---:|---:|---:|
-| decompress | ? | 2.1 s | 2.4 s | 2.4 s | ? |
-| eio | ? | 86.3 s | 72.3 s | 68.4 s | ? |
-| liq video frames | ? | 58.0 s | 54.5 s | 54.5 s† | ? |
-| sedlex 6M | ? | 227.0 s | 89.6 s | 88.0 s | ? |
-| ydump 6M | ? | 46.1 s | 29.7 s | 29.5 s | ? |
-| zarith | ? | 17.8 s | 17.6 s | 17.6 s† | ? |
+| decompress | 0.4 s | 2.1 s | 2.4 s | 2.4 s | 6.36× |
+| eio | 29.4 s | 86.3 s | 72.3 s | 68.4 s | 2.33× |
+| liq video frames | 61.8 s | 58.0 s | 54.5 s | 54.5 s† | 0.88× |
+| sedlex 6M | 18.7 s | 227.0 s | 89.6 s | 88.0 s | 4.71× |
+| ydump 6M | 13.8 s | 46.1 s | 29.7 s | 29.5 s | 2.13× |
+| zarith | 6.5 s | 17.8 s | 17.6 s | 17.6 s† | 2.73× |
 
 Bactrian: sum of STW time (`MMTK_VERBOSE`). Vanilla: `olly gc-stats` GC time (minor + major, incl. slices).
 
@@ -478,17 +478,26 @@ Reading it:
   object vs vanilla's ~72), not pacing any more: the gate removed the
   multi-second Fulls and halved sedlex's wall.
 - **Peak RSS.** Within 1.2× of vanilla on decompress, sedlex and ydump. eio
-  is the open problem (6.3× under v5, from the baseline ratchet described
+  is the open problem (6.3× under v5, the baseline ratchet described
   above; vanilla holds 2.1 GB with 103 majors). liq (3.5×) and zarith (7×)
-  are small absolute numbers (607 MB / 63 MB) from MMTk's block/chunk
-  granularity and LOS accounting.
-- **Major collections.** Vanilla runs far more majors on liq (4413) and
-  zarith (309k, one per two minors) because its major work is paced by
-  allocation of large values; Bactrian's 417 / 25.6k Fulls are the
+  are small absolute numbers (607 MB / 63 MB) from block/chunk granularity
+  and LOS accounting.
+- **Max pause.** Vanilla's incremental major keeps its worst pause at 12–72
+  ms on five benches; its one large pause is ydump (657 ms, a major slice
+  over the 10 GB live set), where Bactrian's sliced cycle is better (166 ms).
+  Bactrian's worst pauses after the gate are 8 ms (decompress), 131–166 ms
+  (sedlex, ydump), 295 ms (liq: its LOS-pressure Fulls) and 0.5–1.2 s on eio
+  (the v5 guard escalation). Before the gate they were 14–40 s.
+- **GC time.** Vanilla spends 29 s (64 %) of eio and 62 s (58 %) of liq in
+  GC — these workloads are GC-heavy under any collector. Bactrian's GC time
+  is 2.1–2.3× vanilla on eio/ydump, 4.7× on sedlex (promotion), 0.9× on
+  liq, and 6× on decompress from a small base (2.4 s vs 0.4 s).
+- **Cycle counts.** Vanilla runs an order of magnitude more majors on liq
+  (4413) and zarith (309k, one per two minors) because its major work is
+  paced by large-value allocation; Bactrian's 417 / 25.6k Fulls are the
   LOS-pressure ticks. On sedlex/ydump the counts match (8–13 vs 8–9). On eio
-  vanilla's 103 cycles vs Bactrian's 12 is the RSS story again.
-- **Minors.** Vanilla's 2 MB minor heap vs Bactrian's 16 MB nursery gives
-  ~6–8× the minor count on the allocation-heavy benches.
+  vanilla's 103 cycles vs Bactrian's 12 is the RSS story again. Minors
+  differ 6–8× from the 2 MB minor heap vs the 16 MB nursery.
 
 ### Quick panel (CLBG-style + kb + 3 adversarial): Bactrian vs vanilla (2026-09-14)
 

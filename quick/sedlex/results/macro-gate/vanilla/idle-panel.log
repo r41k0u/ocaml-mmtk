@@ -1,6 +1,3 @@
-# vanilla, same rungs/pinning as macro_gate.sh, church node 0, IDLE machine (2026-09-14 17:38-18:10 IST, after the external job ended):
-# wall/RSS x3, minors/majors/promoted from OCAMLRUNPARAM=v=0x400, gc_time/max_pause from olly gc-stats (latency profile). Runner: vanilla_panel.sh.
-# (2026-08-30 idle walls for cross-check: decompress 47.79, eio 45.31, liq 105.84, sedlex 44.07, ydump 49.43, zarith 49.79 s)
 vanilla test_decompress: wall_med=48.20s (n=3) rss=1406MB minors=11867 majors=57 promoted_words=1491270 gc_time=0.37s max_pause=12.22ms
 vanilla eio_conc_bench: wall_med=45.77s (n=3) rss=2124MB minors=13194 majors=103 promoted_words=2930345463 gc_time=29.40s max_pause=72.48ms
 vanilla liq_video_frames: wall_med=106.05s (n=3) rss=174MB minors=8826 majors=4413 promoted_words=586 gc_time=61.76s max_pause=15.09ms

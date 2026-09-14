@@ -1,0 +1,37 @@
+Input: 389582329 bytes, 6000000 lines
+Tokens: 126000001
+Idents: 20400000, Numbers: 18000000, Strings: 1200000
+
+Execution times:
+Wall time (s):	43.99
+CPU time (s):	43.99
+GC time (s):	18.69
+GC overhead (% of CPU time):	42.48%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 43.99		 18.69	 42.48
+
+GC latency profile:
+#[Mean (ms):	0.41,	 Stddev (ms):	0.65]
+#[Min (ms):	0.00,	 max (ms):	34.54]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.11
+50.0000 	 0.43
+60.0000 	 0.44
+70.0000 	 0.44
+75.0000 	 0.44
+80.0000 	 0.45
+85.0000 	 0.46
+90.0000 	 0.47
+95.0000 	 1.10
+96.0000 	 2.96
+97.0000 	 3.16
+98.0000 	 3.17
+99.0000 	 3.23
+99.9000 	 3.36
+99.9900 	 3.45
+99.9990 	 34.54
+99.9999 	 34.54
+100.0000 	 34.54

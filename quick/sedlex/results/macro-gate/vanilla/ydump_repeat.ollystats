@@ -1,0 +1,36 @@
+Input: 827757098 bytes, 1 iterations
+Done
+
+Execution times:
+Wall time (s):	48.72
+CPU time (s):	48.72
+GC time (s):	13.85
+GC overhead (% of CPU time):	28.43%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 48.72		 13.85	 28.43
+
+GC latency profile:
+#[Mean (ms):	0.64,	 Stddev (ms):	5.37]
+#[Min (ms):	0.00,	 max (ms):	656.93]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.00
+50.0000 	 0.00
+60.0000 	 0.00
+70.0000 	 0.00
+75.0000 	 0.60
+80.0000 	 2.10
+85.0000 	 2.48
+90.0000 	 2.49
+95.0000 	 2.55
+96.0000 	 2.56
+97.0000 	 2.59
+98.0000 	 2.63
+99.0000 	 2.71
+99.9000 	 3.10
+99.9900 	 202.11
+99.9990 	 656.93
+99.9999 	 656.93
+100.0000 	 656.93
