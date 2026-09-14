@@ -1,0 +1,4 @@
+# Discarded quick-panel passes (kept for the record)
+
+- `panel-noninterleaved.log`, `panel-v5-repeat.log`, `panel-noninterleaved-rerun.log` (laptop, 2026-09-14): a native build ran on the E-cores during the vanilla pass (P-core runs lost 30–40 %), and even alone the same binary drifted up to 2x between passes (mobile-part thermal/turbo). Replaced by the interleaved laptop run in `../panel.log`.
+- `church-loaded-interleaved.log` (church, 2026-09-14): interleaved run while another user's 17-core job held the machine (load ~37). Unusable even as ratios: fannkuchredux (no allocation, no GC) read vanilla 4.84 s vs gate 6.48 s, and single sides swung 2x across their five reps (LU 2.9–5.3 s, binarytrees v5 7.2–12.2 s). An idle-time rerun is queued behind the vanilla macro panel (`~/shape/quick-vs-vanilla/idle/`).
