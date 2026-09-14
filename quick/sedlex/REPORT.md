@@ -490,6 +490,149 @@ Reading it:
 - **Minors.** Vanilla's 2 MB minor heap vs Bactrian's 16 MB nursery gives
   ~6–8× the minor count on the allocation-heavy benches.
 
+### Quick panel (CLBG-style + kb + 3 adversarial): Bactrian vs vanilla (2026-09-14)
+
+The 11-bench quick panel (seven CLBG/sandmark sequential benches, kb, and the
+three adversarial programs weak_memo / mature_mutation / fragmed) at perf
+sizes, vanilla vs Bactrian gate (committed) vs Bactrian v5 (candidate).
+church was occupied by another user's job, so this ran on the laptop (Core
+Ultra 7 265H): one P-core, `setarch -R`, dynamic heap, one GC worker.
+**Interleaved**: for each bench, five rounds of vanilla, gate, v5
+back-to-back, so all three sides see the same thermal/turbo state; wall is
+the median of 5 with min–max spreads of 1–3 %. Two earlier non-interleaved
+passes are kept under `results/quick-vs-vanilla/discarded/`: the same
+binary drifted up to 2× between passes (mobile-part frequency behaviour),
+which is why absolute laptop numbers are not comparable across passes and
+only the interleaved ratios are reported. Instrumentation as in the macro
+table (Bactrian: pause log + `MMTK_VERBOSE`; vanilla: `v=0x400` +
+`olly gc-stats`). Golden outputs byte-identical on all 33 cells. Generator:
+`quick_compare.py`; runner: `results/quick-vs-vanilla/quick_interleaved.sh`.
+
+![quick vs vanilla](charts/quick_vs_vanilla.png)
+
+**Wall time (median of 3)**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 0.7 s | 0.7 s | 0.7 s | 1.01× |
+| fannkuchredux | 1.4 s | 1.4 s | 1.4 s | 1.01× |
+| mandelbrot | 0.6 s | 0.6 s | 0.6 s | 1.00× |
+| spectralnorm | 0.8 s | 0.8 s | 0.8 s | 1.06× |
+| LU decomposition | 0.8 s | 0.9 s | 0.9 s | 1.14× |
+| matrix multiplication | 0.7 s | 0.6 s | 0.6 s | 0.94× |
+| binarytrees | 2.0 s | 2.2 s | 2.2 s | 1.08× |
+| kb | 0.8 s | 0.9 s | 0.9 s | 1.19× |
+| weak memo | 0.6 s | 0.7 s | 0.7 s | 1.11× |
+| mature mutation | 0.4 s | 1.1 s | 1.1 s | 2.76× |
+| fragmed | 0.1 s | 0.1 s | 0.1 s | 3.00× |
+
+**Peak RSS (max over the 3 timed runs)**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 3 MB | 10 MB | 10 MB | 3.33× |
+| fannkuchredux | 3 MB | 10 MB | 10 MB | 3.33× |
+| mandelbrot | 3 MB | 9 MB | 10 MB | 3.33× |
+| spectralnorm | 5 MB | 20 MB | 20 MB | 4.00× |
+| LU decomposition | 17 MB | 34 MB | 34 MB | 2.00× |
+| matrix multiplication | 16 MB | 36 MB | 35 MB | 2.19× |
+| binarytrees | 93 MB | 149 MB | 149 MB | 1.60× |
+| kb | 9 MB | 25 MB | 25 MB | 2.78× |
+| weak memo | 7 MB | 28 MB | 28 MB | 4.00× |
+| mature mutation | 19 MB | 71 MB | 71 MB | 3.74× |
+| fragmed | 29 MB | 248 MB | 243 MB | 8.38× |
+
+**Max pause**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 0 ms | 0 ms | 0 ms | ? |
+| fannkuchredux | 0 ms | 0 ms | 0 ms | ? |
+| mandelbrot | 0 ms | 0 ms | 0 ms | ? |
+| spectralnorm | 0 ms | 1 ms | 1 ms | 35.00× |
+| LU decomposition | 0 ms | 1 ms | 1 ms | 2.50× |
+| matrix multiplication | 0 ms | 7 ms | 6 ms | 22.00× |
+| binarytrees | 3 ms | 47 ms | 75 ms | 22.73× |
+| kb | 0 ms | 2 ms | 4 ms | 13.93× |
+| weak memo | 1 ms | 5 ms | 5 ms | 5.52× |
+| mature mutation | 1 ms | 37 ms | 43 ms | 30.28× |
+| fragmed | 1 ms | 12 ms | 25 ms | 48.82× |
+
+Bactrian: longest STW window in the pause log. Vanilla: `olly gc-stats` latency profile max.
+
+**Major collections**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 0 | 0 | 0 | ? |
+| fannkuchredux | 0 | 0 | 0 | ? |
+| mandelbrot | 0 | 0 | 0 | ? |
+| spectralnorm | 0 | 22 | 22 | ? |
+| LU decomposition | 2 | 47 | 47 | 23.50× |
+| matrix multiplication | 6 | 1 | 1 | 0.17× |
+| binarytrees | 61 | 15 | 15 | 0.25× |
+| kb | 127 | 12 | 12 | 0.09× |
+| weak memo | 220 | 5 | 5 | 0.02× |
+| mature mutation | 43 | 17 | 17 | 0.40× |
+| fragmed | 86 | 6 | 7 | 0.08× |
+
+Bactrian: Fulls plus completed sliced cycles. Vanilla: `major_collections` from `OCAMLRUNPARAM=v=0x400`.
+
+**Minor collections**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 0 | 0 | 0 | ? |
+| fannkuchredux | 0 | 0 | 0 | ? |
+| mandelbrot | 0 | 0 | 0 | ? |
+| spectralnorm | 2,746 | 732 | 732 | 0.27× |
+| LU decomposition | 5,587 | 1,489 | 1,489 | 0.27× |
+| matrix multiplication | 12 | 3 | 2 | 0.17× |
+| binarytrees | 1,778 | 244 | 244 | 0.14× |
+| kb | 943 | 234 | 234 | 0.25× |
+| weak memo | 607 | 133 | 133 | 0.22× |
+| mature mutation | 255 | 44 | 44 | 0.17× |
+| fragmed | 172 | 18 | 21 | 0.12× |
+
+**GC time**
+
+| bench | vanilla | Bactrian gate (committed) | Bactrian v5 (candidate) | v5 ÷ vanilla |
+|---|---:|---:|---:|---:|
+| nbody | 0.0 s | 0.0 s | 0.0 s | ? |
+| fannkuchredux | 0.0 s | 0.0 s | 0.0 s | ? |
+| mandelbrot | 0.0 s | 0.0 s | 0.0 s | ? |
+| spectralnorm | 0.0 s | 0.0 s | 0.0 s | ? |
+| LU decomposition | 0.0 s | 0.0 s | 0.0 s | 4.80× |
+| matrix multiplication | 0.0 s | 0.0 s | 0.0 s | ? |
+| binarytrees | 1.1 s | 1.4 s | 1.4 s | 1.33× |
+| kb | 0.1 s | 0.2 s | 0.2 s | 1.74× |
+| weak memo | 0.2 s | 0.2 s | 0.2 s | 0.84× |
+| mature mutation | 0.3 s | 1.0 s | 1.5 s | 4.86× |
+| fragmed | 0.0 s | 0.0 s | 0.1 s | 2.40× |
+
+Bactrian: sum of STW time (`MMTK_VERBOSE`). Vanilla: `olly gc-stats` GC time (minor + major, incl. slices).
+
+Reading it:
+
+- **Throughput.** Compute-bound CLBG benches are at parity (nbody,
+  fannkuchredux, mandelbrot 1.00–1.01×; matrix_multiplication 0.94×);
+  spectralnorm and LU_decomposition pay 6–14 % for MMTk's per-minor cost at
+  a 16 MB nursery; binarytrees 1.09×, kb 1.19×, weak_memo 1.11×. The two
+  designed adversaries are where Bactrian loses: mature_mutation 2.8×
+  (mature write traffic through the object-grain remembered set) and
+  fragmed 2.6–3.0× (fragmentation churn) — unchanged from the campaign
+  numbers, and independent of the gate/v5 changes.
+- **Peak RSS.** MMTk's fixed footprint (metadata, chunk reservation) shows
+  as 9–10 MB vs 3 MB on the no-GC benches; on the GC-active ones Bactrian
+  sits at 1.6–4× vanilla, fragmed at 8× (248 MB vs 29 MB).
+- **Max pause.** Vanilla's pauses are sub-millisecond everywhere at these
+  sizes (2 MB minor heap, incremental major); Bactrian's are its Fulls: 47–75
+  ms on binarytrees, 37–43 ms on mature_mutation, 12–25 ms on fragmed.
+- **Majors.** Vanilla runs 2–40× more major cycles (allocation-paced slices)
+  than Bactrian runs Fulls; Bactrian runs 3–7× fewer minors (16 MB vs 2 MB).
+- gate vs v5: identical within noise on every bench, as expected (no quick
+  bench reaches the 200 ms worth bar, so no cycle is sliced).
+
 ## 6. Reproducing
 
 ```

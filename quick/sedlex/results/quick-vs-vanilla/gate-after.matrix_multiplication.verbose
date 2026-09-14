@@ -1,0 +1,4 @@
+[mmtk] initialised: plan=Bactrian heap=dynamic weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+[mmtk] pause log: 4 pauses -> /home/r41k0u/ocaml/mmtk_for_ocaml/shape-bench/quick/sedlex/results/quick-vs-vanilla/gate-after.matrix_multiplication.pause.ndjson
+[mmtk] GCs: 4 (full: 1), GC time: 8 ms, objects copied: 101

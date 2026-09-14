@@ -1,0 +1,35 @@
+mature_mutation 8 checksum 11462478557265514 acc 3383444
+
+Execution times:
+Wall time (s):	0.39
+CPU time (s):	0.39
+GC time (s):	0.29
+GC overhead (% of CPU time):	73.85%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 0.39		 0.29	 73.85
+
+GC latency profile:
+#[Mean (ms):	0.62,	 Stddev (ms):	0.25]
+#[Min (ms):	0.00,	 max (ms):	1.63]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.54
+50.0000 	 0.64
+60.0000 	 0.68
+70.0000 	 0.73
+75.0000 	 0.76
+80.0000 	 0.79
+85.0000 	 0.83
+90.0000 	 0.93
+95.0000 	 0.99
+96.0000 	 1.00
+97.0000 	 1.01
+98.0000 	 1.02
+99.0000 	 1.03
+99.9000 	 1.63
+99.9900 	 1.63
+99.9990 	 1.63
+99.9999 	 1.63
+100.0000 	 1.63

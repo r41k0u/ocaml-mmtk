@@ -1,0 +1,36 @@
+weak_memo: dead=13107200 observed-cleared=442366 (timing metric)
+weak_memo 800 checksum 123401184716521472
+
+Execution times:
+Wall time (s):	0.59
+CPU time (s):	0.59
+GC time (s):	0.19
+GC overhead (% of CPU time):	32.79%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 0.59		 0.19	 32.79
+
+GC latency profile:
+#[Mean (ms):	0.20,	 Stddev (ms):	0.13]
+#[Min (ms):	0.00,	 max (ms):	0.43]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.10
+50.0000 	 0.19
+60.0000 	 0.27
+70.0000 	 0.31
+75.0000 	 0.32
+80.0000 	 0.32
+85.0000 	 0.33
+90.0000 	 0.33
+95.0000 	 0.37
+96.0000 	 0.38
+97.0000 	 0.38
+98.0000 	 0.38
+99.0000 	 0.39
+99.9000 	 0.41
+99.9900 	 0.43
+99.9990 	 0.43
+99.9999 	 0.43
+100.0000 	 0.43

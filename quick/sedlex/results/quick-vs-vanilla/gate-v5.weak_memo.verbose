@@ -1,0 +1,5 @@
+[mmtk] initialised: plan=Bactrian heap=dynamic weak_refs=1
+[mmtk] native nursery: TLAB (MMTk-owned copy-nursery block)
+weak_memo: dead=13107200 observed-cleared=16526 (timing metric)
+[mmtk] pause log: 138 pauses -> /home/r41k0u/ocaml/mmtk_for_ocaml/shape-bench/quick/sedlex/results/quick-vs-vanilla/gate-v5.weak_memo.pause.ndjson
+[mmtk] GCs: 138 (full: 5), GC time: 472 ms, objects copied: 2179135

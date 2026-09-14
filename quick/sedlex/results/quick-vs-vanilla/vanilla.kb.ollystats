@@ -1,0 +1,35 @@
+kb checksum=608698882
+
+Execution times:
+Wall time (s):	0.76
+CPU time (s):	0.76
+GC time (s):	0.09
+GC overhead (% of CPU time):	12.42%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 0.76		 0.09	 12.42
+
+GC latency profile:
+#[Mean (ms):	0.05,	 Stddev (ms):	0.05]
+#[Min (ms):	0.00,	 max (ms):	0.26]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.01
+50.0000 	 0.05
+60.0000 	 0.06
+70.0000 	 0.06
+75.0000 	 0.07
+80.0000 	 0.07
+85.0000 	 0.10
+90.0000 	 0.13
+95.0000 	 0.15
+96.0000 	 0.16
+97.0000 	 0.18
+98.0000 	 0.19
+99.0000 	 0.21
+99.9000 	 0.24
+99.9900 	 0.26
+99.9990 	 0.26
+99.9999 	 0.26
+100.0000 	 0.26

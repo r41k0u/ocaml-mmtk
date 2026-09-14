@@ -1,0 +1,35 @@
+matmul 768 checksum -1524324818631411582
+
+Execution times:
+Wall time (s):	0.66
+CPU time (s):	0.66
+GC time (s):	0.00
+GC overhead (% of CPU time):	0.34%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 0.66		 0.00	 0.34
+
+GC latency profile:
+#[Mean (ms):	0.04,	 Stddev (ms):	0.06]
+#[Min (ms):	0.00,	 max (ms):	0.25]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.00
+50.0000 	 0.00
+60.0000 	 0.00
+70.0000 	 0.00
+75.0000 	 0.04
+80.0000 	 0.07
+85.0000 	 0.09
+90.0000 	 0.15
+95.0000 	 0.17
+96.0000 	 0.17
+97.0000 	 0.19
+98.0000 	 0.21
+99.0000 	 0.21
+99.9000 	 0.25
+99.9900 	 0.25
+99.9990 	 0.25
+99.9999 	 0.25
+100.0000 	 0.25

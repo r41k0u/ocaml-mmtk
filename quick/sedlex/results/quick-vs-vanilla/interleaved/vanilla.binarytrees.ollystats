@@ -1,0 +1,45 @@
+stretch tree of depth 21	 check: 4194303
+1048576	 trees of depth 4	 check: 32505856
+262144	 trees of depth 6	 check: 33292288
+65536	 trees of depth 8	 check: 33488896
+16384	 trees of depth 10	 check: 33538048
+4096	 trees of depth 12	 check: 33550336
+1024	 trees of depth 14	 check: 33553408
+256	 trees of depth 16	 check: 33554176
+64	 trees of depth 18	 check: 33554368
+16	 trees of depth 20	 check: 33554416
+long lived tree of depth 20	 check: 2097151
+
+Execution times:
+Wall time (s):	1.96
+CPU time (s):	1.96
+GC time (s):	1.05
+GC overhead (% of CPU time):	53.61%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 1.96		 1.05	 53.61
+
+GC latency profile:
+#[Mean (ms):	0.30,	 Stddev (ms):	0.46]
+#[Min (ms):	0.00,	 max (ms):	3.30]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.00
+50.0000 	 0.03
+60.0000 	 0.10
+70.0000 	 0.38
+75.0000 	 0.56
+80.0000 	 0.75
+85.0000 	 0.82
+90.0000 	 0.92
+95.0000 	 1.30
+96.0000 	 1.38
+97.0000 	 1.47
+98.0000 	 1.53
+99.0000 	 1.80
+99.9000 	 2.54
+99.9900 	 3.30
+99.9990 	 3.30
+99.9999 	 3.30
+100.0000 	 3.30

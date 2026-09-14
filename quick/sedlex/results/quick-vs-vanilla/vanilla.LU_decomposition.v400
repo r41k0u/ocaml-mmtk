@@ -1,0 +1,9 @@
+allocated_words: 1466099026
+minor_words: 1464478958
+promoted_words: 516
+major_words: 1620584
+minor_collections: 5587
+major_collections: 2
+forced_major_collections: 0
+heap_words: 859155
+top_heap_words: 1669158

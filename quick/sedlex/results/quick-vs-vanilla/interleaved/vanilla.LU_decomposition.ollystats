@@ -1,0 +1,42 @@
+[ring_id=0] Lost 856 events
+[ring_id=0] Lost 9622 events
+[ring_id=0] Lost 9451 events
+[ring_id=0] Lost 9587 events
+[ring_id=0] Lost 9622 events
+[ring_id=0] Lost 9657 events
+[ring_id=0] Lost 9760 events
+lu 900 checksum 3573797648884632821
+
+Execution times:
+Wall time (s):	128018.51
+CPU time (s):	128018.51
+GC time (s):	0.01
+GC overhead (% of CPU time):	0.00%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 128018.51		 0.01	 0.00
+
+GC latency profile:
+#[Mean (ms):	0.00,	 Stddev (ms):	0.00]
+#[Min (ms):	0.00,	 max (ms):	0.24]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.00
+50.0000 	 0.00
+60.0000 	 0.00
+70.0000 	 0.00
+75.0000 	 0.00
+80.0000 	 0.00
+85.0000 	 0.00
+90.0000 	 0.00
+95.0000 	 0.00
+96.0000 	 0.00
+97.0000 	 0.00
+98.0000 	 0.00
+99.0000 	 0.00
+99.9000 	 0.01
+99.9900 	 0.02
+99.9990 	 0.24
+99.9999 	 0.24
+100.0000 	 0.24

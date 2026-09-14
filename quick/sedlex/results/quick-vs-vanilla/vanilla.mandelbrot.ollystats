@@ -1,0 +1,35 @@
+mandelbrot 4000 checksum -4021453110995541526
+
+Execution times:
+Wall time (s):	1.39
+CPU time (s):	1.39
+GC time (s):	0.00
+GC overhead (% of CPU time):	0.00%
+
+Per domain stats:
+Domain	 Wall(s)	 GC(s)	 GC(%)
+0	 1.39		 0.00	 0.00
+
+GC latency profile:
+#[Mean (ms):	-nan,	 Stddev (ms):	-nan]
+#[Min (ms):	-0.00,	 max (ms):	0.00]
+
+Percentile 	 Latency (ms)
+25.0000 	 0.00
+50.0000 	 0.00
+60.0000 	 0.00
+70.0000 	 0.00
+75.0000 	 0.00
+80.0000 	 0.00
+85.0000 	 0.00
+90.0000 	 0.00
+95.0000 	 0.00
+96.0000 	 0.00
+97.0000 	 0.00
+98.0000 	 0.00
+99.0000 	 0.00
+99.9000 	 0.00
+99.9900 	 0.00
+99.9990 	 0.00
+99.9999 	 0.00
+100.0000 	 0.00

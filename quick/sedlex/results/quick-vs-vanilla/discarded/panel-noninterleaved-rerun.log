@@ -1,0 +1,23 @@
+vanilla nbody: golden=OK wall_med=0.870s (n=3) rss=3MB minors=0 majors=0 promoted_words=0 gc_time=0.00s max_pause=0.00ms
+vanilla fannkuchredux: golden=OK wall_med=1.670s (n=3) rss=3MB minors=0 majors=0 promoted_words=0 gc_time=0.00s max_pause=0.00ms
+vanilla mandelbrot: golden=OK wall_med=1.410s (n=3) rss=3MB minors=0 majors=0 promoted_words=0 gc_time=0.00s max_pause=0.00ms
+vanilla spectralnorm: golden=OK wall_med=0.750s (n=3) rss=5MB minors=2746 majors=0 promoted_words=164 gc_time=0.00s max_pause=0.03ms
+vanilla LU_decomposition: golden=OK wall_med=1.340s (n=3) rss=17MB minors=5587 majors=2 promoted_words=516 gc_time=0.00s max_pause=0.02ms
+vanilla matrix_multiplication: golden=OK wall_med=0.650s (n=3) rss=16MB minors=12 majors=6 promoted_words=512 gc_time=0.00s max_pause=0.46ms
+vanilla binarytrees: golden=OK wall_med=1.920s (n=3) rss=93MB minors=1778 majors=61 promoted_words=137235194 gc_time=1.09s max_pause=4.13ms
+vanilla kb: golden=OK wall_med=0.790s (n=3) rss=9MB minors=943 majors=127 promoted_words=12518368 gc_time=0.09s max_pause=0.26ms
+vanilla weak_memo: golden=OK wall_med=0.660s (n=3) rss=7MB minors=607 majors=220 promoted_words=19857691 gc_time=0.19s max_pause=0.43ms
+vanilla mature_mutation: golden=OK wall_med=0.400s (n=3) rss=19MB minors=255 majors=43 promoted_words=23257165 gc_time=0.29s max_pause=1.63ms
+vanilla fragmed: golden=OK wall_med=0.060s (n=3) rss=29MB minors=172 majors=86 promoted_words=163 gc_time=0.02s max_pause=0.50ms
+gate-after nbody: golden=OK wall_med=0.690s (n=3) rss=10MB pauses=0 fulls=0 max_pause=0.0ms | [mmtk] GCs: 0 (full: 0), GC time: 0 ms, objects copied: 0
+gate-after fannkuchredux: golden=OK wall_med=1.720s (n=3) rss=9MB pauses=0 fulls=0 max_pause=0.0ms | [mmtk] GCs: 0 (full: 0), GC time: 0 ms, objects copied: 0
+gate-after mandelbrot: golden=OK wall_med=0.680s (n=3) rss=9MB pauses=0 fulls=0 max_pause=0.0ms | [mmtk] GCs: 0 (full: 0), GC time: 0 ms, objects copied: 0
+gate-after spectralnorm: golden=OK wall_med=0.960s (n=3) rss=20MB pauses=754 fulls=22 max_pause=0.8ms | [mmtk] GCs: 754 (full: 22), GC time: 65 ms, objects copied: 37
+gate-after LU_decomposition: golden=OK wall_med=1.190s (n=3) rss=34MB pauses=1536 fulls=47 max_pause=1.1ms | [mmtk] GCs: 1536 (full: 47), GC time: 139 ms, objects copied: 102
+gate-after matrix_multiplication: golden=OK wall_med=1.290s (n=3) rss=35MB pauses=4 fulls=1 max_pause=7.1ms | [mmtk] GCs: 4 (full: 1), GC time: 8 ms, objects copied: 101
+gate-after binarytrees: golden=OK wall_med=2.780s (n=3) rss=159MB pauses=257 fulls=13 max_pause=71.9ms | [mmtk] GCs: 257 (full: 13), GC time: 1480 ms, objects copied: 15668934
+gate-after kb: golden=OK wall_med=1.210s (n=3) rss=25MB pauses=246 fulls=12 max_pause=3.3ms | [mmtk] GCs: 246 (full: 12), GC time: 421 ms, objects copied: 3789609
+gate-after weak_memo: golden=OK wall_med=0.970s (n=3) rss=28MB pauses=138 fulls=5 max_pause=5.8ms | [mmtk] GCs: 138 (full: 5), GC time: 450 ms, objects copied: 2179134
+gate-after mature_mutation: golden=OK wall_med=1.520s (n=3) rss=71MB pauses=61 fulls=17 max_pause=50.5ms | [mmtk] GCs: 61 (full: 17), GC time: 1101 ms, objects copied: 8013913
+gate-after fragmed: golden=OK wall_med=0.230s (n=3) rss=231MB pauses=32 fulls=7 max_pause=18.9ms | [mmtk] GCs: 32 (full: 7), GC time: 90 ms, objects copied: 37
+QUICK-VS-VANILLA-DONE
