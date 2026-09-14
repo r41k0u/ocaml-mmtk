@@ -4,6 +4,7 @@ Reads results/quick-vs-vanilla/panel.log; prints markdown tables; writes charts/
 Usage: quick_compare.py [results/quick-vs-vanilla] [charts]"""
 import re, sys, os, glob
 R = sys.argv[1] if len(sys.argv) > 1 else 'results/quick-vs-vanilla'; OUT = sys.argv[2] if len(sys.argv) > 2 else 'charts'
+HOST = sys.argv[3] if len(sys.argv) > 3 else 'laptop P-cores'; PNG = sys.argv[4] if len(sys.argv) > 4 else 'quick_vs_vanilla.png'
 BENCH = [(b, b.replace('_',' ')) for b in ['nbody','fannkuchredux','mandelbrot','spectralnorm','LU_decomposition','matrix_multiplication','binarytrees','kb','weak_memo','mature_mutation','fragmed']]
 def parse(path, side):
     d = {}
@@ -75,5 +76,5 @@ for ax,(key,lab,log) in zip(axes.flat, panels):
     ax.set_xticks(x); ax.set_xticklabels([n for _,n in BENCH], fontsize=7.5, color=TEXT1, rotation=20, ha='right')
     ax.set_title(lab, fontsize=10.5, color=TEXT1, loc='left', pad=8)
 h,l=axes[0][0].get_legend_handles_labels(); fig.legend(h,l,frameon=False,fontsize=8.5,labelcolor=TEXT1,loc='upper right',ncol=3,bbox_to_anchor=(0.99,0.965))
-fig.suptitle('Quick panel (CLBG-style + kb + 3 adversarial), perf sizes, laptop P-cores, dynamic heap, 1 GC worker: vanilla vs Bactrian (labels = v5 ÷ vanilla)', fontsize=11, color=TEXT1, x=0.01, ha='left')
-fig.tight_layout(rect=(0,0,1,0.92)); os.makedirs(OUT, exist_ok=True); fig.savefig(f'{OUT}/quick_vs_vanilla.png', facecolor=SURFACE); print(f'\nchart: {OUT}/quick_vs_vanilla.png')
+fig.suptitle(f'Quick panel (CLBG-style + kb + 3 adversarial), perf sizes, {HOST}, dynamic heap, 1 GC worker: vanilla vs Bactrian (labels = v5 ÷ vanilla)', fontsize=11, color=TEXT1, x=0.01, ha='left')
+fig.tight_layout(rect=(0,0,1,0.92)); os.makedirs(OUT, exist_ok=True); fig.savefig(f'{OUT}/{PNG}', facecolor=SURFACE); print(f'\nchart: {OUT}/{PNG}')
