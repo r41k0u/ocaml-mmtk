@@ -1,0 +1,5 @@
+vanilla rc=0 peak_rss_MB=2125 samples=84 | 
+pregate rc=0 peak_rss_MB=2987 samples=252 | [mmtk] GCs: 1859 (full: 31), GC time: 89309 ms, objects copied: 518802540
+gate rc=0 peak_rss_MB=24095 samples=264 | [mmtk] GCs: 1837 (full: 8), GC time: 86609 ms, objects copied: 517194018
+v5 rc=0 peak_rss_MB=16146 samples=220 | [mmtk] GCs: 1842 (full: 11), GC time: 73055 ms, objects copied: 517195385
+EIO-RSS-DONE

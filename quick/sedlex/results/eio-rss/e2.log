@@ -1,0 +1,5 @@
+nc rc=0 peak_rss_MB=2917 samples=271 | [mmtk] GCs: 1863 (full: 35), GC time: 97181 ms, objects copied: 519642390
+ov50 rc=0 peak_rss_MB=9956 samples=262 | [mmtk] GCs: 1849 (full: 16), GC time: 88737 ms, objects copied: 517192762
+nur2 rc=0 peak_rss_MB=6064 samples=365 | [mmtk] GCs: 17552 (full: 21), GC time: 120071 ms, objects copied: 519817647
+heap4g rc=0 peak_rss_MB=3942 samples=252 | [mmtk] GCs: 1780 (full: 16), GC time: 86404 ms, objects copied: 516979221
+EIO-RSS-DONE

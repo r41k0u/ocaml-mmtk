@@ -656,6 +656,99 @@ benches whose cost is memory-system bound. Non-interleaved laptop passes and
 the church run taken under another user's 17-core job are under
 `results/quick-vs-vanilla/discarded/` with the reasons.
 
+### What causes the eio RSS blowup under Bactrian (2026-09-15)
+
+Three experiments on the idle church (`results/eio-rss/`, runner
+`eio_rss.sh`, charts `eio_rss_charts.py`): RSS sampled every 0.5 s with the
+pause log aligned (E1: vanilla, pre-gate, gate, v5), one knob at a time on
+the v5 binary (E2), and an instrumented v5 run that prints at every pause
+what the heap trigger takes as live, the per-space reserved pages, the heap
+limit and the sweep state (E3, `patch_trace_spaces.py`). Vanilla's own exit
+statistics put its peak major heap at 2.1 GB (`top_heap_words`), i.e. a
+peak live set near 1 GB at space_overhead 120.
+
+![rss e1](charts/eio_rss_e1.png)
+
+| E2: v5 with one knob | peak RSS | cycles | wall | note |
+|---|---:|---:|---:|---|
+| v5 as is | 15.8–16.1 GB | 11 | 123 s | |
+| every cycle monolithic (`BACTRIAN_NO_CONCURRENT=1`) | **2.8 GB** | 35 | 135 s | pre-gate behaviour |
+| heap pinned at 4 GB (`MMTK_HEAP_SIZE_MB=4096`) | **3.8 GB** | 16 | 126 s | no OOM, no thrash: the collector keeps up when the limit cannot move |
+| 2 MB nursery (vanilla parity) | 5.9 GB | 21 | 180 s | 17.5k minors, 120 s GC |
+| margin 50 % instead of 150 % | 9.7 GB | 16 | 131 s | |
+| 10× mark budget (`MMTK_MARK_RATE_MBPMS=0.1`, gate binary) | 5.4 GB | 16 | 117 s | from the earlier run |
+
+![rss e2](charts/eio_rss_e2.png)
+
+**The causal chain, with the numbers from the instrumented run:**
+
+| pause | event | reserved (unswept mature) | heap limit | what follows |
+|---:|---|---:|---:|---|
+| 224 | InitialMark, cycle 1 | 0.8 GB | 1.8 GB | 46 minors of slices; reserved → 1.4 GB, limit → 3.1 GB |
+| 270 | FinalMark | 1.4 GB | 3.1 GB | sweep drains after 18 minors → reserved 1.7 GB, limit 3.8 GB |
+| 435 | InitialMark, cycle 2 | 4.0 GB | 8.7 GB | 276 minors; reserved → 8.0 GB, limit → 17.6 GB |
+| 711 | FinalMark | 8.0 GB | 17.6 GB | sweep drains after **146 minors** → reserved 7.5 GB |
+| 1356 | InitialMark, cycle 3 | 14.8 GB | 32.5 GB | 49 minors |
+| 1405 | FinalMark | 15.6 GB | 34.3 GB | sweep still draining at exit after **432 minors**; reserved 7.4 GB, RSS stays 15 GB |
+
+![rss e3](charts/eio_rss_e3.png)
+
+1. **Inside a sliced cycle nothing is reclaimed** while eio promotes ~14 MB
+   per minor (85 % of each 16 MB nursery survives; vanilla sees the same
+   ratio in `promoted_words`). A 46–276-minor cycle adds 0.6–4 GB.
+2. **The dynamic heap limit follows it up, one minor at a time.** The
+   trigger's `on_gc_end` runs after every GC and, for a non-full GC, does
+   `heap = max(heap, reserved × 2.2)`. Reserved never falls during a cycle,
+   so the limit is 2.2 × mature at every point (1811 = 824 × 2.2, 17571 =
+   7987 × 2.2 …). There is never any pressure: the runway (limit − mature)
+   grows with mature, which is what made the old quantum shrink and what
+   makes the v5 guard's "minors available" keep growing.
+3. **At FinalMark the limit is set from the unswept size.** The trigger
+   treats FinalMark as a full GC and stores `reserved × 2.2`, but the sweep
+   is deferred, so "reserved" is live + all garbage + everything born black
+   during the cycle. Under a monolithic Full the sweep happens inside the
+   pause and reserved really is live — hence the pre-gate 2.9 GB and the
+   `BACTRIAN_NO_CONCURRENT` 2.8 GB.
+4. **The deferred sweep blocks the next cycle for a long time at scale.**
+   2 ms sweep slices per minor: 18 minors after the first FinalMark, 146
+   after the second, 432 (and unfinished) after the third. My earlier
+   "sweeps drain in ~17 slices" was true only of the first, small one. During
+   those windows promotion continues at 14 MB/minor and no cycle can start.
+5. **The binding's trigger baseline is the swept size, which still contains
+   every black-born promotion**, and its margin (× 2.5) and cadence
+   (2 × baseline of allocation) laws wait for reserved to reach a multiple of
+   it: cycle 2 waited from 1.7 GB to 4.0 GB, cycle 3 from 7.5 GB to 14.8 GB.
+6. **Freed pages are not returned**: after the last sweep reserved fell 15.6
+   → 7.4 GB while RSS stayed at 15 GB (MMTk keeps the pages in its page
+   resource). Peak RSS is therefore the peak reserved, which the steps above
+   set.
+
+Each step feeds the next: a longer cycle means more black-born memory,
+which inflates the limit and the baseline, which permits a longer gap and a
+longer next cycle. Vanilla avoids every step by construction: heap = 2.2 ×
+live measured after the sweep, the sweep is paced by allocation and
+completes with the cycle, and its major slice work is proportional to
+promotion.
+
+What the knobs prove: pinning the limit (4 GB) or removing slicing (all
+monolithic) collapses the blowup to 2.8–3.8 GB with no correctness or
+throughput penalty, so the fix is in the sizing/pacing policy under sliced
+cycles, not in the collector's ability to keep up. The nursery and margin
+knobs only scale the excursion.
+
+**Fix (v6, not yet applied), three parts that match steps 2–5:**
+(a) in `SpaceOverheadTrigger::on_gc_end`, do not raise the limit during an
+in-flight sliced cycle or its deferred sweep (freeze it at the cycle's
+InitialMark size), and after FinalMark resize only once the sweep has
+drained, from the swept reserved minus the pages born black during the
+cycle (mature at FinalMark − mature at InitialMark, already tracked by the
+v5 guards); (b) pace the sweep like the mark floor — at least the promotion
+since the last slice — so the sweep completes in O(runway) minors and the
+v5 sweep guard has an honest "available"; (c) subtract the same black-born
+pages when the binding notes its swept baseline. (a) alone should behave
+like the 4 GB pin at 2.2 × swept live, i.e. ~3 GB; (b) and (c) shorten the
+inter-cycle gaps.
+
 ## 6. Reproducing
 
 ```
