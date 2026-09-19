@@ -1,0 +1,8 @@
+| variant | peak RSS | WSS median (2 s) | WSS p90 | WSS max |
+|---|---:|---:|---:|---:|
+| vanilla | 2.1 GB | 1.63 GB | 1.89 GB | 1.98 GB |
+| Bactrian pre-gate | 3.0 GB | 1.45 GB | 1.97 GB | 2.34 GB |
+| Bactrian gate | 23.6 GB | 0.94 GB | 1.49 GB | 1.65 GB |
+| Bactrian v5 | 12.4 GB | 1.19 GB | 1.74 GB | 2.59 GB |
+| v5, all cycles monolithic | 3.2 GB | 1.40 GB | 1.77 GB | 1.95 GB |
+| v5, heap pinned 4 GB | 3.8 GB | 1.55 GB | 1.98 GB | 2.45 GB |

@@ -1,0 +1,7 @@
+vanilla rc=0 interval=2s samples=23 peak_wss_MB=2029 median_wss_MB=1672 peak_rss_MB=2125 | 
+pregate rc=0 interval=2s samples=65 peak_wss_MB=2395 median_wss_MB=1483 peak_rss_MB=3068 | [mmtk] GCs: 1859 (full: 31), GC time: 87782 ms, objects copied: 518236757
+gate rc=0 interval=2s samples=73 peak_wss_MB=1686 median_wss_MB=962 peak_rss_MB=24178 | [mmtk] GCs: 1838 (full: 8), GC time: 89670 ms, objects copied: 517189426
+v5 rc=0 interval=2s samples=63 peak_wss_MB=2652 median_wss_MB=1220 peak_rss_MB=12697 | [mmtk] GCs: 1842 (full: 11), GC time: 76614 ms, objects copied: 517201592
+nc rc=0 interval=2s samples=68 peak_wss_MB=1993 median_wss_MB=1395 peak_rss_MB=3259 | [mmtk] GCs: 1859 (full: 31), GC time: 90597 ms, objects copied: 519293552
+heap4g rc=0 interval=2s samples=66 peak_wss_MB=2507 median_wss_MB=1579 peak_rss_MB=3887 | [mmtk] GCs: 1779 (full: 16), GC time: 83428 ms, objects copied: 516979779
+EIO-WSS-DONE

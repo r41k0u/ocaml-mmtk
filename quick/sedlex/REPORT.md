@@ -658,6 +658,9 @@ the church run taken under another user's 17-core job are under
 
 ### What causes the eio RSS blowup under Bactrian (2026-09-15)
 
+Standalone investigative report with the working-set measurement: [EIO-RSS-PACING.md](EIO-RSS-PACING.md).
+
+
 Three experiments on the idle church (`results/eio-rss/`, runner
 `eio_rss.sh`, charts `eio_rss_charts.py`): RSS sampled every 0.5 s with the
 pause log aligned (E1: vanilla, pre-gate, gate, v5), one knob at a time on
