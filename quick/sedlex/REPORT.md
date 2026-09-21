@@ -854,9 +854,13 @@ Reading it:
 - Against vanilla the gap is unchanged in kind: 1.2× on decompress, 1.7× on
   ydump, 3.3–3.9× on eio and sedlex, all from the per-object mark cost.
 
-Not done: porting to the 0.32-ocaml PR branch (the measurement tree's core
-carries the August pacing commits the PR branch lacks), an overhead sweep,
-and the minimum-heap floor for decompress-like workloads.
+Pushed as branch `shape/honest-pacing` on both forks (mmtk-core 8ebfc98ecf,
+2d9087d685, 2f3996ba0f on top of the trigger-fixes lineage 7d766ed630;
+ocaml-mmtk bb0642aa0, ccf227db6, 061a7fcfb on top of shape/offheap-pacing),
+built from the patch stack without the probe instrumentation and verified
+file-for-file against the measured tree. Not done: porting to the
+0.32-ocaml PR branch (it lacks the August pacing commits), an overhead
+sweep, and the minimum-heap floor for decompress-like workloads.
 
 ## 6. Reproducing
 
