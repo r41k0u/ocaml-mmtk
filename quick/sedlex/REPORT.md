@@ -858,9 +858,12 @@ Pushed as branch `shape/honest-pacing` on both forks (mmtk-core 8ebfc98ecf,
 2d9087d685, 2f3996ba0f on top of the trigger-fixes lineage 7d766ed630;
 ocaml-mmtk bb0642aa0, ccf227db6, 061a7fcfb on top of shape/offheap-pacing),
 built from the patch stack without the probe instrumentation and verified
-file-for-file against the measured tree. Not done: porting to the
-0.32-ocaml PR branch (it lacks the August pacing commits), an overhead
-sweep, and the minimum-heap floor for decompress-like workloads.
+file-for-file against the measured tree. Also on the PR branch: `0.32-ocaml` (fplaunchpad/mmtk-core PR #1) now
+carries the two August trigger commits (032100ea2a, a7b10f3d85, cherry-picked
+as prerequisites) plus 557c0d77de and 4660d08769; the binding's
+`shape/tweaks` has 19ca2fe1c and the submodule bump 533d94c30, built and
+verified with that binding. Not done: an overhead sweep and the
+minimum-heap floor for decompress-like workloads.
 
 ## 6. Reproducing
 
