@@ -925,8 +925,21 @@ impl Collection<OCamlVM> for VMCollection {
             // drained (plans that sweep in-pause report drained immediately,
             // so the STW mode and Full pauses keep the historical behaviour).
             let sweep_done = plan.concurrent().map(|c| c.sweep_drained()).unwrap_or(true);
+            // Baseline for the cycle-start laws: after a sliced cycle the swept
+            // mature size still holds everything promoted during the cycle and
+            // its sweep window (born black, never tested); the margin (x2.5) and
+            // cadence (2x baseline) laws then wait for multiples of that
+            // (eio_conc: baseline 0.4 -> 1.7 -> 2.8 -> 6.1 GB for a ~1 GB live
+            // set). Use the cycle's marked live size instead; a STW Full reports
+            // 0 and keeps the swept size, which is honest there.
+            let baseline_of = |mature: usize| -> usize {
+                match plan.concurrent().map(|c| c.last_cycle_marked_bytes()) {
+                    Some(m) if m > 0 => m.div_ceil(mmtk::util::constants::BYTES_IN_PAGE),
+                    _ => mature,
+                }
+            };
             if was_full && sweep_done {
-                LAST_FULL_GC_MATURE_PAGES.store(mature, Ordering::Relaxed);
+                LAST_FULL_GC_MATURE_PAGES.store(baseline_of(mature), Ordering::Relaxed);
                 AWAITING_SWEEP_BASELINE.store(false, Ordering::Relaxed);
                 note_swept_baseline(mature);
             } else if was_full {
@@ -934,7 +947,7 @@ impl Collection<OCamlVM> for VMCollection {
             } else if AWAITING_SWEEP_BASELINE.load(Ordering::Relaxed) && sweep_done {
                 // First post-FinalMark pause with the sweep complete: the
                 // mature count is now authoritative.
-                LAST_FULL_GC_MATURE_PAGES.store(mature, Ordering::Relaxed);
+                LAST_FULL_GC_MATURE_PAGES.store(baseline_of(mature), Ordering::Relaxed);
                 AWAITING_SWEEP_BASELINE.store(false, Ordering::Relaxed);
                 note_swept_baseline(mature);
             }
