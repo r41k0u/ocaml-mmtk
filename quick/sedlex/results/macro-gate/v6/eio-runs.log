@@ -1,0 +1,23 @@
+v6/side.log: v6 rc=0 peak_rss_MB=2736 samples=286 | [mmtk] GCs: 1896 (full: 48), GC time: 108709 ms, objects copied: 517263423
+v6/side.log: v6plain rc=0 peak_rss_MB=2726 samples=289 | [mmtk] GCs: 1905 (full: 52), GC time: 111201 ms, objects copied: 517168556
+v6/tune.log: v6mp300 rc=0 peak_rss_MB=2732 samples=293 | [mmtk] GCs: 1907 (full: 53), GC time: 109415 ms, objects copied: 518936782
+v6/tune.log: v6mp1000 rc=0 peak_rss_MB=2633 samples=291 | [mmtk] GCs: 1913 (full: 53), GC time: 112072 ms, objects copied: 517166562
+v6b/run.log: v6b rc=0 peak_rss_MB=3459 samples=260 | [mmtk] GCs: 1877 (full: 34), GC time: 94349 ms, objects copied: 517372045
+v6b/run.log: v6bplain rc=0 peak_rss_MB=3500 samples=261 | [mmtk] GCs: 1883 (full: 38), GC time: 95403 ms, objects copied: 517377985
+v6b/tune.log: v6bmp300 rc=0 peak_rss_MB=3425 samples=264 | [mmtk] GCs: 1879 (full: 33), GC time: 97230 ms, objects copied: 517182949
+v6c/run.log: v6c rc=0 peak_rss_MB=2950 samples=259 | [mmtk] GCs: 1880 (full: 34), GC time: 95863 ms, objects copied: 517178246
+v6d/side.log: v6d rc=0 peak_rss_MB=2997 samples=347 | [mmtk] GCs: 1924 (full: 73), GC time: 143847 ms, objects copied: 517943177
+v6d/side.log: bt rule1v5 golden OK
+v6d/side.log: bt rule1v5 n16 walls: 0.15 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117036
+v6d/side.log: bt v6d golden OK
+v6d/side.log: bt v6d n16 walls: 0.15 0.15 0.14 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117032
+v6e/side.log: v6e rc=0 peak_rss_MB=3667 samples=260 | [mmtk] GCs: 1875 (full: 31), GC time: 95254 ms, objects copied: 517181994
+v6e/side.log: bt rule1v5 golden OK
+v6e/side.log: bt rule1v5 n16 walls: 0.14 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117036
+v6e/side.log: bt v6e golden OK
+v6e/side.log: bt v6e n16 walls: 0.15 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 32 ms, objects copied: 117032
+v6g/side.log: v6g rc=0 peak_rss_MB=3544 samples=264 | [mmtk] GCs: 1876 (full: 30), GC time: 94326 ms, objects copied: 517183906
+v6g/side.log: bt rule1v5 golden OK
+v6g/side.log: bt rule1v5 n16 walls: 0.14 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 30 ms, objects copied: 117036
+v6g/side.log: bt v6g golden OK
+v6g/side.log: bt v6g n16 walls: 0.14 0.15 0.14 | [mmtk] GCs: 11 (full: 0), GC time: 33 ms, objects copied: 117032

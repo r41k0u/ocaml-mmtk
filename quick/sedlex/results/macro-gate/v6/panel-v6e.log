@@ -1,0 +1,7 @@
+gate-v6e eio_conc_bench: wall_med=149.29s (n=3) rss=3687MB pauses=1881 fulls=33 max_pause=1577ms | [mmtk] GCs: 1881 (full: 33), GC time: 93555 ms, objects copied: 517182773
+gate-v6e ydump_repeat: wall_med=95.74s (n=3) rss=10232MB pauses=1455 fulls=13 max_pause=14480ms | [mmtk] GCs: 1455 (full: 13), GC time: 57242 ms, objects copied: 270000540
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ValueError: max() iterable argument is empty
+gate-v6e test_decompress: wall_med=57.55s (n=3) rss=1235MB pauses=4362 fulls=1117 max_pause=15ms | [mmtk] GCs: 4362 (full: 1117), GC time: 5251 ms, objects copied: 115627
+MACRO-GATE-DONE

@@ -752,6 +752,112 @@ pages when the binding notes its swept baseline. (a) alone should behave
 like the 4 GB pin at 2.2 × swept live, i.e. ~3 GB; (b) and (c) shorten the
 inter-cycle gaps.
 
+### v6: honest pacing under sliced cycles — before/after (2026-09-21)
+
+Implemented on the measurement tree (mmtk-inst core + binding; patch scripts
+`results/macro-gate/v6/patch_v6*.py`, applied in order v6, v6b … v6g on top of
+the v2–v5 quota patches; panel logs and eio runs alongside). "Before" is the v5
+candidate; vanilla and pre-gate for reference. Same rungs, dynamic heap, one
+worker, idle church.
+
+What v6g does, in one line each:
+- **live = marked bytes** of the sliced trace (each object once, at enqueue);
+  a STW Full keeps the swept size, which is honest there.
+- **heap limit sized only at cycle-completion points**: a Full from swept
+  reserved; a FinalMark deferred to its sweep drain, then 2.2 × marked, never
+  below reserved + headroom (two nurseries or half the overhead of marked);
+  between those points the limit is only nudged up to keep allocation from
+  failing, never multiplied.
+- **runway frozen at InitialMark** for all pacing; mark and sweep slices take
+  their share of the remaining work so the cycle finishes inside it, with
+  the share **capped** at the pause target from the measured mark rate
+  (overshoot the runway rather than drain everything in one slice); no
+  unbudgeted escalation.
+- **binding baseline = marked live**; the gate's "worth" test also uses the
+  measured Full duration; slicing is always feasible once slices are capped.
+- nursery-pause average taken **net of quanta** (it fed the gate).
+
+Intermediate versions, kept for the record: v6 (headroom term was zero at a
+bounded nursery → heap "full" after every resize → Fulls everywhere: eio
+164 s, ydump 5.7 s pauses, sedlex 18 s, decompress 2816 Fulls); v6b (real
+headroom: eio 3.5 GB but sedlex/ydump drain-all slices of 8–38 s); v6c
+(measured-Full worth test); v6d (latency-aware start fired 42× on eio, and
+quanta inflated the nursery average → 44 Fulls); v6e (net average; ydump
+still one 14 s Full via the feasibility test); v6f/v6g (no mark escalation;
+slice whenever worth).
+
+**Wall time (median of 3)**
+
+| bench | vanilla | Bactrian pre-gate | v5 (before) | v6g (after) | v6g ÷ v5 |
+|---|---:|---:|---:|---:|---:|
+| eio | 46 s | 132 s | 123 s | 154 s | 1.26× |
+| ydump 6M | 50 s | 86 s | 67 s | 83 s | 1.24× |
+| sedlex 6M | 45 s | 281 s | 136 s | 176 s | 1.29× |
+| decompress | 48 s | 54 s | 54 s | 58 s | 1.07× |
+
+**Peak RSS**
+
+| bench | vanilla | Bactrian pre-gate | v5 (before) | v6g (after) | v6g ÷ v5 |
+|---|---:|---:|---:|---:|---:|
+| eio | 2.1 GB | 3.2 GB | 13.1 GB | 3.6 GB | 0.28× |
+| ydump 6M | 9.6 GB | 9.0 GB | 11.3 GB | 9.9 GB | 0.88× |
+| sedlex 6M | 8.1 GB | 8.2 GB | 8.5 GB | 8.6 GB | 1.02× |
+| decompress | 1.4 GB | 1.3 GB | 1.4 GB | 1.2 GB | 0.83× |
+
+**Max pause**
+
+| bench | vanilla | Bactrian pre-gate | v5 (before) | v6g (after) | v6g ÷ v5 |
+|---|---:|---:|---:|---:|---:|
+| eio | 72 ms | 1.85 s | 1.18 s | 483 ms | 0.41× |
+| ydump 6M | 657 ms | 13.85 s | 165 ms | 184 ms | 1.12× |
+| sedlex 6M | 35 ms | 40.07 s | 124 ms | 177 ms | 1.43× |
+| decompress | 12 ms | 33 ms | 8 ms | 15 ms | 1.88× |
+
+**Major cycles**
+
+| bench | vanilla | Bactrian pre-gate | v5 (before) | v6g (after) | v6g ÷ v5 |
+|---|---:|---:|---:|---:|---:|
+| eio | 103 | 31 | 12 | 38 | 3.17× |
+| ydump 6M | 8 | 10 | 8 | 11 | 1.38× |
+| sedlex 6M | 9 | 20 | 13 | 19 | 1.46× |
+| decompress | 57 | 54 | 54 | 1,117 | 20.69× |
+
+**GC time**
+
+| bench | vanilla | Bactrian pre-gate | v5 (before) | v6g (after) | v6g ÷ v5 |
+|---|---:|---:|---:|---:|---:|
+| eio | 29 s | 86 s | 68 s | 99 s | 1.44× |
+| ydump 6M | 14 s | 46 s | 29 s | 45 s | 1.51× |
+| sedlex 6M | 19 s | 227 s | 88 s | 126 s | 1.43× |
+| decompress | 0 s | 2 s | 2 s | 5 s | 2.20× |
+
+binarytrees n16 at 192 MB: unchanged at every version (11 pauses, 30–33 ms
+GC, golden n20 OK).
+
+Reading it:
+
+- **The blowup is gone and pauses are bounded everywhere**: eio 13.1 → 3.6 GB
+  with its worst pause 1.18 s → 0.48 s; ydump, sedlex and decompress hold
+  their RSS with worst pauses of 184, 177 and 15 ms. Nothing above half a
+  second on any bench, against 14–40 s Fulls in the intermediate versions.
+- **The cost is throughput**: +24–29 % wall on eio, ydump and sedlex, +7 % on
+  decompress, from 1.4–1.5× the GC time. Honest sizing holds the heap at
+  2.2 × live, so the collector runs more cycles (eio 12 → 38, sedlex 13 → 19,
+  ydump 8 → 11), and each Bactrian cycle re-marks the live set at ~4× vanilla's
+  per-object cost. This is the space–time trade-off made explicit: v5's walls
+  were bought with an unbounded heap. The trigger's overhead (120 %) is now an
+  honest knob — raising it buys wall time for RSS in a predictable way,
+  which it did not before.
+- **decompress runs 1,117 cheap Fulls** (15 ms each, 5 s total): its marked
+  live set is tiny, so the honest limit sits near the 32 MB floor and a Full
+  is chosen every four minors; a larger minimum heap would remove most of them.
+- Against vanilla the gap is unchanged in kind: 1.2× on decompress, 1.7× on
+  ydump, 3.3–3.9× on eio and sedlex, all from the per-object mark cost.
+
+Not done: porting to the 0.32-ocaml PR branch (the measurement tree's core
+carries the August pacing commits the PR branch lacks), an overhead sweep,
+and the minimum-heap floor for decompress-like workloads.
+
 ## 6. Reproducing
 
 ```
