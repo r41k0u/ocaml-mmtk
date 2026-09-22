@@ -1,0 +1,3 @@
+gate-v7b eio_conc_bench: wall_med=148.16s (n=3) rss=4115MB pauses=1877 fulls=30 max_pause=245ms | [mmtk] GCs: 1877 (full: 30), GC time: 92932 ms, objects copied: 517176812
+gate-v7b sedlex_bench: wall_med=126.33s (n=3) rss=8711MB pauses=3060 fulls=14 max_pause=865ms | [mmtk] GCs: 3060 (full: 14), GC time: 73575 ms, objects copied: 382281200
+MACRO-GATE-DONE

@@ -1,0 +1,15 @@
+v7: v7 rc=0 peak_rss_MB=3190 samples=266 | [mmtk] GCs: 1878 (full: 32), GC time: 91519 ms, objects copied: 517175373
+v7: bt rule1v5 golden OK
+v7: bt rule1v5 n16 walls: 0.14 0.14 0.14 | [mmtk] GCs: 11 (full: 0), GC time: 32 ms, objects copied: 117036
+v7: bt v7 golden OK
+v7: bt v7 n16 walls: 0.15 0.15 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 32 ms, objects copied: 117032
+v7b: v7b rc=0 peak_rss_MB=4059 samples=259 | [mmtk] GCs: 1877 (full: 30), GC time: 91960 ms, objects copied: 517189492
+v7b: bt rule1v5 golden OK
+v7b: bt rule1v5 n16 walls: 0.14 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 33 ms, objects copied: 117036
+v7b: bt v7b golden OK
+v7b: bt v7b n16 walls: 0.15 0.15 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117032
+v7c: v7c rc=0 peak_rss_MB=4154 samples=258 | [mmtk] GCs: 1874 (full: 29), GC time: 91220 ms, objects copied: 517177477
+v7c: bt rule1v5 golden OK
+v7c: bt rule1v5 n16 walls: 0.14 0.14 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 31 ms, objects copied: 117036
+v7c: bt v7c golden OK
+v7c: bt v7c n16 walls: 0.14 0.15 0.15 | [mmtk] GCs: 11 (full: 0), GC time: 33 ms, objects copied: 117032

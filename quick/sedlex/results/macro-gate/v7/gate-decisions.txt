@@ -1,0 +1,21 @@
+== v7 sedlex gate decisions:
+      8 full_ewma=0ms predicted=467ms tick=false worth=true -> sliced
+      1 full_ewma=772ms predicted=40ms tick=false worth=true -> sliced
+      1 full_ewma=772ms predicted=2365ms tick=false worth=true -> sliced
+== v7b sedlex gate decisions:
+      8 full_ewma=0ms predicted=467ms tick=false worth=true -> sliced
+      1 full_ewma=5533ms predicted=2174ms tick=false worth=true -> sliced
+      1 full_ewma=1123ms predicted=57ms tick=false worth=true -> sliced
+== v7c sedlex gate decisions:
+      8 full_ewma=0ms predicted=467ms tick=false worth=true -> sliced
+      1 full_ewma=0ms predicted=843ms tick=true worth=true -> sliced
+      1 full_ewma=0ms predicted=497ms tick=false worth=true -> sliced
+== v7 eio Full decisions
+full_ewma=0ms predicted=8ms tick=false worth=false -> Full
+full_ewma=27ms predicted=12ms tick=false worth=false -> Full
+full_ewma=29ms predicted=15ms tick=false worth=false -> Full
+full_ewma=33ms predicted=18ms tick=false worth=false -> Full
+full_ewma=38ms predicted=22ms tick=false worth=false -> Full
+full_ewma=47ms predicted=53ms tick=false worth=false -> Full
+full_ewma=61ms predicted=133ms tick=false worth=false -> Full
+full_ewma=99ms predicted=189ms tick=false worth=false -> Full

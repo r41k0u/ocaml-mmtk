@@ -1,0 +1,3 @@
+gate-v7c ydump_repeat: wall_med=70.88s (n=3) rss=11621MB pauses=1456 fulls=10 max_pause=156ms | [mmtk] GCs: 1456 (full: 10), GC time: 29741 ms, objects copied: 270000871
+gate-v7c test_decompress: wall_med=57.75s (n=3) rss=977MB pauses=4835 fulls=1292 max_pause=7ms | [mmtk] GCs: 4835 (full: 1292), GC time: 5795 ms, objects copied: 118457
+MACRO-GATE-DONE

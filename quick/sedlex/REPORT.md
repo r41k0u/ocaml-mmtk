@@ -865,6 +865,59 @@ as prerequisites) plus 557c0d77de and 4660d08769; the binding's
 verified with that binding. Not done: an overhead sweep and the
 minimum-heap floor for decompress-like workloads.
 
+### v7: the binding's quantum-hint law retired; Full cost predicted from measurements (2026-09-22)
+
+Review prep for ocaml-mmtk PR #23 found two pacing laws for one cycle: the
+binding's `hint_mark_quantum` (live at an assumed 1 MB/ms over the live
+limit's runway) and core's runway-paced slices. v7 removes the binding side
+(`hint_mark_quantum`, `MMTK_MARK_RATE_MBPMS`); the binding only records which
+pacing site fired the cycle (`set_cycle_tick_origin`). Core's gate then
+predicts a Full's cost itself and slices iff it exceeds `MMTK_SLICE_WORTH_MS`;
+the feasibility test and `MMTK_SLICE_FEASIBLE` are gone (capped slices are
+feasible by construction); the slice time budget is `MMTK_MARK_SLICE_MS` after
+the work floors. Patches and panel logs: `results/macro-gate/v7/`.
+
+Three steps were needed to get the prediction right (`gate-decisions.txt`):
+
+- **v7**: predict from the last sliced cycle's traced count at the measured
+  rate, or the Full EWMA. Both were sampled on a heap several times smaller
+  than the one being decided on: eio "predicted 189 ms" → a 1.9 s Full;
+  sedlex "40 ms" → 772 ms.
+- **v7b**: scale both by mature-page growth since they were sampled (a 99 ms
+  Full at 300 MB predicts ~825 ms at 2.5 GB). eio's worst pause 780 → 245 ms;
+  sedlex unchanged at 865 ms, because its back-to-back tick-origin cycles
+  trace only what was live at each snapshot while most of the heap is
+  promoted black during them — the traced count is blind to it.
+- **v7c**: mature bytes at 1 MB/ms is a floor for the prediction, not a
+  bootstrap. sedlex: no Full at all, worst pause 123 ms.
+
+| bench | metric | v5 | v6g | v7 | v7c | vanilla |
+|---|---|---:|---:|---:|---:|---:|
+| eio | wall | 123 s | 154 s | 145 s | 155 s | 46 s |
+| | peak RSS | 13.1 GB | 3.6 GB | 4.2 GB | 4.1 GB | 2.1 GB |
+| | max pause | 1.18 s | 483 ms | 780 ms | **266 ms** | 72 ms |
+| | cycles / GC time | 12 / 68 s | 38 / 99 s | 30 / 96 s | 31 / 94 s | 103 / 29 s |
+| ydump 6M | wall | 67 s | 83 s | 67 s | 71 s | 50 s |
+| | peak RSS | 11.3 GB | 9.9 GB | 11.6 GB | 11.6 GB | 9.6 GB |
+| | max pause | 165 ms | 184 ms | 150 ms | 156 ms | 657 ms |
+| sedlex 6M | wall | 136 s | 176 s | 126 s | **125 s** | 45 s |
+| | peak RSS | 8.5 GB | 8.6 GB | 8.7 GB | 8.7 GB | 8.1 GB |
+| | max pause | 124 ms | 177 ms | 874 ms | **123 ms** | 35 ms |
+| decompress | wall | 54.5 s | 58 s | 56 s | 58 s | 48 s |
+| | peak RSS | 1.4 GB | 1.2 GB | 1.3 GB | 1.0 GB | 1.4 GB |
+| | max pause | 8 ms | 15 ms | 31 ms | 7 ms | 12 ms |
+
+binarytrees n16 at 192 MB unchanged at every step (golden n20 OK). v7c beats
+v6g on every wall and pause figure, giving back 0.5 GB on eio and 1.7 GB on
+ydump (back to v5's level). Against v5 it keeps eio's memory and pause fixes,
+improves sedlex and decompress's memory, and costs 26 % wall on eio and 6 % on
+ydump and decompress — the honest-sizing trade.
+
+Also in this round: the PR's binding branch had been missing the August
+off-heap credit and the baseline-scaled cadence (`shape/offheap-pacing`,
+the tree every measurement here ran on); they are cherry-picked onto
+`shape/tweaks` so the PR matches the measured configuration.
+
 ## 6. Reproducing
 
 ```
