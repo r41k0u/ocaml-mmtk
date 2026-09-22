@@ -416,21 +416,6 @@ fn conc_trigger_pct() -> usize {
     })
 }
 
-/// Assumed mark throughput for the quantum-sizing law, MB per ms
-/// (MMTK_MARK_RATE_MBPMS overrides; ~1.0 measured on the Skylake bench
-/// host: a 140MB live set monolithically marks in ~138ms).
-fn mark_rate_bytes_per_ms() -> f64 {
-    static V: std::sync::OnceLock<f64> = std::sync::OnceLock::new();
-    *V.get_or_init(|| {
-        std::env::var("MMTK_MARK_RATE_MBPMS")
-            .ok()
-            .and_then(|v| v.parse::<f64>().ok())
-            .filter(|r| *r > 0.0)
-            .unwrap_or(1.0)
-            * 1048576.0
-    })
-}
-
 /// The mature-pressure threshold with the concurrent early-trigger clamp
 /// applied (see `conc_trigger_pct`). Shared by the post-minor path and the
 /// mature-direct allocation tick.
@@ -450,49 +435,13 @@ fn effective_mature_threshold_pages(baseline: usize) -> usize {
     margin.min(clamp)
 }
 
-/// Stock's mark-slice sizing law, applied at cycle-trigger time: spread the
-/// mark debt (post-sweep live ~= baseline) over the pauses the remaining
-/// runway will yield, and hint the plan's per-pause quantum budget. Without
-/// this the static 2ms quantum absorbs only a sliver of a large live set's
-/// marking inside a short runway and the remainder used to drain in one
-/// giant FinalMark pause (bt@2M: 29 cycle-completing pauses of 80-130ms).
-/// quantum_ms = (debt / rate) / (runway / pause_cadence), clamped 2..200ms.
-/// The pause cadence is what actually yields pauses for this cycle: the
-/// nursery cap for minor-paced cycles, the ~2 MiB tick batch for
-/// mature-direct (tick-origin) ones — fragmed's pauses come only from
-/// ticks, so sizing by a 16 MiB nursery under-counted them 8x.
-fn hint_mark_quantum(baseline_pages: usize, mature_pages: usize, tick_origin: bool) {
-    let plan = crate::mmtk().get_plan();
-    let Some(c) = plan.concurrent() else { return };
-    let pg = mmtk::util::constants::BYTES_IN_PAGE;
-    let heap_pages = plan
-        .base()
-        .gc_trigger
-        .policy
-        .get_current_heap_size_in_pages();
-    let runway_bytes = heap_pages.saturating_sub(mature_pages).max(1) * pg;
-    let cadence = if tick_origin {
-        (2 * 1024 * 1024).min(nursery_max_bytes().max(1))
-    } else {
-        nursery_max_bytes().max(1)
-    };
-    let pauses = (runway_bytes / cadence).max(1) as f64;
-    let debt_ms = (baseline_pages * pg) as f64 / mark_rate_bytes_per_ms();
-    // No upper clamp: the slicing gate compares debt_ms and the sliced-pause
-    // estimate against latency targets directly (the 200ms ceiling was redundant
-    // with the old 50ms feasibility gate, which this replaces). Keep the 2ms floor
-    // so a tiny debt does not produce sub-millisecond slices.
-    let q = (debt_ms / pauses).max(2.0);
-    c.set_mark_quantum_hint_ms(q, debt_ms, tick_origin);
-    if std::env::var_os("MMTK_PACE_DEBUG").is_some() {
-        eprintln!(
-            "[pace] quantum hint {:.1}ms (debt {}MB, runway {}MB, {} pauses, tick={})",
-            q,
-            baseline_pages * pg / (1 << 20),
-            runway_bytes / (1 << 20),
-            pauses as usize,
-            tick_origin
-        );
+/// Tell the plan which pacing site fired the cycle just requested (the
+/// mature-direct tick vs the post-minor path); it decides slicing vs a
+/// monolithic Full. Slice sizing is the plan's own (runway frozen at
+/// InitialMark, measured mark rate), so no quantum or debt estimate is passed.
+fn note_cycle_origin(tick_origin: bool) {
+    if let Some(c) = crate::mmtk().get_plan().concurrent() {
+        c.set_cycle_tick_origin(tick_origin);
     }
 }
 
@@ -527,7 +476,7 @@ pub extern "C" fn mmtk_ocaml_mature_alloc_tick(bytes: usize) {
                 by_mature, by_cadence, mature, baseline, nb / (1 << 20)
             );
         }
-        hint_mark_quantum(baseline, mature, true);
+        note_cycle_origin(true);
         g.force_full_heap_collection();
     }
     // In-flight cycle/sweep: this allocation must also DRIVE the quanta
@@ -993,7 +942,7 @@ impl Collection<OCamlVM> for VMCollection {
                             by_mature, by_cadence, mature, baseline, n, nb / (1 << 20)
                         );
                     }
-                    hint_mark_quantum(baseline, mature, false);
+                    note_cycle_origin(false);
                     g.force_full_heap_collection();
                 }
             }
