@@ -1,6 +1,6 @@
 # Review brief: fplaunchpad/ocaml-mmtk PR #23 ("[WIP] Making Bactrian GC shape similar to Vanilla GC")
 
-*Prepared 2026-09-22 before the manual review. Head `r41k0u:shape/tweaks` @ 053dc04d5,
+*Prepared 2026-09-22 before the manual review. Head `r41k0u:shape/tweaks` @ 053dc04d5 (now c6b3cbb11 after the hygiene commit below),
 base `fplaunchpad:5.5+mmtk` @ cbc66e3efd. 123 commits, 97 files, +6054 / −59.*
 
 ## 1. Is it up to date?
@@ -31,6 +31,13 @@ runtime 15, build 6, NOTES 5, docs 2, other 18. Roughly a third of the history i
 journal and bump commits.
 
 ## 3. Things to fix or decide before review
+
+*Update (c6b3cbb11, pushed):* items 1–3 are done — the 72 binaries, SHAPE.md and
+the workshop draft are out of the tree and gitignored (kept on disk); NOTES.md,
+which is an upstream file the campaign had appended to, is back at the base
+version with the appended copy kept locally as the ignored `NOTES-campaign.md`;
+CLAUDE.md is back at the base version. The PR is now 21 files, +1409 / −55.
+
 
 1. **Remove the 72 compiled binaries** under `benchmarks/clbg/build/` and add a
    `.gitignore` for that directory. They are ELF executables committed by accident
@@ -111,6 +118,24 @@ owns what.
    a pointer bump. The reviewer of #23 sees none of the core content; make the PR
    description link the corresponding mmtk-core PR #1 commits, or squash the
    bumps.
+
+### 4.7 Decision: what must change, and where
+
+- **Must (both PRs): retire the binding's quantum-hint law (§4.1).** After honest
+  pacing it is vestigial: core paces slices from a frozen runway and a measured
+  rate; the hint only tops up the time budget and its debt estimate (live ÷ an
+  assumed 1 MB/ms, ~5× off on eio/sedlex) is half of the gate's "worth" test.
+  Leaving two laws in two repos is the thing a reviewer of either PR will trip
+  on. Binding: drop `hint_mark_quantum` / `MMTK_MARK_RATE_MBPMS`, keep only the
+  cycle request. Core: `set_mark_quantum_hint_ms` goes; the slice time budget
+  falls back to `MMTK_MARK_SLICE_MS` after the floors; "worth" from the measured
+  Full duration or marked bytes over the measured mark rate. ~60 lines, needs a
+  re-measure of eio / ydump / sedlex.
+- **Document, don't change now:** the cycle-start split (§4.2; core's
+  latency-aware start fired once in the sedlex debug run and never on eio),
+  nursery sizing in two repos (§4.3), knobs read on several sides (§4.4 — a
+  table in the PR description), the off-heap/LOS pairing (§4.5), and the
+  submodule bumps (§4.6 — link PR #1's commits).
 
 ## 5. What is *not* in this PR but affects it
 
