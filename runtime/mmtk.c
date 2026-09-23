@@ -18,15 +18,27 @@
 #define CAML_INTERNALS
 
 #include <stdlib.h>
-#include <pthread.h>
-#include <sys/prctl.h>
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
-/* usleep: caml_mmtk_quiesce_running_domains poll wait */
-#include <unistd.h>
 
 #include "caml/config.h"
+/* Platform headers, after config.h so configure's HAS_* macros are visible.
+   Threads and the quiesce poll sleep are POSIX; thread naming is Linux
+   (prctl) or a *BSD/macOS pthread extension; Windows gets Sleep(). */
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <pthread.h>
+#include <unistd.h>
+#endif
+#ifdef HAS_PRCTL
+#include <sys/prctl.h>
+#endif
+#ifdef HAS_PTHREAD_NP_H
+#include <pthread_np.h>
+#endif
 
 /* The MMTk glue is compiled into both the bytecode and native runtimes. The few
    bytecode-interpreter-specific bits (caml_mmtk_alloc_small) are harmless when
@@ -44,6 +56,7 @@
 #include "caml/signals.h"
 #include "caml/weak.h"
 #include "caml/mmtk.h"
+#include "caml/osdeps.h"   /* caml_time_counter: portable monotonic nanoseconds */
 
 /* The in-tree MMTk binding's C ABI (gc/mmtk/include/mmtk_ocaml.h). */
 #include "../gc/mmtk/include/mmtk_ocaml.h"
@@ -209,14 +222,74 @@ static int caml_mmtk_tlab_prefetch = 0;
    alloc wrappers therefore subtract whatever caml_mmtk_park accumulated inside
    their window. Blocked time is D3's business (the pause log), not D1's.
 
-   x86-64 only (TSC); armed on another arch it reports zero and warns. */
-#if defined(__x86_64__)
-#include <x86intrin.h>
-#define MUT_GC_TSC() __rdtsc()
+   The counter's unit does not matter: caml_mut_gc_dump calibrates it against
+   the monotonic clock. x86-64 uses the TSC, AArch64 the virtual counter
+   (cntvct_el0, fixed frequency), anything else the portable monotonic clock
+   (coarser, ~20-30 ns per read). */
+#if defined(__x86_64__) || defined(_M_X64)
+#  if defined(_MSC_VER)
+#    include <intrin.h>
+#  else
+#    include <x86intrin.h>
+#  endif
+#  define MUT_GC_TSC() __rdtsc()
+#  define MUT_GC_TSC_KIND "x86-64 TSC"
+#elif defined(__aarch64__) && (defined(__GNUC__) || defined(__clang__))
+static inline uint64_t caml_mmtk_cntvct(void)
+{
+  uint64_t v;
+  __asm__ volatile("mrs %0, cntvct_el0" : "=r"(v));
+  return v;
+}
+#  define MUT_GC_TSC() caml_mmtk_cntvct()
+#  define MUT_GC_TSC_KIND "AArch64 virtual counter"
 #else
-#define MUT_GC_TSC() ((uint64_t)0)
+#  define MUT_GC_TSC() caml_time_counter()
+#  define MUT_GC_TSC_KIND "monotonic clock"
 #endif
 #define MUT_GC_DOMS 256   /* slots; domain id masked (collision = summed, benign) */
+
+/* Write-intent prefetch of one cache line (locality 3 = keep in L1, 2 = L2).
+   GCC/Clang have the builtin on every architecture; MSVC gets the SSE or
+   ARM64 intrinsic; anything else is a no-op. */
+#if defined(__GNUC__) || defined(__clang__)
+#  define CAML_MMTK_PREFETCH_W(addr, locality) __builtin_prefetch((addr), 1, (locality))
+#elif defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86))
+#  include <xmmintrin.h>
+#  define CAML_MMTK_PREFETCH_W(addr, locality) _mm_prefetch((const char *)(addr), _MM_HINT_T1)
+#elif defined(_MSC_VER) && defined(_M_ARM64)
+#  include <intrin.h>
+#  define CAML_MMTK_PREFETCH_W(addr, locality) __prefetch((const void *)(addr))
+#else
+#  define CAML_MMTK_PREFETCH_W(addr, locality) ((void)(addr))
+#endif
+
+/* Sleep for a short interval (quiesce poll, frontier warmer cadence). */
+static void caml_mmtk_sleep_us(unsigned us)
+{
+#ifdef _WIN32
+  Sleep((us + 999) / 1000);
+#else
+  struct timespec ts = { (time_t)(us / 1000000u), (long)(us % 1000000u) * 1000L };
+  nanosleep(&ts, NULL);
+#endif
+}
+
+/* Name the calling thread where the platform allows it (diagnostics only). */
+static void caml_mmtk_name_thread(const char *name)
+{
+#if defined(HAS_PRCTL)
+  prctl(PR_SET_NAME, name, 0, 0, 0);
+#elif defined(__APPLE__) && defined(HAVE_PTHREAD_SETNAME_NP)
+  pthread_setname_np(name);
+#elif defined(HAVE_PTHREAD_SETNAME_NP)
+  pthread_setname_np(pthread_self(), name);
+#elif defined(HAVE_PTHREAD_SET_NAME_NP)
+  pthread_set_name_np(pthread_self(), name);
+#else
+  (void)name;
+#endif
+}
 static int caml_mut_gc_timing = 0;
 static uint64_t caml_mut_gc_barrier_tsc[MUT_GC_DOMS];
 static uint64_t caml_mut_gc_alloc_tsc[MUT_GC_DOMS];
@@ -226,9 +299,7 @@ static double caml_mut_gc_mono0;
 
 static double caml_mut_gc_now(void)
 {
-  struct timespec ts;
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
+  return (double)caml_time_counter() / 1e9;
 }
 
 static void caml_mut_gc_dump(void)
@@ -373,10 +444,14 @@ void caml_mmtk_init(void)
          2..8 select the range explicitly (6 -> 64 lines, up to 4 KiB pads). */
       if (getenv("MMTK_FRONTIER_WARMER") != NULL
           && atoi(getenv("MMTK_FRONTIER_WARMER")) > 0) {
+#ifdef _WIN32
+        fprintf(stderr, "[mmtk] MMTK_FRONTIER_WARMER: not available on this platform\n");
+#else
         pthread_t t;
         caml_mmtk_warm_dom0 = Caml_state;
         if (pthread_create(&t, NULL, caml_mmtk_frontier_warmer, NULL) == 0)
           pthread_detach(t);
+#endif
       }
       if (getenv("MMTK_TEST_MALLOC_MEDIUM") != NULL)
         caml_mmtk_test_malloc_medium = atoi(getenv("MMTK_TEST_MALLOC_MEDIUM"));
@@ -404,10 +479,7 @@ void caml_mmtk_init(void)
     caml_mut_gc_timing = 1;
     caml_mut_gc_tsc0 = MUT_GC_TSC();
     caml_mut_gc_mono0 = caml_mut_gc_now();
-#if !defined(__x86_64__)
-    fprintf(stderr, "[mmtk] mutator GC time: no TSC on this arch; "
-                    "figures will read 0\n");
-#endif
+    fprintf(stderr, "[mmtk] mutator GC time: counter = %s\n", MUT_GC_TSC_KIND);
     atexit(caml_mut_gc_dump);
   }
 
@@ -509,12 +581,11 @@ void caml_mmtk_domain_init(caml_domain_state *dom)
    3b/6. Reads are racy-by-design (young_ptr moves; prefetch of any mapped
    line is safe) and the thread only issues prefetches — never stores.
    Single-domain experiment: warms domain 0 only. */
+#ifndef _WIN32
 static void *caml_mmtk_frontier_warmer(void *arg)
 {
   (void)arg;
-#ifdef __linux__
-  prctl(PR_SET_NAME, "mmtk-warmer", 0, 0, 0);
-#endif
+  caml_mmtk_name_thread("mmtk-warmer");
   const size_t WINDOW = 24 * 1024;           /* lines ahead of the frontier */
   for (;;) {
     caml_domain_state *d = caml_mmtk_warm_dom0;
@@ -524,16 +595,14 @@ static void *caml_mmtk_frontier_warmer(void *arg)
       if (hi != NULL && lo != NULL && hi > lo) {
         char *from = hi - WINDOW > lo ? hi - WINDOW : lo;
         for (char *a = (char *)((uintptr_t)from & ~63ull); a < hi; a += 64)
-          __builtin_prefetch(a, 1, 2);       /* write intent, into L2 */
+          CAML_MMTK_PREFETCH_W(a, 2);        /* write intent, into L2 */
       }
     }
-    {
-      struct timespec ts = { 0, 8000 };      /* ~8us cadence */
-      nanosleep(&ts, NULL);
-    }
+    caml_mmtk_sleep_us(8);                   /* ~8us cadence */
   }
   return NULL;
 }
+#endif /* !_WIN32 */
 
 /* Shape experiments (see SHAPE.md, W-tax mechanisms).
    MMTK_LOS_THRESHOLD (bytes) re-routes "large-ish" objects to the LOS instead
@@ -841,8 +910,8 @@ int caml_mmtk_refill_tlab(caml_domain_state *dom, mlsize_t whsize)
     char *base = (char *)start, *top = (char *)end;
     char *l1_floor = top - 1024 > base ? top - 1024 : base;
     char *a = top - 64;
-    for (; a >= l1_floor; a -= 64) __builtin_prefetch(a, 1, 3);
-    for (; a >= base; a -= 64)     __builtin_prefetch(a, 1, 2);
+    for (; a >= l1_floor; a -= 64) CAML_MMTK_PREFETCH_W(a, 3);
+    for (; a >= base; a -= 64)     CAML_MMTK_PREFETCH_W(a, 2);
   }
 
   dom->young_start          = (value*)start;
@@ -1555,7 +1624,7 @@ void caml_mmtk_quiesce_running_domains(void)
       all_done = 0;
     }
     if (all_done) break;
-    usleep(CAML_MMTK_QUIESCE_POLL_US);
+    caml_mmtk_sleep_us(CAML_MMTK_QUIESCE_POLL_US);
   }
 
   /* Re-enter OCaml as a RUNNING participant (parks cooperatively if a GC is now
