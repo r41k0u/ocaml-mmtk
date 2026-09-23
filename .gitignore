@@ -345,7 +345,8 @@ META
 # reproducible distributable builds)
 /gc/mmtk/target/
 
-# Local-only: compiled benchmark binaries, campaign journals and drafts (kept on disk, not in the PR).
+# Local-only: compiled benchmark binaries, campaign journals and drafts
+# (kept on disk, not in the PR).
 /benchmarks/clbg/build/
 /gc/mmtk/SHAPE.md
 /docs/ocaml-workshop-2026-abstract.md

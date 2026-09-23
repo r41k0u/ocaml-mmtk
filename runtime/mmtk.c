@@ -56,7 +56,7 @@
 #include "caml/signals.h"
 #include "caml/weak.h"
 #include "caml/mmtk.h"
-#include "caml/osdeps.h"   /* caml_time_counter: portable monotonic nanoseconds */
+#include "caml/osdeps.h"   /* caml_time_counter: monotonic nanoseconds */
 
 /* The in-tree MMTk binding's C ABI (gc/mmtk/include/mmtk_ocaml.h). */
 #include "../gc/mmtk/include/mmtk_ocaml.h"
@@ -148,7 +148,7 @@ int caml_mmtk_weak_refs = 1;
 
 static size_t caml_mmtk_los_threshold = CAML_MMTK_LOS_THRESHOLD;
 /* MMTK_MEDIUM_NONMOVING=1: route "medium" objects (>= 2056 B = stock's
-   Max_young_wosize boundary, < the LOS threshold) to the NonMoving space —
+   Max_young_wosize boundary, < the LOS threshold) to the NonMoving space -
    with the marksweep_as_nonmoving build this is a swept FREE-LIST space,
    i.e. size-class pools: stock OCaml's placement for exactly this size band
    (stock allocates >Max_young_wosize blocks straight into major-heap pools).
@@ -166,10 +166,10 @@ static size_t caml_mmtk_los_threshold = CAML_MMTK_LOS_THRESHOLD;
    MMTK_MEDIUM_NONMOVING=0/1 overrides either way. */
 static int caml_mmtk_medium_nonmoving = 0;
 #define CAML_MMTK_SEM_NONMOVING 6
-/* MMTK_TEST_MALLOC_MEDIUM=1 — MEASUREMENT INSTRUMENT ONLY, NEVER a default.
+/* MMTK_TEST_MALLOC_MEDIUM=1 - MEASUREMENT INSTRUMENT ONLY, NEVER a default.
    Allocates >=2056B blocks via plain malloc as OUT-OF-HEAP (foreign) objects:
    the GC never traces, moves, or frees them (they leak). This gives Bactrian
-   byte-for-byte glibc placement for the medium band — the causal test for
+   byte-for-byte glibc placement for the medium band - the causal test for
    the matmul residual (SHAPE.md round 18): if exact-fit malloc placement is
    the mechanism, the W gap must collapse under this knob. Only sound for
    workloads whose medium objects carry no outgoing heap pointers that the
@@ -185,9 +185,9 @@ static int caml_mmtk_alloc_jitter = 6;
 static uint64_t caml_mmtk_jitter_state = 0x9E3779B97F4A7C15ull;
 static _Atomic uint64_t caml_mmtk_jitter_fills = 0;
 /* MMTK_TLAB_PREFETCH=1: on each TLAB refill, software-prefetch the fresh
-   block with write intent — top 1 KiB into L1, the rest into L2. Rationale
+   block with write intent - top 1 KiB into L1, the rest into L2. Rationale
    (SHAPE.md W-night round 3b): the residual W-tax is allocation-frontier
-   STORE stalls — bump stores into never-touched cold lines drain through the
+   STORE stalls - bump stores into never-touched cold lines drain through the
    store buffer at RFO latency (mutator loads hit L1 at 98.9%, yet
    stalls_mem_any doubles vs vanilla). OCaml bumps DOWNWARD from young_end,
    so warming proceeds top-down to match store order. */
@@ -199,15 +199,15 @@ static int caml_mmtk_tlab_prefetch = 0;
    The D1 CPU-budget comparison needs GC work attributed the same way on both
    runtimes. Vanilla runs ALL of its GC on the mutator, and its runtime_events
    spans capture it there. Under MMTk, per-thread attribution captures only the
-   worker pool: the GC work the MUTATOR does — write barriers, TLAB refills,
-   LOS allocations — lands in the mutator bucket and flatters MMTk. Measured on
+   worker pool: the GC work the MUTATOR does - write barriers, TLAB refills,
+   LOS allocations - lands in the mutator bucket and flatters MMTk. Measured on
    church (binarytrees-20): the identical program's "mutator" CPU is 2.5 s under
-   MMTk vs 1.65 s under vanilla — that ~0.9 s IS this uncounted GC work.
+   MMTk vs 1.65 s under vanilla - that ~0.9 s IS this uncounted GC work.
 
    So: time the mutator-side GC entry points, report at exit, and let the
    harness add this to worker CPU (G) and subtract it from mutator CPU (W).
-   All such work funnels through the helpers in this file — native code makes
-   no other GC-related C calls — so wrapping them here is complete.
+   All such work funnels through the helpers in this file - native code makes
+   no other GC-related C calls - so wrapping them here is complete.
 
    Mechanics. TSC pairs (~20 ns/pair), accumulated in PER-DOMAIN plain u64
    slots (each domain writes only its own; no atomics on the hot path), summed
@@ -217,7 +217,7 @@ static int caml_mmtk_tlab_prefetch = 0;
    The park subtraction is load-bearing: a TLAB refill or LOS allocation can
    BLOCK FOR AN ENTIRE GC (its block acquisition polls, which can trigger a
    collection and park the mutator). TSC measures wall cycles, and a parked
-   thread burns wall time but no CPU — without the subtraction a single
+   thread burns wall time but no CPU - without the subtraction a single
    blocking refill would book a whole multi-ms pause as mutator GC *CPU*. The
    alloc wrappers therefore subtract whatever caml_mmtk_park accumulated inside
    their window. Blocked time is D3's business (the pause log), not D1's.
@@ -247,16 +247,19 @@ static inline uint64_t caml_mmtk_cntvct(void)
 #  define MUT_GC_TSC() caml_time_counter()
 #  define MUT_GC_TSC_KIND "monotonic clock"
 #endif
-#define MUT_GC_DOMS 256   /* slots; domain id masked (collision = summed, benign) */
+/* Slots; domain id masked (a collision sums two domains, benign). */
+#define MUT_GC_DOMS 256
 
 /* Write-intent prefetch of one cache line (locality 3 = keep in L1, 2 = L2).
    GCC/Clang have the builtin on every architecture; MSVC gets the SSE or
    ARM64 intrinsic; anything else is a no-op. */
 #if defined(__GNUC__) || defined(__clang__)
-#  define CAML_MMTK_PREFETCH_W(addr, locality) __builtin_prefetch((addr), 1, (locality))
+#  define CAML_MMTK_PREFETCH_W(addr, locality) \
+     __builtin_prefetch((addr), 1, (locality))
 #elif defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86))
 #  include <xmmintrin.h>
-#  define CAML_MMTK_PREFETCH_W(addr, locality) _mm_prefetch((const char *)(addr), _MM_HINT_T1)
+#  define CAML_MMTK_PREFETCH_W(addr, locality) \
+     _mm_prefetch((const char *)(addr), _MM_HINT_T1)
 #elif defined(_MSC_VER) && defined(_M_ARM64)
 #  include <intrin.h>
 #  define CAML_MMTK_PREFETCH_W(addr, locality) __prefetch((const void *)(addr))
@@ -270,7 +273,9 @@ static void caml_mmtk_sleep_us(unsigned us)
 #ifdef _WIN32
   Sleep((us + 999) / 1000);
 #else
-  struct timespec ts = { (time_t)(us / 1000000u), (long)(us % 1000000u) * 1000L };
+  struct timespec ts;
+  ts.tv_sec = (time_t)(us / 1000000u);
+  ts.tv_nsec = (long)(us % 1000000u) * 1000L;
   nanosleep(&ts, NULL);
 #endif
 }
@@ -445,7 +450,8 @@ void caml_mmtk_init(void)
       if (getenv("MMTK_FRONTIER_WARMER") != NULL
           && atoi(getenv("MMTK_FRONTIER_WARMER")) > 0) {
 #ifdef _WIN32
-        fprintf(stderr, "[mmtk] MMTK_FRONTIER_WARMER: not available on this platform\n");
+        fprintf(stderr,
+                "[mmtk] MMTK_FRONTIER_WARMER: not available on this OS\n");
 #else
         pthread_t t;
         caml_mmtk_warm_dom0 = Caml_state;
@@ -485,7 +491,7 @@ void caml_mmtk_init(void)
 
   /* Per-pause STW records (backlog #R1). MMTK_VERBOSE only reports the SUM of
      pause time, which cannot distinguish many small pauses from a few large
-     ones — the distinction the GC-shape comparison turns on. Arming here keeps
+     ones - the distinction the GC-shape comparison turns on. Arming here keeps
      the pause path itself free of any I/O: records accumulate in memory and are
      written once at exit. */
   caml_mmtk_pause_log_path = getenv("MMTK_PAUSE_LOG");
@@ -573,13 +579,13 @@ void caml_mmtk_domain_init(caml_domain_state *dom)
 }
 
 /* MMTK_FRONTIER_WARMER=1: a helper thread that prefetches (write-intent) the
-   cache lines JUST BELOW domain 0's bump pointer — the lines the mutator is
+   cache lines JUST BELOW domain 0's bump pointer - the lines the mutator is
    about to allocate into. OCaml bumps DOWNWARD, so the warm window is
    [young_ptr - WINDOW, young_ptr). The mutator's allocation stores then hit
    lines already in (or in flight to) the cache hierarchy instead of paying a
-   cold RFO each — the store-frontier mechanism measured in SHAPE.md rounds
+   cold RFO each - the store-frontier mechanism measured in SHAPE.md rounds
    3b/6. Reads are racy-by-design (young_ptr moves; prefetch of any mapped
-   line is safe) and the thread only issues prefetches — never stores.
+   line is safe) and the thread only issues prefetches - never stores.
    Single-domain experiment: warms domain 0 only. */
 #ifndef _WIN32
 static void *caml_mmtk_frontier_warmer(void *arg)
@@ -643,7 +649,7 @@ static void caml_mmtk_jitter_pad(size_t bytes, int sem)
   if (caml_mmtk_alloc_jitter && bytes >= 2048
       && (sem == CAML_MMTK_SEM_DEFAULT || sem == CAML_MMTK_SEM_NONMOVING)) {
     /* Entropy in LINES, not words: 8-128 B pads (v1) carry <2 lines of
-       set-index entropy — enough to break exact pitch alignment (768) but
+       set-index entropy - enough to break exact pitch alignment (768) but
        enough to CREATE near-alignments where the natural pitch was benign
        (mm800: LLC-loads 140M -> 217M). 0..31 lines spreads consecutive
        large objects across 32 L2 sets; successive pads accumulate, so
@@ -666,7 +672,7 @@ static void caml_mmtk_jitter_pad(size_t bytes, int sem)
       /* Deterministic mode (MMTK_ALLOC_JITTER=17..23): a FIXED pad of L =
          (value-16) cache lines before every >=2KB allocation. A constant
          odd-line total pitch steps the cache set index by an odd amount per
-         object — coprime with every power-of-two set count (L1/L2/L3) — so
+         object - coprime with every power-of-two set count (L1/L2/L3) - so
          column walks over same-sized rows cover sets uniformly, and unlike
          the random mode the pitch stays constant (stride-predictable). */
       int lines = caml_mmtk_alloc_jitter - 16;
@@ -739,7 +745,7 @@ value caml_mmtk_alloc_shr(mlsize_t wosize, tag_t tag, reserved_t reserved)
       (MUT_GC_TSC() - t0) - (caml_mut_gc_park_tsc[slot] - p0);
   if (p == NULL) caml_raise_out_of_memory();
   /* Mature-direct pacing tick (pretenure + LOS): batches ~2MB then lets the
-     binding evaluate the cycle-trigger law — without this, a workload that
+     binding evaluate the cycle-trigger law - without this, a workload that
      allocates straight to mature runs to the space-full edge before any
      cycle fires (fragmed; SHAPE round 30). */
   if (sem != CAML_MMTK_SEM_DEFAULT) {
@@ -767,7 +773,7 @@ value caml_mmtk_alloc_shr(mlsize_t wosize, tag_t tag, reserved_t reserved)
    mature-direct allocation. Stock consumes caml_adjust_gc_speed's accumulator
    in update_major_slice_work; under always-on MMTk that consumer never runs
    (the major slice is inert), so nothing told the GC about memory held
-   OUTSIDE the MMTk heap — Bigarrays, GMP limbs, video frames. A frame pool
+   OUTSIDE the MMTk heap - Bigarrays, GMP limbs, video frames. A frame pool
    holding ~180MB under stock grew to ~25GB of dead off-heap frames here
    because the OCaml-side live set never filled the heap, so no collection
    ever ran the finalizers that release the frames.
@@ -797,17 +803,17 @@ void caml_mmtk_custom_mem_pressure(size_t bytes)
             memory_order_relaxed, memory_order_relaxed)) {
       mmtk_ocaml_mature_alloc_tick(acc);
       /* The tick and the vm_live_bytes credit only make the NEXT collection
-         see the pressure — but a program whose OCaml-side allocation is tiny
+         see the pressure - but a program whose OCaml-side allocation is tiny
          (a pool of small records fronting huge off-heap frames) may never
          reach an allocation poll to START one, and on native the poll's TLAB
          early-return makes caml_request_minor_gc() a no-op as well (measured
          both ways: 1 GC across a 6GB frame churn). Start a real collection
-         through the binding — non-exhaustive, so it is a nursery GC unless
+         through the binding - non-exhaustive, so it is a nursery GC unless
          the tick's laws above escalated it to full.
 
          Starter cadence: one collection per nursery-max of off-heap bytes
          (stock's custom-minor law: a minor GC per minor-heap-worth of custom
-         mem), NOT per 2MB credit batch — at 2MB the probe run was 95%% GC
+         mem), NOT per 2MB credit batch - at 2MB the probe run was 95%% GC
          time while still pooling 3x stock's RSS. MMTK_CUSTOM_GC_BYTES
          overrides. Guarded: unmarshalling allocates customs with collection
          disabled; the credit keeps accumulating and the next enabled batch

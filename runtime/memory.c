@@ -199,7 +199,7 @@ Caml_inline void write_barrier(
      path the cost is a single predictable branch.
 
      Gated on Is_block(new_val): an immediate store creates no heap edge, so
-     there is nothing for a young collection to find in this slot — the same
+     there is nothing for a young collection to find in this slot - the same
      filter stock's caml_modify applies before touching the ref table. (The
      SATB barrier below is NOT gated on it: SATB greys the OLD referent,
      which exists regardless of what is being stored.) */
@@ -291,8 +291,8 @@ CAMLexport void caml_adjust_gc_speed (mlsize_t res, mlsize_t max)
   if (Caml_state->extra_heap_resources > 0.2){
     CAML_EV_COUNTER (EV_C_REQUEST_MAJOR_ADJUST_GC_SPEED, 1);
     /* Under always-on MMTk the stock consumer of this accumulator
-       (update_major_slice_work, reached via the major slice) never runs — the
-       slice request lands in an inert stub — so without a reset here the
+       (update_major_slice_work, reached via the major slice) never runs - the
+       slice request lands in an inert stub - so without a reset here the
        accumulator ratchets past the threshold once and then every later
        custom allocation re-fires an interrupt for nothing. The MMTk-side
        pressure credit happens with raw bytes in alloc_custom_gen
@@ -365,7 +365,7 @@ CAMLexport CAMLweakdef void caml_initialize (volatile value *fp, value val)
      never consumed). Both the bytecode and native runtimes record it (see
      write_barrier).
 
-     Immediates are never heap edges, so skip them — stock's caml_initialize
+     Immediates are never heap edges, so skip them - stock's caml_initialize
      applies the same filter (only young values enter the ref table). Without
      it, initialising a born-mature array (Max_young_wosize pretenuring)
      buffers one remset entry PER SLOT: matmul-768's int rows alone retained
