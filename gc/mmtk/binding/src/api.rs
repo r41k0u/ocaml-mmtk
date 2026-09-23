@@ -121,13 +121,18 @@ pub extern "C" fn mmtk_ocaml_init(heap_size: usize, plan: *const libc::c_char) {
         memory_manager::process(&mut builder, "plan", plan_str),
         "unknown MMTk plan: {}", plan_str
     );
-    // Transparent hugepages ON by default (Linux madvise; a no-op elsewhere).
+    // Transparent hugepages ON by default on Linux (madvise). mmtk-core accepts
+    // `transparent_hugepages=true` only on Linux (its option validator rejects it
+    // elsewhere, and the macOS CI runner died on this assert), so other platforms
+    // keep the core default (off).
     // Measured 2026-08-08 (SHAPE.md W-night): a uniform 2-3.5% cycle win on the
     // panel (binarytrees 13.10G->12.81G, kb 5.43G->5.28G, LU 7.64G->7.38G) by
     // cutting dTLB churn from the streaming nursery (dTLB-store misses 3.0M vs
     // vanilla's 0.03M on LU). An explicit MMTK_TRANSPARENT_HUGEPAGES env
     // (already read by MMTKBuilder::new) is honoured: only default when unset.
-    if std::env::var_os("MMTK_TRANSPARENT_HUGEPAGES").is_none() {
+    if cfg!(target_os = "linux")
+        && std::env::var_os("MMTK_TRANSPARENT_HUGEPAGES").is_none()
+    {
         assert!(memory_manager::process(
             &mut builder, "transparent_hugepages", "true"));
     }
