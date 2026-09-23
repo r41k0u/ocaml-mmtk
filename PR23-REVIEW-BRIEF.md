@@ -1,6 +1,6 @@
 # Review brief: fplaunchpad/ocaml-mmtk PR #23 ("[WIP] Making Bactrian GC shape similar to Vanilla GC")
 
-*Prepared 2026-09-22 before the manual review. Head `r41k0u:shape/tweaks` @ 053dc04d5 (now c6b3cbb11 after the hygiene commit below),
+*Prepared 2026-09-22 before the manual review; head now `r41k0u:shape/tweaks` @ 57fb1718d (2026-09-23: hygiene commit, the two August pacing cherry-picks, the binding's quantum-hint removal, submodule at mmtk-core abd1879f6f). Originally written at 053dc04d5,
 base `fplaunchpad:5.5+mmtk` @ cbc66e3efd. 123 commits, 97 files, +6054 / −59.*
 
 ## 1. Is it up to date?
@@ -136,6 +136,18 @@ owns what.
   nursery sizing in two repos (§4.3), knobs read on several sides (§4.4 — a
   table in the PR description), the off-heap/LOS pairing (§4.5), and the
   submodule bumps (§4.6 — link PR #1's commits).
+
+### 4.8 Done (2026-09-23)
+
+The must-fix (§4.7) is on both PRs: mmtk-core `0.32-ocaml` 22351d1644 (hint
+law retired, Full cost predicted from measurements), 9372c33c01 (prediction
+scaled by heap growth), abd1879f6f (mature-bytes floor); ocaml-mmtk
+`shape/tweaks` 22ade70f2 (binding requests cycles only) with submodule bumps.
+The PR's binding also gained the two August pacing commits it was missing
+(d9816ef9d off-heap credit, e16d20e0a baseline-scaled cadence), so it now
+matches the measured tree. Numbers (v7c): eio 155 s / 4.1 GB / 266 ms, ydump
+71 s / 11.6 GB / 156 ms, sedlex 125 s / 8.7 GB / 123 ms, decompress 58 s /
+1.0 GB / 7 ms; binarytrees unchanged. Details: `quick/sedlex/REPORT.md` §v7.
 
 ## 5. What is *not* in this PR but affects it
 
