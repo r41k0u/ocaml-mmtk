@@ -5,6 +5,22 @@ Each entry is dated and self-contained. Newest first.
 
 ---
 
+## 2026-09-29 - Bactrian's heap sizing saw each GC's full/nursery status one pause late
+
+Copilot review on mmtk-core PR 1. `GCTriggerPolicy::on_gc_end` runs before
+`Plan::end_of_gc`, and Bactrian's `last_collection_full_heap()` read
+`previous_pause()`, which `end_of_gc` only updates afterwards. So in the
+space-overhead trigger a FinalMark looked like a nursery pause (the limit
+could only grow) and the next nursery pause looked full (it resized from
+nursery-inflated reserved pages). The binding's own reader in
+`resume_mutators` runs after `end_of_gc` and was already right. Fix (core
+44bd35a862): prefer the still-latched `current_pause()`, fall back to
+`previous_pause()`. Bactrian testsuite 1442 passed, 0 failed; CLBG matrix
+all pass. Other plans are unaffected (GenImmix keys on `gc_full_heap`,
+latched for the whole GC).
+
+---
+
 ## 2026-09-29 - sync_and_terminate dropped its local roots after the domain was gone
 
 **Symptom.** Rare SIGSEGV (exit -11) in multi-domain tests: CI
