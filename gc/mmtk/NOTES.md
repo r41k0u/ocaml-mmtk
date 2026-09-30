@@ -5,19 +5,27 @@ Each entry is dated and self-contained. Newest first.
 
 ---
 
-## 2026-09-29 - Bactrian's heap sizing saw each GC's full/nursery status one pause late
+## 2026-09-29 - Bactrian full/nursery attribution fix: landed, then REVERTED (full-GC storm)
 
 Copilot review on mmtk-core PR 1. `GCTriggerPolicy::on_gc_end` runs before
-`Plan::end_of_gc`, and Bactrian's `last_collection_full_heap()` read
+`Plan::end_of_gc`, and Bactrian's `last_collection_full_heap()` reads
 `previous_pause()`, which `end_of_gc` only updates afterwards. So in the
-space-overhead trigger a FinalMark looked like a nursery pause (the limit
-could only grow) and the next nursery pause looked full (it resized from
-nursery-inflated reserved pages). The binding's own reader in
-`resume_mutators` runs after `end_of_gc` and was already right. Fix (core
-44bd35a862): prefer the still-latched `current_pause()`, fall back to
-`previous_pause()`. Bactrian testsuite 1442 passed, 0 failed; CLBG matrix
-all pass. Other plans are unaffected (GenImmix keys on `gc_full_heap`,
-latched for the whole GC).
+space-overhead trigger a FinalMark looks like a nursery pause (the limit
+can only grow) and the next nursery pause looks full. The binding's own
+reader in `resume_mutators` runs after `end_of_gc` and is right.
+
+The fix (core 44bd35a862: prefer the still-latched `current_pause()`) passed
+the Bactrian testsuite (1442/0) and CLBG, but the church panel showed a
+multi-domain regression. With the shrink-after-full path now actually
+running after FinalMark/Full, CLBG binarytrees at 8 domains (cores 2-9,
+MMTK_THREADS=8, 5 interleaved reps) went from 2.26-2.51 s with 42-48 full
+GCs to 3.89-15.29 s with 95-498 full GCs. Single-domain numbers did not
+move. Bactrian's pacing had been tuned while that shrink effectively never
+ran. Reverted (core e6ad6b1f75, identical to 4bd0674237).
+
+To re-land: keep the attribution fix, but damp the shrink (e.g. never
+shrink below the previous full GC's live estimate, or shrink only after two
+consecutive full GCs agree), and gate on the 8-domain binarytrees number.
 
 ---
 
