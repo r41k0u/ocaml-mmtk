@@ -119,6 +119,14 @@ static int caml_mmtk_generational = 0;
    needs the SATB (snapshot-at-the-beginning) deletion write barrier. Read on
    every mutable pointer write, so keep it a plain int. */
 static int caml_mmtk_concurrent = 0;
+/* Whether the continuation resume path must take the cont scan lock: only when
+   a GC worker can scan a suspended stack while mutators run, i.e. a concurrent
+   plan whose marking is NOT confined to pauses (ConcurrentImmix, or Bactrian
+   with MMTK_MARK_SLICED=0). Under Bactrian's default sliced-STW marking every
+   stack scan happens with all domains stopped, so the lock protects nothing,
+   and taking it (one process-wide mutex, twice per resume) serialised every
+   resume across domains. MMTK_CONT_LOCK_ALWAYS=1 restores the old behaviour. */
+static int caml_mmtk_cont_lock_on = 0;
 /* Whether the active plan (LXR) uses the coalescing field-logging write barrier
    for reference counting. Like the SATB barrier, the per-slot pre-store hook in
    caml_modify routes to the mutator's installed barrier (a FieldBarrier for
@@ -431,6 +439,12 @@ void caml_mmtk_init(void)
                           || strcmp(plan, "Bactrian") == 0);
   caml_mmtk_field_log = (strcmp(plan, "LXR") == 0);
   caml_mmtk_cont_resume_hook = caml_mmtk_field_log;
+  {
+    const char *always = getenv("MMTK_CONT_LOCK_ALWAYS");
+    caml_mmtk_cont_lock_on = caml_mmtk_concurrent
+      && ((always != NULL && atoi(always) != 0)
+          || !mmtk_ocaml_marking_confined_to_pauses());
+  }
 
   /* RQ8 (ocaml-mmtk): turn OFF allocation-time zero-fill UNIVERSALLY, for every
      plan including ConcurrentImmix. OCaml fully initializes every block before
@@ -1442,13 +1456,13 @@ void caml_mmtk_satb_barrier(volatile value *start, mlsize_t count)
    address. */
 void caml_mmtk_cont_lock(value cont)
 {
-  if (caml_mmtk_concurrent)
+  if (caml_mmtk_cont_lock_on)
     mmtk_ocaml_cont_lock((uintptr_t) cont);
 }
 
 void caml_mmtk_cont_unlock(value cont)
 {
-  if (caml_mmtk_concurrent)
+  if (caml_mmtk_cont_lock_on)
     mmtk_ocaml_cont_unlock((uintptr_t) cont);
 }
 
