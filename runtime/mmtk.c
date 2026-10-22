@@ -123,9 +123,15 @@ static int caml_mmtk_concurrent = 0;
    a GC worker can scan a suspended stack while mutators run, i.e. a concurrent
    plan whose marking is NOT confined to pauses (ConcurrentImmix, or Bactrian
    with MMTK_MARK_SLICED=0). Under Bactrian's default sliced-STW marking every
-   stack scan happens with all domains stopped, so the lock protects nothing,
-   and taking it (one process-wide mutex, twice per resume) serialised every
-   resume across domains. MMTK_CONT_LOCK_ALWAYS=1 restores the old behaviour. */
+   worker stack scan happens with all domains stopped, so no worker can race a
+   resume, and taking the lock (one process-wide mutex, twice per resume)
+   serialised every resume across domains.
+   The lock also ordered two domains racing to resume the same continuation:
+   each snapshots the stack before the field-0 CAS, so without it one could
+   scan a stack the other has already claimed, run or freed. With the lock off,
+   continuation_take_noexc (fiber.c) therefore claims the stack first and
+   snapshots it after, when only the winner can reach it.
+   MMTK_CONT_LOCK_ALWAYS=1 restores the locked path for A/B runs. */
 static int caml_mmtk_cont_lock_on = 0;
 /* Whether the active plan (LXR) uses the coalescing field-logging write barrier
    for reference counting. Like the SATB barrier, the per-slot pre-store hook in
@@ -1460,6 +1466,11 @@ void caml_mmtk_cont_lock(value cont)
     mmtk_ocaml_cont_lock((uintptr_t) cont);
 }
 
+int caml_mmtk_cont_lock_required(void)
+{
+  return caml_mmtk_cont_lock_on;
+}
+
 void caml_mmtk_cont_unlock(value cont)
 {
   if (caml_mmtk_cont_lock_on)
@@ -1485,16 +1496,17 @@ static void caml_mmtk_satb_grey_stack_slot(void *fdata, value v,
   caml_mmtk_satb_barrier(slot, 1);
 }
 
-void caml_mmtk_cont_snapshot(value cont)
+void caml_mmtk_stack_snapshot(struct stack_info *stk)
 {
   if (!caml_mmtk_concurrent) return;
   if (!mmtk_ocaml_concurrent_marking_active()) return;
-  {
-    value stk = Field(cont, 0);
-    if (Ptr_val(stk) != NULL)
-      caml_scan_stack(caml_mmtk_satb_grey_stack_slot, 0, NULL,
-                      Ptr_val(stk), NULL);
-  }
+  if (stk != NULL)
+    caml_scan_stack(caml_mmtk_satb_grey_stack_slot, 0, NULL, stk, NULL);
+}
+
+void caml_mmtk_cont_snapshot(value cont)
+{
+  caml_mmtk_stack_snapshot(Ptr_val(Field(cont, 0)));
 }
 
 /* -- Stop-the-world ---------------------------------------------------- */
