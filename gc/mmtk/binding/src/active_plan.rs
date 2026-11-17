@@ -79,6 +79,7 @@ pub fn register_mutator(domain_state_addr: usize, mutator: *mut Mutator<OCamlVM>
         map.len()
     };
     crate::collection::update_solo_eligible(n);
+    crate::collection::unpin_new_domain_thread();
     update_nursery_scale(n);
 }
 

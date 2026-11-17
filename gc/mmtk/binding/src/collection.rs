@@ -902,6 +902,13 @@ pub(crate) fn in_forked_child() -> bool {
 /// `gc_active` is waited on, as before this wait was added. Explicit requests
 /// return without collecting in a forked child.
 fn park_until_resumed(addr: usize) {
+    #[cfg(target_os = "linux")]
+    if solo_pin_enabled() {
+        if solo_pin_mode() >= 2 {
+            mutator_pin_follow();
+        }
+        LAST_MUT_CPU.store(unsafe { libc::sched_getcpu() } as isize, Ordering::Relaxed);
+    }
     let forked = in_forked_child();
     let mut s = STW.lock().unwrap();
     let start = s.epoch;
@@ -912,6 +919,9 @@ fn park_until_resumed(addr: usize) {
         s = STW_COND.wait(s).unwrap();
     }
 }
+
+/// Solo mode: the CPU the last parking mutator ran on (-1 = unknown).
+static LAST_MUT_CPU: std::sync::atomic::AtomicIsize = std::sync::atomic::AtomicIsize::new(-1);
 
 /// MMTK_SOLO=k (default 0 = off): arm solo UP mode when at most k domains exist.
 fn solo_k() -> usize {
@@ -935,6 +945,79 @@ pub(crate) fn update_solo_eligible(domains: usize) {
     if let Some(m) = crate::SINGLETON.get() {
         m.set_solo_eligible(k > 0 && domains <= k);
     }
+}
+
+/// MMTK_SOLO_PIN=1: pin the solo worker to the parked mutator's CPU.
+/// MMTK_SOLO_PIN=2: also pin the mutator thread to its CPU while solo is
+/// allowed, so the kernel cannot move it to an idle core at resume (the
+/// mutator and the solo worker then share one core, as with taskset on one CPU).
+/// Thread affinity is only implemented for Linux; elsewhere the knob is ignored.
+fn solo_pin_mode() -> u32 {
+    if !cfg!(target_os = "linux") {
+        return 0;
+    }
+    static P: std::sync::OnceLock<u32> = std::sync::OnceLock::new();
+    *P.get_or_init(|| {
+        std::env::var("MMTK_SOLO_PIN")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(0)
+    })
+}
+fn solo_pin_enabled() -> bool {
+    solo_pin_mode() >= 1
+}
+
+/// MMTK_SOLO_PIN=2: the mask the first pinned mutator had. A thread inherits
+/// its creator's mask, so a domain spawned by a pinned mutator would start out
+/// pinned to that one CPU; `unpin_new_domain_thread` puts it back.
+#[cfg(target_os = "linux")]
+struct MaskCell(libc::cpu_set_t);
+#[cfg(target_os = "linux")]
+unsafe impl Sync for MaskCell {}
+#[cfg(target_os = "linux")]
+unsafe impl Send for MaskCell {}
+#[cfg(target_os = "linux")]
+static MUT_PROC_MASK: std::sync::OnceLock<MaskCell> = std::sync::OnceLock::new();
+
+/// Called on a new domain's thread when it registers.
+pub(crate) fn unpin_new_domain_thread() {
+    #[cfg(target_os = "linux")]
+    if let Some(m) = MUT_PROC_MASK.get() {
+        unsafe { libc::sched_setaffinity(0, std::mem::size_of::<libc::cpu_set_t>(), &m.0) };
+    }
+}
+
+#[cfg(target_os = "linux")]
+thread_local! {
+    /// MMTK_SOLO_PIN=2: this mutator thread's mask before it was pinned.
+    static MUT_SAVED_MASK: std::cell::RefCell<Option<libc::cpu_set_t>> = const { std::cell::RefCell::new(None) };
+}
+
+/// Pin the calling mutator to its current CPU while solo is allowed; restore
+/// its own mask once it is not (another domain exists).
+#[cfg(target_os = "linux")]
+fn mutator_pin_follow() {
+    let want = solo_allowed();
+    MUT_SAVED_MASK.with(|m| unsafe {
+        let mut m = m.borrow_mut();
+        let sz = std::mem::size_of::<libc::cpu_set_t>();
+        if want && m.is_none() {
+            let mut old: libc::cpu_set_t = std::mem::zeroed();
+            if libc::sched_getaffinity(0, sz, &mut old) == 0 {
+                let _ = MUT_PROC_MASK.set(MaskCell(old));
+                let mut set: libc::cpu_set_t = std::mem::zeroed();
+                libc::CPU_SET(libc::sched_getcpu() as usize, &mut set);
+                if libc::sched_setaffinity(0, sz, &set) == 0 {
+                    *m = Some(old);
+                }
+            }
+        } else if !want {
+            if let Some(old) = m.take() {
+                libc::sched_setaffinity(0, sz, &old);
+            }
+        }
+    });
 }
 
 /// True if a collection is in progress (queried from the C safepoint hook).
@@ -1170,7 +1253,12 @@ impl Collection<OCamlVM> for VMCollection {
                 // Solo mode (MMTK_SOLO=k): with at most k domains, one worker
                 // runs the whole pause on the UP paths and the others stay
                 // parked apart from their designated packets.
-                crate::mmtk().set_up_trace_solo(None);
+                let pin = if solo_pin_enabled() {
+                    usize::try_from(LAST_MUT_CPU.load(Ordering::Relaxed)).ok()
+                } else {
+                    None
+                };
+                crate::mmtk().set_up_trace_solo(pin);
             } else if crate::mmtk().solo_chosen() {
                 crate::mmtk().cancel_solo();
             }

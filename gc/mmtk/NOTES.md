@@ -5,6 +5,44 @@ Each entry is dated and self-contained. Newest first.
 
 ---
 
+## 2026-11-17 - Solo pin: keep the mutator and the solo worker on one core (`MMTK_SOLO_PIN`)
+
+**Opt-in, default off, Linux only.** Builds on solo mode (next entry).
+
+In solo mode the mutator and one GC worker take turns: exactly one of them
+runs at any time. The kernel does not know that. At each resume it tends to
+wake the mutator on an idle core, so the two threads wander over the machine,
+caches go cold, and the cores they land on are in a low-frequency state.
+On sedlex 2M: 2,016 migrations at an average 1.6 GHz without pinning, 5
+migrations at 3.1 GHz with it.
+
+- `MMTK_SOLO_PIN=1`: at each park the mutator records its CPU; the solo
+  worker pins itself there for the pause and restores its mask afterwards.
+- `MMTK_SOLO_PIN=2`: the mutator also pins itself to its current CPU while
+  solo is allowed. When a second domain registers, solo is no longer allowed:
+  the mutator restores its mask at its next park, and the new domain's thread
+  (which inherited the pinned mask) gets the original mask back at
+  registration.
+
+Same machine and setup as the solo entry; "solo" is `MMTK_SOLO=1
+MMTK_LOCAL_NURSERY_TRACE=1 MMTK_UP_DRAIN_REUSE=1 MMTK_UP_OLDIFY=1`:
+
+| bench | vanilla | solo | + `MMTK_SOLO_PIN=2` |
+|---|--:|--:|--:|
+| sedlex 6M | 42.6 | 95.9 | 48.1 |
+| ydump 6M | 48.5 | 59.5 | 50.0 |
+| zarith_pi 38000 | 50.8 | 53.2 | 36.1 |
+| decompress | 46.5 | 55.4 | 52.1 |
+| eio_conc_bench 9000 | 44.6 | 121.9 | 92.5 |
+| liq_video_frames | 107.0 | 35.2 | 30.5 |
+
+Limits: mode 2 changes the affinity of a user thread, which a program or its
+environment may also manage; only the thread that parks is pinned, so other
+systhreads of the domain keep their masks; and a single-domain program is
+held on one core even if that core is busy with other work.
+
+---
+
 ## 2026-11-17 - Solo mode: one worker runs the pause when few domains exist (`MMTK_SOLO`)
 
 **Opt-in, default off.** Needs the mmtk-core solo-mode change (this commit's
