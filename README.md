@@ -321,6 +321,7 @@ them.
 | `MMTK_MEDIUM_TO` | `immix` | Set to `freelist` to place the pretenured medium-object band in the common mark-sweep space. Experimental allocator comparison. |
 | `MMTK_COMPACT_OVERHEAD_PCT` | `100` | Concurrent plans' threshold for requesting mature compaction after a Full when reserved space sufficiently exceeds traced live bytes. `0` disables this trigger. |
 | `MMTK_UP_OLDIFY` | `0` | Opt-in stock-style nursery tracing for eligible single-worker Bactrian pauses. |
+| `MMTK_SOLO` | `0` | Experimental. `k`: while at most `k` domains exist, one GC worker runs each eligible pause alone on the single-tracer (UP) paths and the other workers stay parked, whatever `MMTK_THREADS` is. This is what lets `MMTK_UP_DRAIN_REUSE` and `MMTK_UP_OLDIFY` apply with several workers. `0` or unset: off. See `gc/mmtk/NOTES.md`, 2026-11-17 solo mode. |
 
 Current policy lives in the [Bactrian implementation](https://github.com/fplaunchpad/mmtk-core/blob/44d02b65a980743eb0e91078bf0bf8f3b54d9214/src/plan/concurrent/bactrian/global.rs)
 and [binding collection code](gc/mmtk/binding/src/collection.rs). Further allocation,

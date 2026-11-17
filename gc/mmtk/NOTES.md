@@ -5,6 +5,43 @@ Each entry is dated and self-contained. Newest first.
 
 ---
 
+## 2026-11-17 - Solo mode: one worker runs the pause when few domains exist (`MMTK_SOLO`)
+
+**Opt-in, default off.** Needs the mmtk-core solo-mode change (this commit's
+submodule bump).
+
+With one domain and `MMTK_THREADS=8`, every pause used to run on the parallel
+packet path: atomics, work packets, and eight workers woken per pause. The
+single-tracer (UP) paths were only reachable with `MMTK_THREADS=1`.
+`MMTK_SOLO=k` arms them at any worker count while at most `k` domains exist:
+
+- the binding tells MMTk when the domain count allows it
+  (`update_solo_eligible`, called when a domain registers or leaves);
+- MMTk picks the solo worker when the GC starts (the last worker to park, with
+  all the others parked);
+- `stop_all_mutators` arms UP mode on that worker when the pause qualifies
+  (the same `marking_safe` test as the one-worker case), and cancels solo
+  otherwise, which wakes the other workers for a normal parallel pause.
+
+Measured on an 8-core slice of one NUMA node of a Xeon Gold 5120 (cores 2-9,
+8 GC workers, Bactrian, medians of 3, wall seconds). "before" already has
+`MMTK_LOCAL_NURSERY_TRACE=1`:
+
+| bench | vanilla | before | `MMTK_SOLO=1` | + `MMTK_UP_DRAIN_REUSE=1 MMTK_UP_OLDIFY=1` |
+|---|--:|--:|--:|--:|
+| sedlex 6M | 42.6 | 140.4 | 123.5 | 95.9 |
+| ydump 6M | 48.5 | 82.6 | 64.6 | 59.5 |
+| zarith_pi 38000 | 50.8 | 84.7 | 53.7 | 53.2 |
+| decompress | 46.5 | 61.5 | 55.3 | 55.4 |
+| eio_conc_bench 9000 | 44.6 | 109.7 | **136.3** | 121.9 |
+
+eio_conc_bench gets slower with solo alone. Its pauses are frequent, and the
+kernel moves the mutator and the solo worker between cores at each one. The
+follow-up change (`MMTK_SOLO_PIN`) fixes that. Multi-domain programs are not
+affected: with more than `k` domains solo is never chosen.
+
+---
+
 ## 2026-10-01 - RQ7 decision measurement: pause distributions, GenImmix vs Bactrian vs vanilla (ROADMAP item 33)
 
 *Measured*, godel node 0 (Xeon Gold 5120), matched pinned heaps (the sweep's

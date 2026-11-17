@@ -78,6 +78,7 @@ pub fn register_mutator(domain_state_addr: usize, mutator: *mut Mutator<OCamlVM>
         );
         map.len()
     };
+    crate::collection::update_solo_eligible(n);
     update_nursery_scale(n);
 }
 
@@ -139,6 +140,7 @@ pub fn deregister_by_addr(domain_state_addr: usize) {
         unsafe { (*m.0).flush() };
     }
     update_nursery_scale(DOMAIN_REGISTRY.read().unwrap().len());
+    crate::collection::update_solo_eligible(DOMAIN_REGISTRY.read().unwrap().len());
     // Also drop it from the stop-the-world RUNNING set so a collection in flight
     // does not wait for a domain that has terminated (it has left the runtime's
     // STW participant set and is no longer executing OCaml).
@@ -154,7 +156,9 @@ pub fn deregister_by_ptr(mutator_ptr: *mut Mutator<OCamlVM>) {
         .map(|(k, _v)| *k)
         .expect("deregister_by_ptr: mutator pointer not found — double-free or unregistered pointer");
     map.remove(&key);
+    let n = map.len();
     drop(map);
+    crate::collection::update_solo_eligible(n);
     crate::collection::remove_running(key);
 }
 

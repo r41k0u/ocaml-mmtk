@@ -913,6 +913,30 @@ fn park_until_resumed(addr: usize) {
     }
 }
 
+/// MMTK_SOLO=k (default 0 = off): arm solo UP mode when at most k domains exist.
+fn solo_k() -> usize {
+    static K: std::sync::OnceLock<usize> = std::sync::OnceLock::new();
+    *K.get_or_init(|| {
+        std::env::var("MMTK_SOLO")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(0)
+    })
+}
+fn solo_allowed() -> bool {
+    let k = solo_k();
+    k > 0 && crate::active_plan::domain_addrs().len() <= k
+}
+
+/// Called whenever the domain registry changes size: tell MMTk whether the
+/// next GC may pick a solo worker.
+pub(crate) fn update_solo_eligible(domains: usize) {
+    let k = solo_k();
+    if let Some(m) = crate::SINGLETON.get() {
+        m.set_solo_eligible(k > 0 && domains <= k);
+    }
+}
+
 /// True if a collection is in progress (queried from the C safepoint hook).
 #[no_mangle]
 pub extern "C" fn mmtk_ocaml_stw_active() -> bool {
@@ -1142,6 +1166,13 @@ impl Collection<OCamlVM> for VMCollection {
             }
             if single && marking_safe {
                 crate::mmtk().set_up_trace(true);
+            } else if crate::mmtk().solo_chosen() && marking_safe && solo_allowed() {
+                // Solo mode (MMTK_SOLO=k): with at most k domains, one worker
+                // runs the whole pause on the UP paths and the others stay
+                // parked apart from their designated packets.
+                crate::mmtk().set_up_trace_solo(None);
+            } else if crate::mmtk().solo_chosen() {
+                crate::mmtk().cancel_solo();
             }
         }
 
